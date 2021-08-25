@@ -6,11 +6,8 @@ use yii\db\ActiveRecord;
 
 class UserModel extends ActiveRecord
 {
-    public $id;
     public $username;
     public $password;
-    // public $authKey;
-    // public $accessToken;
 
     /**
      * @inheritdoc
@@ -36,12 +33,6 @@ class UserModel extends ActiveRecord
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        // foreach (self::$users as $user) {
-        //     if ($user['accessToken'] === $token) {
-        //         return new static($user);
-        //     }
-        // }
-
         return null;
     }
 

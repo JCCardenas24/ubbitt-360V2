@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\db\UserProfile;
+use app\models\db\Permission;
 use Yii;
 use yii\base\Model;
 
@@ -48,8 +50,56 @@ class LoginForm extends Model
                 $this->addError($attribute, 'Usuario o contraseña incorrecto.');
             } else {
                 Yii::$app->session->set("userIdentity", $this->_user);
+                Yii::$app->session->set("userPermissions", $this->getPermissions());
             }
         }
+    }
+
+    private function getPermissions()
+    {
+        $userProfile = new UserProfile();
+        $userProfile = $userProfile->findUserProfileByUserId($this->getUser()->getId());
+        $profilePermissions = $userProfile->getProfilePermissions()->one();
+        $permissions = $profilePermissions->getPermissions()->all();
+        return array_map(function ($permission) {
+            return $permission->codeName;
+        }, $permissions);
+    }
+
+    private function getMenu()
+    {
+        $permissionModel = new Permission();
+        $permissions = $permissionModel->findPermissionsByUserId($this->getUser()->getId());
+
+        // Extracts the important info only
+        $menus = [];
+        /* @var $parentPermission Menu */
+        foreach ($permissions as $parentPermission) {
+            $menu = [];
+            $menu['permissionId'] = $parentPermission->permissionId;
+            $menu['name'] = $parentPermission->name;
+            $menu['codeName'] = $parentPermission->codeName;
+            $menu['type'] = $parentPermission->type;
+            $menus[] = $menu;
+        }
+
+        /* @var $parentPermission Menu */
+        $parentPermission['submenus'] = [];
+        foreach ($menus as &$parentPermission) {
+            $subpermissions = $permissionModel->findSubpermissionsByPermissionIdAndUsername($parentPermission['menuId'], $this->getUser()->getId());
+            // Extracts the important info only
+            /* @var $parentPermission Menu */
+            foreach ($subpermissions as $subpermissionModel) {
+                $subpermission = [];
+                $subpermission['permissionId'] = $subpermissionModel->permissionId;
+                $subpermission['name'] = $subpermissionModel->name;
+                $subpermission['codeName'] = $subpermissionModel->codeName;
+                $subpermission['type'] = $subpermissionModel->type;
+                $parentPermission['submenus'][] = $subpermission;
+            }
+        }
+
+        return $menus;
     }
 
     /**
