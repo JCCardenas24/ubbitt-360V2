@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,12 +21,20 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        'assets/css/vendors_css.css',
+        'assets/css/style.css',
+        'assets//icons/font-awesome/css/font-awesome.css',
+        'assets/css/crm-styles.css',
+        'assets/libs/datatables/datatables.min.css',
+        'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css',
+        'https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css',
+        'assets/css/main.min.css',
     ];
     public $js = [
+        'js/vendors.min.js',
     ];
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap4\BootstrapAsset',
-    ];
+    // public $depends = [
+    //     'yii\web\YiiAsset',
+    //     'yii\bootstrap4\BootstrapAsset',
+    // ];
 }

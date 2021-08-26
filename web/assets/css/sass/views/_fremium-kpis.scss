@@ -1,0 +1,47 @@
+.container_kpis_cards {
+    .card {
+        border: transparent;
+    }
+    .fst_row {
+        .card {
+            height: 127px;
+            border-radius: 15px;
+            background: #fd8377;
+        }
+        .card.gray {
+            background: #4d4d4d;
+        }
+        .card.dark-orange {
+            background: #ff3e3e;
+        }
+        .card.green {
+            background: #00b731;
+        }
+    }
+    .scd_row {
+        .card {
+            height: 127px;
+            border-radius: 15px;
+            background: #ff6f61;
+        }
+    }
+    .thrt_row {
+        .card {
+            height: 127px;
+            border-radius: 15px;
+            background: #4d4d4d;
+        }
+    }
+    .info_t2 {
+        .text-right {
+            font-weight: bold;
+            font-size: 30px;
+        }
+    }
+    .info_t1 {
+        .number_calls {
+            font-weight: bold;
+            font-size: 30px;
+        }
+    }
+}

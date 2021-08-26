@@ -1,0 +1,97 @@
+.perfil_container {
+    .info {
+        height: 479px;
+        border-radius: 15px;
+        background: #fff;
+        padding: 20px;
+        border-color: transparent;
+        h5 {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: left;
+            color: #4d4d4d;
+            padding-bottom: 27px;
+            margin-bottom: 0;
+        }
+        .avatar_container {
+            justify-content: flex-start;
+            align-items: center;
+            img {
+                width: 72px;
+                margin-right: 20px;
+            }
+            h4 {
+                font-weight: 600;
+                font-size: 24px;
+                text-align: left;
+                color: #4d4d4d;
+            }
+        }
+        small {
+            font-size: 12px;
+            text-align: left;
+            color: #ff6f61;
+            margin-bottom: 8px;
+        }
+        .form-group {
+            input {
+                height: 38px !important;
+                border-radius: 15px !important;
+                background: #fff;
+                border: 1px solid #e6e4e4 !important;
+            }
+            label {
+                font-weight: 600;
+                font-size: 14px;
+                text-align: left;
+                color: #4d4d4d;
+            }
+        }
+    }
+    .datos {
+        height: 586px;
+        border-radius: 15px;
+        background: #fff;
+        padding: 20px;
+        border-color: transparent;
+        h5 {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: left;
+            color: #4d4d4d;
+            padding-bottom: 50px;
+            margin-bottom: 0;
+        }
+        .row {
+            h4 {
+                font-weight: 600;
+                font-size: 14px;
+                text-align: left;
+                color: #4d4d4d;
+                margin-bottom: 22px;
+            }
+            p {
+                font-size: 16px;
+                text-align: left;
+                color: #b2b2b2;
+                margin-bottom: 30px;
+                display: block;
+            }
+        }
+    }
+}
+
+.perfil_cards {
+    hr {
+        position: relative;
+        width: 100%;
+        top: unset;
+        left: unset;
+    }
+    h1 {
+        font-weight: bold;
+        font-size: 22px;
+        text-align: left;
+        color: #ff6f61;
+    }
+}

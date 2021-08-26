@@ -1,0 +1,379 @@
+.freemium-inbound-resumen {
+    h1 {
+        font-weight: bold;
+        font-size: 22px;
+        text-align: left;
+        color: #4d4d4d;
+    }
+    .container_chart-1 {
+        width: 100%;
+        height: 530px;
+        border-radius: 20px;
+        background: #fff;
+        margin-bottom: 30px;
+        padding: 40px 60px 0;
+        .captions_chart {
+            margin-left: auto;
+            width: fit-content;
+            margin-right: 180px;
+            .d-flex {
+                margin-left: 30px;
+                justify-content: center;
+                align-items: center;
+                .mini_circle {
+                    width: 16px;
+                    height: 16px;
+                    border-radius: 50%;
+                    margin-right: 8px;
+                }
+                .mini_circle.green {
+                    background: #47d182;
+                }
+                .mini_circle.black {
+                    background: #211a19;
+                }
+                .mini_circle.orange {
+                    background: #ff6f61;
+                }
+                .mini_circle.yellow {
+                    background: #ffd800;
+                }
+                span {
+                    font-weight: normal;
+                    font-size: 14px;
+                    text-align: left;
+                    color: #4d4d4d;
+                }
+            }
+        }
+    }
+    .container_chart-2 {
+        width: 100%;
+        height: 710px;
+        border-radius: 20px;
+        background: #fff;
+        margin-bottom: 30px;
+    }
+    select {
+        width: 362px;
+        font-family: FontAwesome, sans-serif;
+        border: 1px solid #ccc;
+    }
+    .pdf_button {
+        width: 33px;
+        height: 33px;
+        background: #fff;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i {
+            font-size: 1.5em;
+        }
+    }
+    .container_cards_resumen_info {
+        .card {
+            background-color: black;
+            height: 127px;
+            color: white;
+            p {
+                font-weight: 900;
+                font-size: 18px;
+                // text-align: left;
+            }
+            h5 {
+                font-weight: normal;
+                font-size: 18px;
+                // text-align: left;
+            }
+            small {
+                font-weight: bold;
+                font-size: 30px;
+                // text-align: right;
+            }
+        }
+        .card.bg-c-orange {
+            background-color: #ff6f61;
+        }
+    }
+    .container_cards_ventas_info {
+        h4 {
+            font-weight: 600;
+            font-size: 22px;
+            text-align: left;
+            color: #4d4d4d;
+        }
+        .card {
+            height: 100px;
+            border-radius: 15px;
+            background: #ff6f61;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            p {
+                font-weight: bold;
+                font-size: 12px;
+                text-align: center;
+                color: #fff;
+            }
+            small {
+                font-weight: bold;
+                font-size: 20px;
+                text-align: center;
+                color: #fff;
+            }
+        }
+    }
+    .container_concentrado_polizas {
+        .card {
+            height: 181px;
+            border-radius: 20px;
+            background: #fff;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            p {
+                font-weight: 900;
+                font-size: 30px;
+                text-align: center;
+                color: #4d4d4d;
+                margin-bottom: 0;
+            }
+            small {
+                position: absolute;
+                left: 25px;
+                top: 25px;
+                font-weight: bold;
+                font-size: 15px;
+                text-align: left;
+                color: #4d4d4d;
+            }
+        }
+        .card.fst_card {
+            padding: 30px 40px 0;
+            height: 381px;
+            border-radius: 20px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            p {
+                font-weight: bold;
+                font-size: 18px;
+                color: #4d4d4d;
+                span {
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+    .container_clasifiacion_llamadas {
+        .card {
+            height: 380px;
+        }
+        .card.fst_card {
+            margin-bottom: 0 !important;
+            padding: 30px 20px 0;
+            p {
+                font-weight: normal;
+                font-size: 18px;
+                text-align: left;
+                color: #4d4d4d;
+            }
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .scd_card {
+            margin-bottom: 0!important;
+            padding-left: 45px;
+            padding-right: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .big_ttl_ {
+                h1:first-of-type {
+                    font-weight: bold;
+                    font-size: 18px;
+                    text-align: center;
+                    color: #4d4d4d;
+                    margin-bottom: 0;
+                    text-align: left;
+                    display: block;
+                }
+                h1:last-of-type {
+                    font-weight: bold;
+                    font-size: 30px;
+                    text-align: left;
+                    color: #4d4d4d;
+                    margin-bottom: 10px;
+                    text-align: left;
+                    display: block;
+                    span {
+                        color: #fd8377;
+                    }
+                }
+            }
+            p {
+                margin-bottom: 0;
+                font-family: "Open Sans";
+                font-weight: bold;
+                font-size: 11px;
+                text-align: left;
+                color: #4d4d4d;
+            }
+        }
+    }
+    .container_graficas_llamadas {
+        .card {
+            height: 435px;
+            border-radius: 15px;
+            background: #fff
+        }
+    }
+    .ttl_llamadas {
+        font-family: Lato;
+        font-weight: 900;
+        font-size: 16px;
+        text-align: left;
+        color: #919191;
+        margin-top: 17px;
+        margin-bottom: 17px;
+    }
+    .atc_cards {
+        padding: 20px 10px;
+        h1 {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: left;
+            color: #4d4d4d;
+        }
+        p {
+            font-weight: bold;
+            font-size: 30px;
+            text-align: left;
+            color: #4d4d4d;
+            span {
+                color: #fd8377;
+            }
+        }
+        h4 {
+            font-weight: bold;
+            font-size: 11px;
+            text-align: left;
+            color: #4d4d4d;
+            margin-bottom: 5px;
+        }
+        .d-flex {
+            justify-content: space-between;
+            align-items: center;
+            span.ttl_number {
+                font-weight: bold;
+                font-size: 11px;
+                text-align: left;
+                color: #4d4d4d;
+            }
+            span.ttl_detalle {
+                font-weight: bold;
+                font-size: 8px;
+                text-align: left;
+                color: #fd8377;
+                &:hover {
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    .card {
+        border-color: transparent;
+    }
+}
+
+.progress {
+    margin-bottom: 10px;
+    height: 13px;
+}
+
+.progress-bar.aqua {
+    background: #4bb6cc;
+}
+
+.progress-bar.navy {
+    background: #2c72f0;
+}
+
+.progress-bar.orange {
+    background: #f06c39;
+}
+
+.progress-bar.yellow {
+    background: #f5a841;
+}
+
+.progress-bar.magenta {
+    background: #ec4497;
+}
+
+.instalment2 .donut-case {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #48b2c1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-clip: border-box;
+    overflow: hidden;
+}
+
+.instalment2 .donut-case::before {
+    content: "";
+    clip: rect(0 100px 100px 0);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(180deg);
+    background: #f00;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.instalment2 .donut-case::after {
+    content: "";
+    clip: rect(0 100px 200px 0);
+    -webkit-transform: rotate(327.6deg);
+    transform: rotate(360deg);
+    background: #cbcb41;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.instalment2 .donut-line::before {
+    content: "";
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background: #fff;
+    z-index: 2;
+}
+
+.instalment2 .donut-line::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    background: #fff;
+    border-bottom: 1px solid #fff;
+    z-index: 2;
+}

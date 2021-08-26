@@ -1,0 +1,43 @@
+
+[type=file] {
+    position: inline;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+
+input,[type=file] + label {
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    text-align: left;
+    padding: 10px;
+    width: 50%;
+    margin: 0;
+    left: 0;
+}
+
+[type=file] + label {
+    text-align: center;
+    left: 7.35em;
+    top: 0.5em;
+    /* Decorative */
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+[type=file] + label:hover {
+    background: #CCC;
+}
+
+.bg-blue {
+    background: #1A233A !important;
+}
+
+.progress {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    height: 25px;
+}
