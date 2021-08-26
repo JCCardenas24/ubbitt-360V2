@@ -61,6 +61,7 @@ $config = [
         ],
         'assetManager' => [
             'basePath' => '@webroot/yii-assets',
+            'baseUrl' => '@web/yii-assets/',
         ],
     ],
     'params' => $params,
