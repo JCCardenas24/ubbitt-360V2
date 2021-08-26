@@ -49,6 +49,16 @@ class LoginController extends Controller
     }
 
     /**
+     * {@inheritDoc}
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        $this->layout = 'login';
+        return parent::beforeAction($action);
+    }
+
+    /**
      * Displays homepage.
      *
      * @return string
