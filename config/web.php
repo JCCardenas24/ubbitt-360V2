@@ -59,6 +59,9 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
+        'assetManager' => [
+            'basePath' => '@webroot/yii-assets',
+        ],
     ],
     'params' => $params,
 ];
