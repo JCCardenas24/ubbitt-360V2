@@ -73,7 +73,7 @@ let basicdoughnutChart = echarts.init(document.getElementById('basic-doughnut'))
 let options = {
     // Add title
     title: {
-        text: 'Concentrado de pólizas',
+        text: 'Concentrado de ventas',
         subtext: 'Emisiones / Cobro',
         x: ''
     },
@@ -191,6 +191,8 @@ let options = {
 
 basicdoughnutChart.setOption(options);
 
+
+
 let basicdoughnut2Chart = echarts.init(document.getElementById('basic-doughnut2'));
 let option2 = {
     // Add title
@@ -209,7 +211,7 @@ let option2 = {
     },
 
     // Add custom colors
-    color: ['#2c72f0', '#4bb6cc', '#ec4497', '#f06c39', '#f5a841'],
+    color: ['#ec4497', '#4bb6cc', '#2c72f0', '#f06c39', '#FF5757'],
 
     // Display toolbox
     toolbox: {

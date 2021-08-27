@@ -30,7 +30,9 @@ class LoginAsset extends AssetBundle
         'https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css',
         'assets/css/main.min.css',
     ];
-    public $js = [];
+    public $js = [
+        'assets/icons/feather-icons/feather.min.js',
+    ];
     public $depends = [
         'yii\web\YiiAsset',
     ];

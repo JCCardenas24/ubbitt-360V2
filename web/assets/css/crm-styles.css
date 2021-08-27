@@ -68,7 +68,7 @@
     border: 1px #c3c3c3 solid;
 }
 
-hr {
+header hr {
     width: 96%;
     position: absolute;
     top: 61%;
@@ -235,6 +235,10 @@ table.dataTable thead .sorting_desc:before {
     height: 390px;
     width: 455px;
     margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
 }
 
 .modal-content {
@@ -259,7 +263,7 @@ table.dataTable thead .sorting_desc:before {
 }
 
 .bg-login {
-    background-color: #F36F63;
+    background-color: #FF6F61;
     background-image: url('../images/syn/svg_prueba_3.svg');
 }
 
@@ -390,7 +394,7 @@ table.dataTable thead .sorting_desc:before {
 }
 
 .c-terminos {
-    color: #f36f63;
+    color: #FF6F61;
 }
 
 .c-blue {
@@ -1426,12 +1430,12 @@ form#add_new_lead .form-control {
 }
 
 .light-skin .main-sidebar {
-    border-right: 1px solid #f36f63;
-    background-color: #f36f63;
+    border-right: 1px solid #FF6F61;
+    background-color: #FF6F61;
 }
 
 .main-header div.logo-box {
-    background-color: #f36f63 !important;
+    background-color: #FF6F61 !important;
     border-right: none;
 }
 
@@ -1456,7 +1460,7 @@ form#add_new_lead .form-control {
 }
 
 #letterSpace {
-    color: #F36F63
+    color: #FF6F61
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
@@ -1494,28 +1498,6 @@ form#add_new_lead .form-control {
 
 
 /* line */
-
-.info_t1 .col-6 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    font-size: 18px;
-}
-
-.info_t2 {
-    display: flex;
-    justify-content: center;
-    padding: 16px;
-    color: white;
-}
-
-select#exampleFormControlSelect2 {
-    width: 362px;
-    font-family: FontAwesome, sans-serif;
-    border: 1px solid #ccc;
-}
 
 .pdf_button {
     width: 33px;
@@ -1610,7 +1592,7 @@ table tbody tr td i {
 
 .linkselected {
     fill: none;
-    stroke: tomato;
+    stroke: #4D4D4D;
     stroke-width: 2px;
 }
 
@@ -1620,7 +1602,7 @@ table tbody tr td i {
 }
 
 .arrowselected {
-    fill: tomato;
+    fill: #4D4D4D;
     stroke-width: 2px;
 }
 
@@ -1688,10 +1670,22 @@ a.exchangeName {
 }
 
 .mini-tree_card {
-    font-size: 11px;
     color: white;
     font-weight: bold;
     padding-left: 7px;
+}
+
+.mini-tree_card span {
+    font-size: 12px;
+}
+
+.mini-tree_card small {
+    font-size: 13px;
+}
+
+.mini-tree_card small span.efectivos {
+    font-weight: bold;
+    color: #FFBE2C;
 }
 
 .theme-primary .daterangepicker td.active {

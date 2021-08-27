@@ -31,10 +31,10 @@ function treeBoxes(urlService, jsonData) {
 
     let navy = '#2c72f0',
         aqua = '#4bb6cc',
-        yellow = '#f5a841',
+        yellow = '#FF5757',
         salmon = '#fd8377',
         blueText = '#4ab1eb',
-        purple = '#9467bd',
+        red = '#FA4938',
         black = '#211a19',
         gray = '#4d4d4d',
         orange = '#f06c39';
@@ -47,12 +47,12 @@ function treeBoxes(urlService, jsonData) {
         },
         // Height and width are redefined later in function of the size of the tree
         // (after that the data are loaded)
-        width = '1000' - margin.right - margin.left,
+        width = 1000 - margin.right - margin.left,
         height = 710 - margin.top - margin.bottom;
 
     let rectNode = {
-            width: 170,
-            height: 40,
+            width: 160,
+            height: 50,
             textMargin: 5
         },
         tooltip = {
@@ -116,7 +116,7 @@ function treeBoxes(urlService, jsonData) {
                 if (node.type == 'type3')
                     node.color = yellow;
                 if (node.type == 'type4')
-                    node.color = purple;
+                    node.color = red;
                 if (node.type == 'type5')
                     node.color = aqua;
                 if (node.type == 'type6')
@@ -236,8 +236,8 @@ function treeBoxes(urlService, jsonData) {
                 return '<div style="width: ' +
                     (rectNode.width - rectNode.textMargin * 2) + 'px; height: ' +
                     (rectNode.height - rectNode.textMargin * 2) + 'px;" class="mini-tree_card">' +
-                    '<span>' + d.nodeName + '</span>' + '<br>' +
-                    '<span>' + d.code + '</span>' +
+                    '<span class="ttl_categoria">' + d.ttl_categoria + '</span>' + '<br>' +
+                    '<small>' + '<span>' + d.total_llamadas + '</span>' + '<span class="efectivos">' + d.efectivos + '</span>' + '</small>' +
                     '</div>';
             })
             .on('mouseover', function(d) {

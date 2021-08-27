@@ -4,11 +4,10 @@
 /* @var $form yii\bootstrap4\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Html;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Ubbitt 360';
 ?>
 <div class="container h-p100">
     <div class="row align-items-center justify-content-md-center h-p100">
@@ -16,22 +15,24 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row justify-content-center no-gutters">
                 <div class="col-lg-5 col-md-5 col-12">
                     <div class="bg-white rounded10 shadow-lg container-login">
-                        <div class="content-top-agile p-20 pb-0">
-                            <img class="logo_ubbitt d-block m-auto"
-                                src="<?= Yii::getAlias('@web') ?>/assets/images/ubbitt_color.png" alt="logo"
-                                width="200">
-                            <p class="mb-0 c-header">Ingresa tus datos para continuar.</p>
-                        </div>
-                        <div class="p-40 pt-10">
+                        <div>
+                            <div class="content-top-agile">
+                                <img class="logo_ubbitt d-block m-auto"
+                                    src="<?= Yii::getAlias('@web') ?>/assets/images/ubbitt_color.svg" alt="logo"
+                                    width="200">
+                                <p class="mb-0 c-header">Ingresa tus datos para continuar.</p>
+                            </div>
                             <?php $form = ActiveForm::begin([
                                 'id' => 'login-form',
-                                'layout' => 'horizontal',
                                 'fieldConfig' => [
                                     'template' => "{input}{error}",
                                     'options' => [
                                         'tag' => false,
                                     ],
                                 ],
+                                'options' => [
+                                    'class' => 'mt-10',
+                                ]
                             ]); ?>
                             <div class="form-group">
                                 <div class="input-group mb-3">
@@ -54,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             class="input-group-text brd-gray bg-transparent border-right-0 font-size-16"><i
                                                 class="fa fa-lock"></i></span>
                                     </div>
-                                    <?= $form->field($model, 'password')->passwordInput(['id' => 'pass', 'class' => 'form-control pl-10 bg-transparent border-left-0 brd-gray', 'placeholder' => 'Password']) ?>
+                                    <?= $form->field($model, 'password')->passwordInput(['id' => 'pass', 'class' => 'form-control brd-gray pl-15 bg-transparent border-left-0', 'placeholder' => 'Password']) ?>
                                 </div>
                             </div>
                             <div class="row">
@@ -63,7 +64,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                                         <label class="form-check-label" for="defaultCheck1">
                                             <span class="font-size-14 c-gray">Acepto <a href="#"
-                                                    class="c-terminos">Términos y Condiciones</a></span>
+                                                    class="c-terminos">Términos
+                                                    y Condiciones</a></span>
                                         </label>
                                     </div>
                                 </div>

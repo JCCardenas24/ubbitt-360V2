@@ -3,110 +3,119 @@
         <div class="col-3">
             <div class="card">
                 <div class="row m-0 he-100 info_t1">
-                    <div class="col-6 p-0">Número de
-                        llamadas
-                        entrantes</div>
-                    <div class="col-6 p-0 number_calls">2646</div>
+                    <div class="col-6 p-0">
+                        <div class="text-left he-100 wid-100">
+                            <p class="m-0">Número de
+                                llamadas
+                                entrantes</p>
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 number_calls">
+                        <p class="m-0">5280</p>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-3">
             <div class="card green">
                 <div class="row m-0 he-100 info_t1">
-                    <div class="col-6 p-0">Número de
-                        llamadas
-                        contestadas</div>
-                    <div class="col-6 p-0 number_calls">2646</div>
+                    <div class="col-6 p-0">
+                        <div class="text-left he-100 wid-100">
+                            <p class="m-0">Número de
+                                llamadas
+                                contestadas</p>
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 number_calls">
+                        <p class="m-0">2646</p>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-3">
             <div class="card gray">
                 <div class="row m-0 he-100 info_t1">
-                    <div class="col-6 p-0">Número de
-                        llamadas
-                        salientes</div>
-                    <div class="col-6 p-0 number_calls">2500</div>
+                    <div class="col-6 p-0">
+                        <div class="text-left he-100 wid-100">
+                            <p class="m-0">Número de
+                                llamadas
+                                salientes</p>
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 number_calls">
+                        <p class="m-0">2500</p>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-3">
             <div class="card dark-orange">
                 <div class="row m-0 he-100 info_t1">
-                    <div class="col-6 p-0">Número de
-                        llamadas
-                        perdidas</div>
-                    <div class="col-6 p-0 number_calls">78</div>
+                    <div class="col-6 p-0">
+                        <div class="text-left he-100 wid-100">
+                            <p class="m-0">Número de
+                                llamadas
+                                perdidas</p>
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 number_calls">
+                        <p class="m-0">78</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="scd_row row m-0">
+        <div class="col ">
+            <div class="card info_t2">
+                <p class="m-0 big_ttl"></p>
+                <p class="m-0 sub_ttl">Atendidos antes de 25 <br> segundos</p>
+                <span>208</span>
+            </div>
+        </div>
         <div class="col">
             <div class="card info_t2">
-                <p class="text-left">Atendidos antes de 25 segundos</p>
-                <p class="text-right">208</p>
+                <p class="m-0 big_ttl">NSL</p>
+                <p class="m-0 sub_ttl">(NSL/NCO)</p>
+                <span>89%</span>
             </div>
         </div>
         <div class="col">
             <div class="card info_t2">
-                <b>
-                    <p class="text-left">NSL</p>
-                </b>
-                <p class="text-left">(NSL/NCO)</p>
-                <p class="text-right">89%</p>
+                <p class="m-0 big_ttl">ABA</p>
+                <p class="m-0 sub_ttl">Abandonados antes de 5 segundos</p>
+                <span>15%</span>
             </div>
         </div>
         <div class="col">
-            <div class="card">
-                <div class="card info_t2">
-                    <b>
-                        <p class="text-left">ABA</p>
-                    </b>
-                    <p class="text-left">Abandonados antes de 5 segundos</p>
-                    <p class="text-right">208</p>
-                </div>
+            <div class="card info_t2">
+                <p class="m-0 big_ttl">NSL</p>
+                <p class="m-0 sub_ttl">(NSL/NCO)</p>
+                <span>208</span>
             </div>
         </div>
         <div class="col">
-            <div class="card">
-                <div class="card info_t2">
-                    <b>
-                        <p class="text-left">% abandono</p>
-                    </b>
-                    <p class="text-left">(Colgado)</p>
-                    <p class="text-right">15%</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card info_t2">
-                    <b>
-                        <p class="text-left">ATH</p>
-                    </b>
-                    <p class="text-left">Tiempo promedio en llamada</p>
-                    <p class="text-right">5.3 min</p>
-                </div>
+            <div class="card info_t2">
+                <p class="m-0 big_ttl">ATH</p>
+                <p class="m-0 sub_ttl">Tiempo promedio en llamada</p>
+                <span>5.3 min</span>
             </div>
         </div>
     </div>
     <div class="thrt_row row m-0">
-        <div class="col-6">
-            <div class="card">
-                <div class="row m-0 he-100 info_t1">
-                    <div class="col-6 p-0">Tiempo promedio <br>
-                        en contestar la
-                        llamada</div>
-                    <div class="col-6 p-0">12.32 seg</div>
+        <div class="d-flex wid-100">
+            <div class="col-6 mb-0">
+                <div class="card">
+                    <p>Tiempo promedio <br>
+                        en contestar la <br>
+                        llamada</p>
+                    <h5>12.32 seg</h5>
                 </div>
             </div>
-        </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="row m-0 he-100 info_t1">
-                    <div class="col-6 p-0">Speaking time</div>
-                    <div class="col-6 p-0">11:42 hrs</div>
+            <div class="col-6 mb-0">
+                <div class="card">
+                    <p>Speaking time</p>
+                    <h5>11:42 hrs</h5>
                 </div>
             </div>
         </div>
