@@ -44,8 +44,6 @@ $this->title = 'Ubbitt 360';
                                         </span>
                                     </div>
                                     <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'id' => 'user', 'class' => 'form-control pl-10 bg-transparent border-left-0 brd-gray', 'placeholder' => 'Nombre de usuario']) ?>
-
-
                                 </div>
                             </div>
                             <div class="form-group">
