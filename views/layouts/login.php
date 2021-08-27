@@ -59,8 +59,6 @@ app\assets\LoginAsset::register($this);
     <?php $this->beginBody(); ?>
     <?= $content ?>
     </div>
-    <!-- Vendor JS -->
-    <script src="<?= Yii::getAlias('@web') ?>/assets/icons/feather-icons/feather.min.js"></script>
     <?php $this->endBody(); ?>
 </body>
 
