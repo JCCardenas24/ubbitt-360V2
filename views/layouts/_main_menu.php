@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+/* @var $this yii\web\View */
+
 ?>
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -71,14 +73,16 @@ use yii\helpers\Url;
                         </h5>
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <li class="sub_ttl"><a href="dashboard-beyond-cobranza.php">Cobranza</a></li>
+                        <li class="sub_ttl"><a
+                                href="<?= Url::toRoute(['ubbitt-beyond/collection-dashboard']) ?>">Cobranza</a></li>
                         <ul>
                             <li><span>Resumen</span></li>
                             <li><span>Call Center</span></li>
                             <li><span>Reportes</span></li>
                             <li><span>Carga de base de datos</span></li>
                         </ul>
-                        <li class="sub_ttl"><a href="dashboard-beyond-renovacion.php">Renovación</a></li>
+                        <li class="sub_ttl"><a
+                                href="<?= Url::toRoute(['ubbitt-beyond/renewal-dashboard']) ?>">Renovación</a></li>
                         <ul>
                             <li><span>Resumen</span></li>
                             <li><span>Call Center</span></li>
@@ -102,8 +106,10 @@ use yii\helpers\Url;
                     </div>
                     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                         <ul class="mt-3">
-                            <li class="cuenta"><span><a href="perfil.php">Mis datos</a></span></li>
-                            <li class="cuenta"><span><a href="index.php?close_session">Cerrar sesión</a></span></li>
+                            <li class="cuenta"><span><a href="<?= Url::toRoute(['account/profile']) ?>">Mis
+                                        datos</a></span></li>
+                            <li class="cuenta"><span><a href="<?= Url::toRoute(['login/logout']) ?>">Cerrar
+                                        sesión</a></span></li>
                         </ul>
                     </div>
                 </div>

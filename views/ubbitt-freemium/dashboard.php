@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 
+use yii\helpers\Url;
 use yii\web\View;
 
 $this->title = 'Ubbitt 360';
@@ -22,7 +23,8 @@ $this->registerJs('d3.json("/jsonData.json", function(error, json) {
             <a class="nav-link" id="premium-tab">Ubbitt Premium</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="beyond_option-tab" href="dashboard-beyond-cobranza.php">Ubbitt Beyond</a>
+            <a class="nav-link" id="beyond_option-tab"
+                href="<?= Url::toRoute(['ubbitt-beyond/collection-dashboard']) ?>">Ubbitt Beyond</a>
         </li>
     </ul>
     <div class="tab-content" id="main_tabs_panelsContent">
