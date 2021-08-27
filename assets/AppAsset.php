@@ -31,7 +31,17 @@ class AppAsset extends AssetBundle
         'assets/css/main.min.css',
     ];
     public $js = [
-        'assets/js/functions.js'
+        'assets/js/functions.js',
+        'assets/icons/feather-icons/feather.min.js',
+        'assets/js/template.js',
+        'assets/js/demo.js',
+        'assets/js/pages/dashboard.js',
+        'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
+        'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js',
+        'assets/js/tables.js',
+        'assets/js/general.js',
+        'https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js',
+        'https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
