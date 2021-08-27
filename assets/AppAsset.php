@@ -31,6 +31,7 @@ class AppAsset extends AssetBundle
         'assets/css/main.min.css',
     ];
     public $js = [
+        'assets/js/vendors.min.js',
         'assets/js/functions.js',
         'assets/icons/feather-icons/feather.min.js',
         'assets/js/template.js',
@@ -42,6 +43,7 @@ class AppAsset extends AssetBundle
         'assets/js/general.js',
         'https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js',
         'https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js',
+        // 'https://cdn.jsdelivr.net/npm/apexcharts',
     ];
     public $depends = [
         'yii\web\YiiAsset',
