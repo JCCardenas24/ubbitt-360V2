@@ -1,3 +1,9 @@
+<?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+
+?>
 <aside class="main-sidebar">
     <section class="sidebar">
         <div class="user-profile px-20 py-15">
@@ -28,7 +34,7 @@
                     </div>
 
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                        <li class="sub_ttl"><a href="dashboard-freemium.php">Inbound</a></li>
+                        <li class="sub_ttl"><?= Html::a("Inbound", Url::toRoute('ubbitt-freemium/dashboard')) ?></li>
                         <ul>
                             <li><span>Resumen</span></li>
                             <li><span>Call Center</span></li>
