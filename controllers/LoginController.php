@@ -30,7 +30,7 @@ class LoginController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'index' => ['get', 'post'],
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
         ];
@@ -67,9 +67,6 @@ class LoginController extends Controller
     {
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            // return $this->redirect(
-            //     Yii::$app->user->returnUrl
-            // );
             return $this->goBack();
         }
 
