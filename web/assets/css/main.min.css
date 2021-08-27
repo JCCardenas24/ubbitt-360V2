@@ -26,6 +26,10 @@ a.logo img {
   display: block;
 }
 
+.sidebar-collapse .icons_collapsed i:first-of-type {
+  color: black;
+}
+
 .menu-sidebar {
   width: 220px;
   margin: auto;
@@ -68,6 +72,7 @@ a.logo img {
   font-weight: normal;
   font-size: 13px;
   text-align: left;
+  margin-top: 15px;
   color: #fff;
 }
 
@@ -153,6 +158,10 @@ a.logo img {
   color: white;
 }
 
+.user-menu a.dropdown-toggle:active, .user-menu a.dropdown-toggle:focus, .user-menu a.dropdown-toggle:hover {
+  background: #E6E4E4;
+}
+
 .wid-100 {
   width: 100%;
 }
@@ -206,10 +215,10 @@ a.logo img {
 }
 
 .level_two li.nav-item a.nav-link.active {
-  background-color: #e3e3e3 !important;
+  background-color: #FF6F61 !important;
   font-weight: 600;
   font-size: 15px;
-  color: #4d4d4d;
+  color: white;
 }
 
 .level-three {
@@ -279,6 +288,23 @@ a.logo img {
   display: block;
 }
 
+.main-footer {
+  padding: 0 0 10px 0;
+  text-align: center;
+  font-size: 10px;
+  color: #6f6f6f;
+}
+
+.main-footer span a {
+  font-weight: bold;
+  color: #6f6f6f;
+}
+
+.main-footer span a:hover, .main-footer span a:focus, .main-footer span a:active {
+  color: #6f6f6f;
+  text-decoration: underline;
+}
+
 .freemium-inbound-resumen h1 {
   font-weight: bold;
   font-size: 22px;
@@ -327,7 +353,7 @@ a.logo img {
 }
 
 .freemium-inbound-resumen .container_chart-1 .captions_chart .d-flex .mini_circle.yellow {
-  background: #ffd800;
+  background: #FF5757;
 }
 
 .freemium-inbound-resumen .container_chart-1 .captions_chart .d-flex span {
@@ -470,7 +496,7 @@ a.logo img {
 }
 
 .freemium-inbound-resumen .container_clasifiacion_llamadas .card {
-  height: 380px;
+  height: 430px;
 }
 
 .freemium-inbound-resumen .container_clasifiacion_llamadas .card.fst_card {
@@ -622,7 +648,7 @@ a.logo img {
 }
 
 .progress-bar.yellow {
-  background: #f5a841;
+  background: #FF5757;
 }
 
 .progress-bar.magenta {
@@ -688,6 +714,30 @@ a.logo img {
   z-index: 2;
 }
 
+.href_detalle {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.href_detalle span.ttl_detalle {
+  font-weight: bold;
+  font-size: 8px;
+  text-align: left;
+  color: #fd8377;
+}
+
+.href_detalle span.ttl_detalle:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.href_detalle span.ttl_number {
+  font-weight: bold;
+  font-size: 11px;
+  text-align: left;
+  color: #4d4d4d;
+}
+
 .container_kpis_cards .card {
   border: transparent;
 }
@@ -717,18 +767,77 @@ a.logo img {
 }
 
 .container_kpis_cards .thrt_row .card {
-  height: 127px;
   border-radius: 15px;
   background: #4d4d4d;
+  height: 127px;
+  margin-bottom: 0 !important;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 }
 
-.container_kpis_cards .info_t2 .text-right {
+.container_kpis_cards .thrt_row .card p {
+  width: fit-content;
+  margin: 0;
+  font-size: 18px;
+  text-align: left;
+  color: #fff;
+}
+
+.container_kpis_cards .thrt_row .card h5 {
+  width: fit-content;
+  margin: 0;
   font-weight: bold;
   font-size: 30px;
+  text-align: left;
+  color: #fff;
 }
 
-.container_kpis_cards .info_t1 .number_calls {
+.container_kpis_cards .info_t2 {
+  position: relative;
+  padding: 15px 10px;
+  color: white;
+}
+
+.container_kpis_cards .info_t2 .big_ttl {
   font-weight: bold;
+  font-size: 18px;
+  text-align: left;
+  color: #fff;
+}
+
+.container_kpis_cards .info_t2 .sub_ttl {
+  font-size: 14px;
+  text-align: left;
+  color: #fff;
+}
+
+.container_kpis_cards .info_t2 span {
+  position: absolute;
+  font-weight: bold;
+  font-size: 30px;
+  color: white;
+  right: 10px;
+  bottom: 20px;
+  line-height: 1;
+}
+
+.container_kpis_cards .info_t1 {
+  padding: 25px 20px;
+}
+
+.container_kpis_cards .info_t1 .col-6 {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 17px;
+}
+
+.container_kpis_cards .info_t1 .col-6.number_calls {
+  font-weight: bold;
+  justify-content: flex-end;
   font-size: 30px;
 }
 
@@ -750,10 +859,11 @@ a.logo img {
 }
 
 .resumen-beyond-cobranza .container_chart-2 .card-gestion {
-  height: 273px;
+  height: 280px;
   border-radius: 15px;
   background: #f4f4f4;
   padding: 14px 7px 0;
+  margin-bottom: 0 !important;
 }
 
 .resumen-beyond-cobranza .container_chart-2 .card-gestion .header {
@@ -762,7 +872,7 @@ a.logo img {
   background: #4d4d4d;
   border-radius: 10px;
   margin-bottom: 10px;
-  clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
 }
 
 .resumen-beyond-cobranza .container_chart-2 .card-gestion .header p {
@@ -789,7 +899,7 @@ a.logo img {
   padding: 4px 13px;
   border-radius: 10px;
   background-color: white;
-  height: 50px;
+  height: 55px;
   margin-bottom: 10px;
 }
 
@@ -810,6 +920,10 @@ a.logo img {
 
 .resumen-beyond-cobranza .container_chart-2 .card-gestion .info_gestion h5 span {
   color: #ffbe2c;
+}
+
+.resumen-beyond-cobranza .container_chart-2 .card-gestion .info_gestion h5 span.mini_price {
+  color: #32D900;
 }
 
 .resumen-beyond-cobranza .container_graficas_llamadas .atc_cards p span {

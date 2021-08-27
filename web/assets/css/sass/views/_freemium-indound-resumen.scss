@@ -36,7 +36,7 @@
                     background: #ff6f61;
                 }
                 .mini_circle.yellow {
-                    background: #ffd800;
+                    background: #FF5757;
                 }
                 span {
                     font-weight: normal;
@@ -171,7 +171,7 @@
     }
     .container_clasifiacion_llamadas {
         .card {
-            height: 380px;
+            height: 430px;
         }
         .card.fst_card {
             margin-bottom: 0 !important;
@@ -310,7 +310,7 @@
 }
 
 .progress-bar.yellow {
-    background: #f5a841;
+    background: #FF5757;
 }
 
 .progress-bar.magenta {
@@ -376,4 +376,25 @@
     background: #fff;
     border-bottom: 1px solid #fff;
     z-index: 2;
+}
+
+.href_detalle {
+    justify-content: space-between;
+    align-items: center;
+    span.ttl_detalle {
+        font-weight: bold;
+        font-size: 8px;
+        text-align: left;
+        color: #fd8377;
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+    span.ttl_number {
+        font-weight: bold;
+        font-size: 11px;
+        text-align: left;
+        color: #4d4d4d;
+    }
 }

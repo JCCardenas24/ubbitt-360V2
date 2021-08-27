@@ -27,20 +27,68 @@
     }
     .thrt_row {
         .card {
-            height: 127px;
             border-radius: 15px;
             background: #4d4d4d;
+            height: 127px;
+            margin-bottom: 0 !important;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+            p {
+                width: fit-content;
+                margin: 0;
+                font-size: 18px;
+                text-align: left;
+                color: #fff;
+            }
+            h5 {
+                width: fit-content;
+                margin: 0;
+                font-weight: bold;
+                font-size: 30px;
+                text-align: left;
+                color: #fff;
+            }
         }
     }
     .info_t2 {
-        .text-right {
+        position: relative;
+        padding: 15px 10px;
+        color: white;
+        .big_ttl {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: left;
+            color: #fff;
+        }
+        .sub_ttl {
+            font-size: 14px;
+            text-align: left;
+            color: #fff;
+        }
+        span {
+            position: absolute;
             font-weight: bold;
             font-size: 30px;
+            color: white;
+            right: 10px;
+            bottom: 20px;
+            line-height: 1;
         }
     }
     .info_t1 {
-        .number_calls {
+        padding: 25px 20px;
+        .col-6 {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 17px;
+        }
+        .col-6.number_calls {
             font-weight: bold;
+            justify-content: flex-end;
             font-size: 30px;
         }
     }

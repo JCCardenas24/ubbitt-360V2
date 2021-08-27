@@ -1,260 +1,370 @@
 {
     "tree": {
-        "nodeName": "NCO (Total llamadas)",
+        "ttl_categoria": "NCO (Total llamadas)",
         "type": "type8",
-        "code": "1000",
+        "total_llamadas": "1000",
+        "efectivos": "",
         "label": "",
         "link": {
-            "nodeName": "NODE NAME 1",
+            "ttl_categoria": "NODE NAME 1",
             "direction": "ASYN"
         },
         "children": [{
-                "nodeName": "Motivo de venta",
+                "ttl_categoria": "Motivo de venta",
                 "name": "NODE NAME 2.1",
                 "type": "type2",
-                "code": "500 / 50%",
+                "total_llamadas": "500 / ",
                 "label": "Node name 2.1",
-                "version": "v1.0",
+                "efectivos": "50%",
                 "link": {
                     "name": "Link node 1 to 2.1",
-                    "nodeName": "NODE NAME 2.1",
+                    "ttl_categoria": "NODE NAME 2.1",
                     "direction": "SYNC"
                 },
                 "children": [{
-                        "nodeName": "Acepta venta",
+                        "ttl_categoria": "Acepta venta",
                         "name": "NODE NAME 3.1",
                         "type": "type2",
-                        "code": "500 / 10%",
+                        "total_llamadas": "125 / ",
                         "label": "Node name 3.1",
-                        "version": "v1.0",
+                        "efectivos": "25%",
                         "link": {
                             "name": "Link node 2.1 to 3.1",
-                            "nodeName": "NODE NAME 3.1",
+                            "ttl_categoria": "NODE NAME 3.1",
                             "direction": "SYNC"
                         },
                         "children": [{
-                            "nodeName": "Ventas",
-                            "name": "NODE NAME 3.1",
-                            "type": "type2",
-                            "code": "300 / 10%",
-                            "label": "Node name 3.1",
-                            "version": "v1.0",
-                            "link": {
-                                "name": "Link node 2.1 to 3.1",
-                                "nodeName": "NODE NAME 3.1",
-                                "direction": "SYNC"
-                            },
-                            "children": [{
-                                "nodeName": "Cobrado",
+                                "ttl_categoria": "Ventas",
                                 "name": "NODE NAME 3.1",
                                 "type": "type2",
-                                "code": "234 / 5%",
+                                "total_llamadas": "62 / ",
                                 "label": "Node name 3.1",
-                                "version": "v1.0",
+                                "efectivos": "50%",
                                 "link": {
                                     "name": "Link node 2.1 to 3.1",
-                                    "nodeName": "NODE NAME 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
                                     "direction": "SYNC"
                                 },
-                                "children": []
-                            }]
-                        }]
+                                "children": [{
+                                        "ttl_categoria": "Cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type2",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    },
+                                    {
+                                        "ttl_categoria": "No cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type4",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "ttl_categoria": "En seguimiento",
+                                "name": "NODE NAME 3.1",
+                                "type": "type7",
+                                "total_llamadas": "62 /",
+                                "label": "Node name 3.1",
+                                "efectivos": "50%",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                }
+                            }
+                        ]
                     },
                     {
-                        "nodeName": "Agenda llamada",
+                        "ttl_categoria": "Agenda llamada",
                         "name": "NODE NAME 3.1",
                         "type": "type2",
-                        "code": "500 / 10%",
+                        "total_llamadas": "125 / ",
                         "label": "Node name 3.1",
-                        "version": "v1.0",
+                        "efectivos": "25%",
                         "link": {
                             "name": "Link node 2.1 to 3.1",
-                            "nodeName": "NODE NAME 3.1",
+                            "ttl_categoria": "NODE NAME 3.1",
                             "direction": "SYNC"
                         },
                         "children": [{
-                            "nodeName": "Ventas",
-                            "name": "NODE NAME 3.1",
-                            "type": "type2",
-                            "code": "300 / 10%",
-                            "label": "Node name 3.1",
-                            "version": "v1.0",
-                            "link": {
-                                "name": "Link node 2.1 to 3.1",
-                                "nodeName": "NODE NAME 3.1",
-                                "direction": "SYNC"
-                            },
-                            "children": [{
-                                "nodeName": "Cobrado",
+                                "ttl_categoria": "Ventas",
                                 "name": "NODE NAME 3.1",
                                 "type": "type2",
-                                "code": "234 / 5%",
+                                "total_llamadas": "62 / ",
                                 "label": "Node name 3.1",
-                                "version": "v1.0",
+                                "efectivos": "50%",
                                 "link": {
                                     "name": "Link node 2.1 to 3.1",
-                                    "nodeName": "NODE NAME 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
                                     "direction": "SYNC"
                                 },
-                                "children": []
-                            }]
-                        }]
+                                "children": [{
+                                        "ttl_categoria": "Cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type2",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    },
+                                    {
+                                        "ttl_categoria": "No cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type4",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "ttl_categoria": "En seguimiento",
+                                "name": "NODE NAME 3.1",
+                                "type": "type7",
+                                "total_llamadas": "62 /",
+                                "label": "Node name 3.1",
+                                "efectivos": "50%",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                }
+                            }
+                        ]
                     },
                     {
-                        "nodeName": "Agenda de promesa pago",
+                        "ttl_categoria": "Agenda de promesa pago",
                         "name": "NODE NAME 3.1",
                         "type": "type2",
-                        "code": "500 / 10%",
+                        "total_llamadas": "125 / ",
                         "label": "Node name 3.1",
-                        "version": "v1.0",
+                        "efectivos": "50%",
                         "link": {
                             "name": "Link node 2.1 to 3.1",
-                            "nodeName": "NODE NAME 3.1",
+                            "ttl_categoria": "NODE NAME 3.1",
                             "direction": "SYNC"
                         },
                         "children": [{
-                            "nodeName": "Ventas",
-                            "name": "NODE NAME 3.1",
-                            "type": "type2",
-                            "code": "300 / 10%",
-                            "label": "Node name 3.1",
-                            "version": "v1.0",
-                            "link": {
-                                "name": "Link node 2.1 to 3.1",
-                                "nodeName": "NODE NAME 3.1",
-                                "direction": "SYNC"
-                            },
-                            "children": [{
-                                "nodeName": "Cobrado",
+                                "ttl_categoria": "Ventas",
                                 "name": "NODE NAME 3.1",
                                 "type": "type2",
-                                "code": "234 / 5%",
+                                "total_llamadas": "62 / ",
                                 "label": "Node name 3.1",
-                                "version": "v1.0",
+                                "efectivos": "50%",
                                 "link": {
                                     "name": "Link node 2.1 to 3.1",
-                                    "nodeName": "NODE NAME 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
                                     "direction": "SYNC"
                                 },
-                                "children": []
-                            }]
-                        }]
+                                "children": [{
+                                        "ttl_categoria": "Cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type2",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    },
+                                    {
+                                        "ttl_categoria": "No cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type4",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "ttl_categoria": "En seguimiento",
+                                "name": "NODE NAME 3.1",
+                                "type": "type7",
+                                "total_llamadas": "62 /",
+                                "label": "Node name 3.1",
+                                "efectivos": "50%",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                }
+                            }
+                        ]
                     },
                     {
-                        "nodeName": "Envía ficha de depósito",
+                        "ttl_categoria": "Envía ficha de depósito",
                         "name": "NODE NAME 3.1",
                         "type": "type2",
-                        "code": "500 / 10%",
+                        "total_llamadas": "125 / ",
                         "label": "Node name 3.1",
-                        "version": "v1.0",
+                        "efectivos": "50%",
                         "link": {
                             "name": "Link node 2.1 to 3.1",
-                            "nodeName": "NODE NAME 3.1",
+                            "ttl_categoria": "NODE NAME 3.1",
                             "direction": "SYNC"
                         },
                         "children": [{
-                            "nodeName": "Ventas",
-                            "name": "NODE NAME 3.1",
-                            "type": "type2",
-                            "code": "300 / 10%",
-                            "label": "Node name 3.1",
-                            "version": "v1.0",
-                            "link": {
-                                "name": "Link node 2.1 to 3.1",
-                                "nodeName": "NODE NAME 3.1",
-                                "direction": "SYNC"
-                            },
-                            "children": [{
-                                "nodeName": "Cobrado",
+                                "ttl_categoria": "Ventas",
                                 "name": "NODE NAME 3.1",
                                 "type": "type2",
-                                "code": "234 / 5%",
+                                "total_llamadas": "62 / ",
                                 "label": "Node name 3.1",
-                                "version": "v1.0",
+                                "efectivos": "50%",
                                 "link": {
                                     "name": "Link node 2.1 to 3.1",
-                                    "nodeName": "NODE NAME 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
                                     "direction": "SYNC"
                                 },
-                                "children": []
-                            }]
-                        }]
+                                "children": [{
+                                        "ttl_categoria": "Cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type2",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    },
+                                    {
+                                        "ttl_categoria": "No cobrado",
+                                        "name": "NODE NAME 3.1",
+                                        "type": "type4",
+                                        "total_llamadas": "62 / ",
+                                        "label": "Node name 3.1",
+                                        "efectivos": "50%",
+                                        "link": {
+                                            "name": "Link node 2.1 to 3.1",
+                                            "ttl_categoria": "NODE NAME 3.1",
+                                            "direction": "SYNC"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "ttl_categoria": "En seguimiento",
+                                "name": "NODE NAME 3.1",
+                                "type": "type7",
+                                "total_llamadas": "62 /",
+                                "label": "Node name 3.1",
+                                "efectivos": "50%",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "ttl_categoria": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                }
+                            }
+                        ]
                     }
                 ]
             },
             {
-                "nodeName": "Atención a clientes",
+                "ttl_categoria": "Atención a clientes",
                 "type": "type7",
-                "code": "500 / 50%",
+                "total_llamadas": "500 / ",
+                "efectivos": "50%",
                 "label": "Node name 2.3",
                 "link": {
-                    "nodeName": "NODE NAME 2.3",
+                    "ttl_categoria": "NODE NAME 2.3",
                     "direction": "ASYN"
                 },
                 "children": [{
-                        "nodeName": "Asistencia Ubbitt",
+                        "ttl_categoria": "Asistencia Ubbitt",
                         "name": "NODE NAME 3.3",
                         "type": "type5",
-                        "code": "100 / 10%",
+                        "total_llamadas": "100 / ",
                         "label": "Node name 3.3",
-                        "version": "v1.0",
+                        "efectivos": "10%",
                         "link": {
                             "name": "Link node 2.3 to 3.3",
-                            "nodeName": "NODE NAME 3.3",
+                            "ttl_categoria": "NODE NAME 3.3",
                             "direction": "ASYN"
                         },
                         "children": [{
-                                "nodeName": "Dudas de producto",
+                                "ttl_categoria": "Dudas de producto",
                                 "name": "NODE NAME 4.1",
                                 "type": "type5",
-                                "code": "10 / 5%",
+                                "total_llamadas": "10 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.1",
-                                "version": "v1.0",
                                 "link": {
                                     "name": "Link node 3.3 to 4.1",
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "SYNC"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Asesorías de producto",
+                                "ttl_categoria": "Asesorías de producto",
                                 "name": "NODE NAME 4.1",
                                 "type": "type5",
-                                "code": "9 / 5%",
+                                "total_llamadas": "9 / ",
                                 "label": "Node name 4.1",
-                                "version": "v1.0",
+                                "efectivos": "5%",
                                 "link": {
                                     "name": "Link node 3.3 to 4.1",
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "SYNC"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Enlace de producto",
+                                "ttl_categoria": "Enlace de producto",
                                 "name": "NODE NAME 4.1",
                                 "type": "type5",
-                                "code": "2 / 5%",
+                                "total_llamadas": "2 / ",
                                 "label": "Node name 4.1",
-                                "version": "v1.0",
+                                "efectivos": "5%",
                                 "link": {
                                     "name": "Link node 3.3 to 4.1",
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "SYNC"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Enlace de coberturas",
+                                "ttl_categoria": "Enlace de coberturas",
                                 "name": "NODE NAME 4.1",
                                 "type": "type5",
-                                "code": "1 / 5%",
+                                "total_llamadas": "1 / ",
                                 "label": "Node name 4.1",
-                                "version": "v1.0",
+                                "efectivos": "5%",
                                 "link": {
                                     "name": "Link node 3.3 to 4.1",
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "SYNC"
                                 },
                                 "children": []
@@ -262,65 +372,71 @@
                         ]
                     },
                     {
-                        "nodeName": "Otros productos",
+                        "ttl_categoria": "Otros productos",
                         "type": "type1",
-                        "code": "120 / 10%",
+                        "total_llamadas": "120 / ",
                         "label": "Node name 3.4",
+                        "efectivos": "10%",
                         "link": {
-                            "nodeName": "NODE NAME 3.4",
+                            "ttl_categoria": "NODE NAME 3.4",
                             "direction": "ASYN"
                         },
                         "children": [{
-                                "nodeName": "Gastos médicos",
+                                "ttl_categoria": "Gastos médicos",
                                 "type": "type1",
-                                "code": "10 / 5%",
+                                "total_llamadas": "10 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Vida",
+                                "ttl_categoria": "Vida",
                                 "type": "type1",
-                                "code": "9 / 5%",
+                                "total_llamadas": "9 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Legalizados",
+                                "ttl_categoria": "Legalizados",
                                 "type": "type1",
-                                "code": "2 / 5%",
+                                "total_llamadas": "2 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Plataformas",
+                                "ttl_categoria": "Plataformas",
                                 "type": "type1",
-                                "code": "1 / 5%",
+                                "total_llamadas": "1 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Residenciales",
+                                "ttl_categoria": "Residenciales",
                                 "type": "type1",
-                                "code": "1 / 5%",
+                                "total_llamadas": "1 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
@@ -328,54 +444,59 @@
                         ]
                     },
                     {
-                        "nodeName": "Atención a clientes",
+                        "ttl_categoria": "Atención a clientes",
                         "type": "type6",
-                        "code": "130 / 10%",
+                        "total_llamadas": "130 / ",
+                        "efectivos": "10%",
                         "label": "Node name 3.4",
                         "link": {
-                            "nodeName": "NODE NAME 3.4",
+                            "ttl_categoria": "NODE NAME 3.4",
                             "direction": "ASYN"
                         },
                         "children": [{
-                                "nodeName": "Reportar atención de asesor",
+                                "ttl_categoria": "Reportar atención de asesor",
                                 "type": "type6",
-                                "code": "10 / 5%",
+                                "total_llamadas": "10 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Revisión renovación póliza",
+                                "ttl_categoria": "Revisión renovación póliza",
                                 "type": "type6",
-                                "code": "9 / 5%",
+                                "total_llamadas": "9 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Cancelación de producto",
+                                "ttl_categoria": "Cancelación de producto",
                                 "type": "type6",
-                                "code": "2 / 5%",
+                                "total_llamadas": "2 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Checar fechas de vigencia",
+                                "ttl_categoria": "Checar fechas de vigencia",
                                 "type": "type6",
-                                "code": "1 / 5%",
+                                "total_llamadas": "1 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
@@ -383,54 +504,59 @@
                         ]
                     },
                     {
-                        "nodeName": "Dudas de cobranza",
+                        "ttl_categoria": "Dudas de cobranza",
                         "type": "type3",
-                        "code": "150 / 20%",
+                        "total_llamadas": "150 / ",
+                        "efectivos": "20%",
                         "label": "Node name 3.4",
                         "link": {
-                            "nodeName": "NODE NAME 3.4",
+                            "ttl_categoria": "NODE NAME 3.4",
                             "direction": "ASYN"
                         },
                         "children": [{
-                                "nodeName": "Seguimiento pago",
+                                "ttl_categoria": "Seguimiento pago",
                                 "type": "type3",
-                                "code": "10 / 5%",
+                                "total_llamadas": "10 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Reembolsos",
+                                "ttl_categoria": "Reembolsos",
                                 "type": "type3",
-                                "code": "9 / 5%",
+                                "total_llamadas": "9 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Aclaración pagos",
+                                "ttl_categoria": "Aclaración pagos",
                                 "type": "type3",
-                                "code": "2 / 5%",
+                                "total_llamadas": "2 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
                             },
                             {
-                                "nodeName": "Reaiizar pago",
+                                "ttl_categoria": "Reaiizar pago",
                                 "type": "type3",
-                                "code": "1 / 5%",
+                                "total_llamadas": "1 / ",
+                                "efectivos": "5%",
                                 "label": "Node name 4.2",
                                 "link": {
-                                    "nodeName": "NODE NAME 4.1",
+                                    "ttl_categoria": "NODE NAME 4.1",
                                     "direction": "ASYN"
                                 },
                                 "children": []
