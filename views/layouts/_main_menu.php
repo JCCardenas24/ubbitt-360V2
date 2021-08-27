@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+/* @var $this yii\web\View */
+
 ?>
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -103,7 +105,8 @@ use yii\helpers\Url;
                     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                         <ul class="mt-3">
                             <li class="cuenta"><span><a href="perfil.php">Mis datos</a></span></li>
-                            <li class="cuenta"><span><a href="index.php?close_session">Cerrar sesión</a></span></li>
+                            <li class="cuenta"><span><a href="<?= Url::toRoute(['login/logout'])  ?>">Cerrar
+                                        sesión</a></span></li>
                         </ul>
                     </div>
                 </div>
