@@ -73,11 +73,7 @@ app\assets\AppAsset::register($this);
         </div>
     </main>
 
-    <footer class="footer mt-auto py-3 text-muted">
-        <div class="container">
-            <p class="float-left">&copy; Ubbitt 360 - <?= date('Y') ?></p>
-        </div>
-    </footer>
+    <?= $this->render('//layouts/_main_footer') ?>
 
     <?php $this->endBody() ?>
 </body>
