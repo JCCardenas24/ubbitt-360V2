@@ -62,6 +62,11 @@ $config = [
         'assetManager' => [
             'basePath' => '@webroot/yii-assets',
             'baseUrl' => '@web/yii-assets/',
+            'bundles' => [
+                'yii\bootstrap4\BootstrapAsset' => [
+                    'css' => [],
+                ],
+            ],
         ],
     ],
     'params' => $params,
