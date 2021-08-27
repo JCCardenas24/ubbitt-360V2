@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'assets/css/vendors_css.css',
         'assets/css/style.css',
-        'assets//icons/font-awesome/css/font-awesome.css',
+        'assets/icons/font-awesome/css/font-awesome.css',
         'assets/css/crm-styles.css',
         'assets/libs/datatables/datatables.min.css',
         'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css',
@@ -31,10 +31,9 @@ class AppAsset extends AssetBundle
         'assets/css/main.min.css',
     ];
     public $js = [
-        'js/vendors.min.js',
+        'assets/js/functions.js'
     ];
-    // public $depends = [
-    //     'yii\web\YiiAsset',
-    //     'yii\bootstrap4\BootstrapAsset',
-    // ];
+    public $depends = [
+        'yii\web\YiiAsset',
+    ];
 }
