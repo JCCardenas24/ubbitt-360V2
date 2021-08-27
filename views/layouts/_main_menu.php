@@ -3,7 +3,7 @@
         <div class="user-profile px-20 py-15">
             <div class="d-flex align-items-center">
                 <div class="image d-flex justify-content-center align-items-center">
-                    <span id="letterSpace" class="font-size-30 font-weight-700 c-sky"></span>
+                    <span id="letterSpace" class="font-size-30 font-weight-700 c-sky">U</span>
                 </div>
                 <div class="info">
                     <span class="px-20 font-size-14 font-weight-900 c-white">Ubbitt - Admin</span><br>
