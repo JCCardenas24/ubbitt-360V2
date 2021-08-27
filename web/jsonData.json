@@ -1,0 +1,444 @@
+{
+    "tree": {
+        "nodeName": "NCO (Total llamadas)",
+        "type": "type8",
+        "code": "1000",
+        "label": "",
+        "link": {
+            "nodeName": "NODE NAME 1",
+            "direction": "ASYN"
+        },
+        "children": [{
+                "nodeName": "Motivo de venta",
+                "name": "NODE NAME 2.1",
+                "type": "type2",
+                "code": "500 / 50%",
+                "label": "Node name 2.1",
+                "version": "v1.0",
+                "link": {
+                    "name": "Link node 1 to 2.1",
+                    "nodeName": "NODE NAME 2.1",
+                    "direction": "SYNC"
+                },
+                "children": [{
+                        "nodeName": "Acepta venta",
+                        "name": "NODE NAME 3.1",
+                        "type": "type2",
+                        "code": "500 / 10%",
+                        "label": "Node name 3.1",
+                        "version": "v1.0",
+                        "link": {
+                            "name": "Link node 2.1 to 3.1",
+                            "nodeName": "NODE NAME 3.1",
+                            "direction": "SYNC"
+                        },
+                        "children": [{
+                            "nodeName": "Ventas",
+                            "name": "NODE NAME 3.1",
+                            "type": "type2",
+                            "code": "300 / 10%",
+                            "label": "Node name 3.1",
+                            "version": "v1.0",
+                            "link": {
+                                "name": "Link node 2.1 to 3.1",
+                                "nodeName": "NODE NAME 3.1",
+                                "direction": "SYNC"
+                            },
+                            "children": [{
+                                "nodeName": "Cobrado",
+                                "name": "NODE NAME 3.1",
+                                "type": "type2",
+                                "code": "234 / 5%",
+                                "label": "Node name 3.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "nodeName": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            }]
+                        }]
+                    },
+                    {
+                        "nodeName": "Agenda llamada",
+                        "name": "NODE NAME 3.1",
+                        "type": "type2",
+                        "code": "500 / 10%",
+                        "label": "Node name 3.1",
+                        "version": "v1.0",
+                        "link": {
+                            "name": "Link node 2.1 to 3.1",
+                            "nodeName": "NODE NAME 3.1",
+                            "direction": "SYNC"
+                        },
+                        "children": [{
+                            "nodeName": "Ventas",
+                            "name": "NODE NAME 3.1",
+                            "type": "type2",
+                            "code": "300 / 10%",
+                            "label": "Node name 3.1",
+                            "version": "v1.0",
+                            "link": {
+                                "name": "Link node 2.1 to 3.1",
+                                "nodeName": "NODE NAME 3.1",
+                                "direction": "SYNC"
+                            },
+                            "children": [{
+                                "nodeName": "Cobrado",
+                                "name": "NODE NAME 3.1",
+                                "type": "type2",
+                                "code": "234 / 5%",
+                                "label": "Node name 3.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "nodeName": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            }]
+                        }]
+                    },
+                    {
+                        "nodeName": "Agenda de promesa pago",
+                        "name": "NODE NAME 3.1",
+                        "type": "type2",
+                        "code": "500 / 10%",
+                        "label": "Node name 3.1",
+                        "version": "v1.0",
+                        "link": {
+                            "name": "Link node 2.1 to 3.1",
+                            "nodeName": "NODE NAME 3.1",
+                            "direction": "SYNC"
+                        },
+                        "children": [{
+                            "nodeName": "Ventas",
+                            "name": "NODE NAME 3.1",
+                            "type": "type2",
+                            "code": "300 / 10%",
+                            "label": "Node name 3.1",
+                            "version": "v1.0",
+                            "link": {
+                                "name": "Link node 2.1 to 3.1",
+                                "nodeName": "NODE NAME 3.1",
+                                "direction": "SYNC"
+                            },
+                            "children": [{
+                                "nodeName": "Cobrado",
+                                "name": "NODE NAME 3.1",
+                                "type": "type2",
+                                "code": "234 / 5%",
+                                "label": "Node name 3.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "nodeName": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            }]
+                        }]
+                    },
+                    {
+                        "nodeName": "Envía ficha de depósito",
+                        "name": "NODE NAME 3.1",
+                        "type": "type2",
+                        "code": "500 / 10%",
+                        "label": "Node name 3.1",
+                        "version": "v1.0",
+                        "link": {
+                            "name": "Link node 2.1 to 3.1",
+                            "nodeName": "NODE NAME 3.1",
+                            "direction": "SYNC"
+                        },
+                        "children": [{
+                            "nodeName": "Ventas",
+                            "name": "NODE NAME 3.1",
+                            "type": "type2",
+                            "code": "300 / 10%",
+                            "label": "Node name 3.1",
+                            "version": "v1.0",
+                            "link": {
+                                "name": "Link node 2.1 to 3.1",
+                                "nodeName": "NODE NAME 3.1",
+                                "direction": "SYNC"
+                            },
+                            "children": [{
+                                "nodeName": "Cobrado",
+                                "name": "NODE NAME 3.1",
+                                "type": "type2",
+                                "code": "234 / 5%",
+                                "label": "Node name 3.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 2.1 to 3.1",
+                                    "nodeName": "NODE NAME 3.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            }]
+                        }]
+                    }
+                ]
+            },
+            {
+                "nodeName": "Atención a clientes",
+                "type": "type7",
+                "code": "500 / 50%",
+                "label": "Node name 2.3",
+                "link": {
+                    "nodeName": "NODE NAME 2.3",
+                    "direction": "ASYN"
+                },
+                "children": [{
+                        "nodeName": "Asistencia Ubbitt",
+                        "name": "NODE NAME 3.3",
+                        "type": "type5",
+                        "code": "100 / 10%",
+                        "label": "Node name 3.3",
+                        "version": "v1.0",
+                        "link": {
+                            "name": "Link node 2.3 to 3.3",
+                            "nodeName": "NODE NAME 3.3",
+                            "direction": "ASYN"
+                        },
+                        "children": [{
+                                "nodeName": "Dudas de producto",
+                                "name": "NODE NAME 4.1",
+                                "type": "type5",
+                                "code": "10 / 5%",
+                                "label": "Node name 4.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 3.3 to 4.1",
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Asesorías de producto",
+                                "name": "NODE NAME 4.1",
+                                "type": "type5",
+                                "code": "9 / 5%",
+                                "label": "Node name 4.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 3.3 to 4.1",
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Enlace de producto",
+                                "name": "NODE NAME 4.1",
+                                "type": "type5",
+                                "code": "2 / 5%",
+                                "label": "Node name 4.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 3.3 to 4.1",
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Enlace de coberturas",
+                                "name": "NODE NAME 4.1",
+                                "type": "type5",
+                                "code": "1 / 5%",
+                                "label": "Node name 4.1",
+                                "version": "v1.0",
+                                "link": {
+                                    "name": "Link node 3.3 to 4.1",
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "SYNC"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "nodeName": "Otros productos",
+                        "type": "type1",
+                        "code": "120 / 10%",
+                        "label": "Node name 3.4",
+                        "link": {
+                            "nodeName": "NODE NAME 3.4",
+                            "direction": "ASYN"
+                        },
+                        "children": [{
+                                "nodeName": "Gastos médicos",
+                                "type": "type1",
+                                "code": "10 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Vida",
+                                "type": "type1",
+                                "code": "9 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Legalizados",
+                                "type": "type1",
+                                "code": "2 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Plataformas",
+                                "type": "type1",
+                                "code": "1 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Residenciales",
+                                "type": "type1",
+                                "code": "1 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "nodeName": "Atención a clientes",
+                        "type": "type6",
+                        "code": "130 / 10%",
+                        "label": "Node name 3.4",
+                        "link": {
+                            "nodeName": "NODE NAME 3.4",
+                            "direction": "ASYN"
+                        },
+                        "children": [{
+                                "nodeName": "Reportar atención de asesor",
+                                "type": "type6",
+                                "code": "10 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Revisión renovación póliza",
+                                "type": "type6",
+                                "code": "9 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Cancelación de producto",
+                                "type": "type6",
+                                "code": "2 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Checar fechas de vigencia",
+                                "type": "type6",
+                                "code": "1 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "nodeName": "Dudas de cobranza",
+                        "type": "type3",
+                        "code": "150 / 20%",
+                        "label": "Node name 3.4",
+                        "link": {
+                            "nodeName": "NODE NAME 3.4",
+                            "direction": "ASYN"
+                        },
+                        "children": [{
+                                "nodeName": "Seguimiento pago",
+                                "type": "type3",
+                                "code": "10 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Reembolsos",
+                                "type": "type3",
+                                "code": "9 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Aclaración pagos",
+                                "type": "type3",
+                                "code": "2 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            },
+                            {
+                                "nodeName": "Reaiizar pago",
+                                "type": "type3",
+                                "code": "1 / 5%",
+                                "label": "Node name 4.2",
+                                "link": {
+                                    "nodeName": "NODE NAME 4.1",
+                                    "direction": "ASYN"
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

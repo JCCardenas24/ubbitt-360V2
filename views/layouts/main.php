@@ -4,7 +4,6 @@
 /* @var $content string */
 
 use app\widgets\Alert;
-use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 
 app\assets\AppAsset::register($this);
@@ -58,26 +57,17 @@ app\assets\AppAsset::register($this);
 
 <body class="hold-transition light-skin sidebar-mini theme-primary">
     <?php $this->beginBody() ?>
-    <?= $this->render('//layouts/_main_header') ?>
-    <?= $this->render('//layouts/_main_menu') ?>
+    <div class="wrapper">
+        <?= $this->render('//layouts/_main_header') ?>
+        <?= $this->render('//layouts/_main_menu') ?>
 
-    <main role="main" class="flex-shrink-0">
-        <div class="container">
-            <?= Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]) ?>
-            <?= Alert::widget() ?>
-            <div class="content-wrapper">
-                <?= $content ?>
-            </div>
+        <?= Alert::widget() ?>
+        <div class="content-wrapper">
+            <?= $content ?>
         </div>
-    </main>
 
-    <footer class="footer mt-auto py-3 text-muted">
-        <div class="container">
-            <p class="float-left">&copy; Ubbitt 360 - <?= date('Y') ?></p>
-        </div>
-    </footer>
+        <?= $this->render('//layouts/_main_footer') ?>
+    </div>
 
     <?php $this->endBody() ?>
 </body>
