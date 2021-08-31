@@ -151,7 +151,7 @@ let options = {
                     show: true,
                     position: 'inner',
                     formatter: function(params) {
-                        return params.value + '%\n'
+                        return params.value + '\n'
                     },
                 },
                 labelLine: {
