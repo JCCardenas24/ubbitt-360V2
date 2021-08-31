@@ -66,7 +66,7 @@ class UbbittFreemiumController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
