@@ -36,7 +36,9 @@ use yii\helpers\Url;
                     </div>
 
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                        <li class="sub_ttl"><?= Html::a("Inbound", Url::toRoute('ubbitt-freemium/dashboard')) ?></li>
+                        <li class="sub_ttl">
+                            <?= Html::a("Inbound", Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound'])) ?>
+                        </li>
                         <ul>
                             <li><span id="li_resumen_inbound_freemium" class="options_inbound_freemium">Resumen</span>
                             </li>
