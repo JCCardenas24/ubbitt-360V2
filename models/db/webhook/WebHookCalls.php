@@ -114,10 +114,11 @@ class WebHookCalls extends ActiveRecord
      * @param integer $id
      * @return array[] \app\models\db\webhook\WebHookCalls
      */
-    public function findByDate($startDate, $endDate, $page)
+    public function findByDate($phoneNumber, $startDate, $endDate, $page)
     {
         $query = self::find()
-            ->where(['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            ->where(['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+            ->andWhere(['like', 'callpicker_number', $phoneNumber]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
         $calls = $query->offset($pages->offset)->limit($pages->limit)->all();
