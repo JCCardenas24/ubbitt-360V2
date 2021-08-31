@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\db\webhook\WebHookCalls;
+use app\models\forms\SearchByDateForm;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 class UbbittFreemiumController extends Controller
 {
@@ -18,7 +22,7 @@ class UbbittFreemiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard'],
+                        'actions' => ['dashboard', 'find-calls'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -28,6 +32,7 @@ class UbbittFreemiumController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'dashboard' => ['get'],
+                    'find-calls' => ['post'],
                 ],
             ],
         ];
@@ -53,5 +58,16 @@ class UbbittFreemiumController extends Controller
     public function actionDashboard()
     {
         return $this->render('dashboard');
+    }
+
+    public function actionFindCalls()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $calls = new WebHookCalls();
+        $callsArray = $calls->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $callsArray;
     }
 }
