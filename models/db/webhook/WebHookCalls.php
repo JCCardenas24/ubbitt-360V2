@@ -7,7 +7,7 @@ use yii\data\Pagination;
 use yii\db\ActiveRecord;
 
 /**
- * This is the  class for table "Permission".
+ * This is the  class for table "calls".
  *
  * @property integer $callId
  * @property string $status
@@ -25,6 +25,7 @@ class WebHookCalls extends ActiveRecord
 {
 
     public $db = null;
+    public $records = [];
 
     /**
      * @inheritdoc
@@ -53,6 +54,7 @@ class WebHookCalls extends ActiveRecord
             [['duration',], 'double'],
             [['status', 'type', 'dialed_by', 'answered_by',], 'string'],
             [['date',], 'datetime'],
+            [['records',], 'safe'],
         ];
     }
 
@@ -71,6 +73,7 @@ class WebHookCalls extends ActiveRecord
             'callpicker_number' => 'Teléfono recibido',
             'duration' => 'Duración',
             'date' => 'Fecha de la llamada',
+            'records' => 'Grabaciones',
         ];
     }
 
@@ -100,6 +103,30 @@ class WebHookCalls extends ActiveRecord
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields['records'] = function ($model) {
+            $records = $model->getCallRecords()->all();
+            return array_map(function ($record) {
+                return $record->name;
+            }, $records);
+        };
+        return $fields;
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCallRecords()
+    {
+        return $this->hasMany(WebHookCallRecord::class, ['pk_callpicker_id' => 'pk_callpicker_id']);
+    }
+
+    /**
      * Finds a Permission by its id
      * @param integer $id
      * @return \app\models\db\webhook\WebHookCalls
@@ -117,11 +144,18 @@ class WebHookCalls extends ActiveRecord
     public function findByDate($phoneNumber, $startDate, $endDate, $page)
     {
         $query = self::find()
+            ->with('callRecords')
             ->where(['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->andWhere(['like', 'callpicker_number', $phoneNumber]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
         $calls = $query->offset($pages->offset)->limit($pages->limit)->all();
+        foreach ($calls as &$call) {
+            $records = $call->getCallRecords()->all();
+            foreach ($records as $record) {
+                array_push($call->records, $record->name);
+            }
+        }
         return [
             'callsRecords' => $calls,
             'totalPages' => $pages->pageCount
