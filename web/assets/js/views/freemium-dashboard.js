@@ -107,10 +107,19 @@ function createCallRecordRow(callRecord) {
         callRecord.date +
         `</td>
             <td>
+            ` +
+        callRecord.records.map(
+            (record) =>
+                ` 
             <audio controls>
-                <source src="./assets/audio/record_example.mp3" type="audio/mpeg">
+                <source src="/assets/audio/` +
+                record +
+                `.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
+            `
+        ) +
+        `
             </td>
         </tr>
     `
