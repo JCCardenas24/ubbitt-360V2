@@ -10,7 +10,7 @@ $this->title = 'Ubbitt 360';
 $this->registerJs('d3.json("/jsonData.json", function(error, json) {
     treeBoxes("", json.tree);
 });', View::POS_READY, 'web');
-$this->registerJsFile('@web/assets/js/views/freemium-dashboard.js', ['position' => View::POS_END, 'depends' => [\app\assets\ChartsAsset::class]]);
+$this->registerJsFile('@web/assets/js/views/ubbitt-freemium/freemium-dashboard.js', ['position' => View::POS_END, 'depends' => [\app\assets\ChartsAsset::class]]);
 ?>
 <div class="container" id="dynamic-tabs">
     <ul class="nav nav-pills level_one" id="main_tabs_panels" role="tablist">

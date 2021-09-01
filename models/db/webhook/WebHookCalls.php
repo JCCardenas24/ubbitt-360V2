@@ -150,12 +150,6 @@ class WebHookCalls extends ActiveRecord
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
         $calls = $query->offset($pages->offset)->limit($pages->limit)->all();
-        foreach ($calls as &$call) {
-            $records = $call->getCallRecords()->all();
-            foreach ($records as $record) {
-                array_push($call->records, $record->name);
-            }
-        }
         return [
             'callsRecords' => $calls,
             'totalPages' => $pages->pageCount
