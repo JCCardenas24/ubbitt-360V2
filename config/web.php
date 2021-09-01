@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$webhookDb = require __DIR__ . '/webhookDb.php';
 
 $config = [
     'id' => 'ubbitt-360-v2',
@@ -46,10 +47,12 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logFile' => '@runtime/logs/app-' . date('Y') . '-' . date('m') . '-' . date('d') . '.log',
                 ],
             ],
         ],
         'db' => $db,
+        'webhookDb' => $webhookDb,
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

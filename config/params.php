@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'itemsPerPage' => 10,
+    'ubbitt_freemium_did' => '5588547978'
 ];

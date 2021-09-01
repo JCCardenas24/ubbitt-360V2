@@ -24,7 +24,6 @@ class ChartsAsset extends AssetBundle
 
     public $js = [
         'assets/vendor_components/moment/locale/es.js',
-        'assets/js/clientes.js',
         'assets/js/pages/d3.min.js',
         'assets/vendor_components/echarts/dist/echarts-en.min.js',
         'assets/js/new-charts.js',
