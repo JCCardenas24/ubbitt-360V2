@@ -6,16 +6,18 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Ubbitt 360';
+$this->registerJsFile('@web/assets/js/views/login/index.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
 ?>
 <div class="container h-p100">
     <div class="row align-items-center justify-content-md-center h-p100">
         <div class="col-12">
             <div class="row justify-content-center no-gutters">
                 <div class="col-lg-5 col-md-5 col-12">
-                    <div class="bg-white rounded10 shadow-lg container-login">
+                    <div id="login_container" class="bg-white rounded10 shadow-lg container-login">
                         <div>
                             <div class="content-top-agile">
                                 <img class="logo_ubbitt d-block m-auto"
@@ -59,22 +61,36 @@ $this->title = 'Ubbitt 360';
                             </div>
                             <div class="row">
                                 <div class="col-12 text-center pos-check">
-                                    <div class="form-check p-0 prt-10">
+                                    <div class="form-check p-0 prt-10 pt-10">
                                         <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                                         <label class="form-check-label" for="defaultCheck1">
                                             <span class="font-size-14 c-gray">Acepto <a
                                                     href="<?= Url::toRoute(['terms-and-conditions/index']) ?>"
-                                                    class="c-terminos">Términos
-                                                    y Condiciones</a></span>
+                                                    class="c-terminos">Términos y
+                                                    Condiciones</a></span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-12 text-center p-20 pb-0">
-                                    <?= Html::submitButton('iniciar
-                                        sesión', ['class' => 'btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase', 'name' => 'login-button']) ?>
-                                </div>
+                                <?= Html::submitButton('iniciar
+                                        sesión', ['class' => 'btn_login btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase d-block mx-auto', 'name' => 'login-button']) ?>
+                                <a id="btn_go_to_recover" class="wid-100  text-center d-block mx-auto">Olvidé mi
+                                    contraseña</a>
                             </div>
                             <?php ActiveForm::end(); ?>
+                        </div>
+                    </div>
+                    <div id="recovery_psw_container" style="display: none;">
+                        <div class="recovery_step_1">
+                            <h5>Recuperar contraseña</h5>
+                            <p>Ingresa tu correo electrónico y se te enviará un link para reestabecer tu contraseña
+                            </p>
+                            <div class="form-group">
+                                <label for="email_recovery_input">Email</label>
+                                <input type="email" class="form-control email_input" id="email_recovery_input"
+                                    placeholder="test@gmail.com">
+                            </div>
+                            <a class="send_request_email">Enviar</a>
+                            <a class="cancel_request_email">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -82,46 +98,3 @@ $this->title = 'Ubbitt 360';
         </div>
     </div>
 </div>
-<div class="modal fade" id="cambioPassword" tabindex="-1" role="dialog" aria-labelledby="cambioPasswordTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-            </div>
-            <div class="modal-body">
-                <div class="text-center p-25">
-                    <h4 class="c-header font-weight-800">Ayuda con la contraseña</h4>
-                    <p class="c-header">Introduce tu correo electrónico <br> para que un agente de RH pueda
-                        modificar la contraseña</p>
-                    <input type="text" class="col-10 m-auto">
-                    <div class="col-12 text-center mt-20">
-                        <button type="button" class="btn btn-first col-6 c-white font-weight-800" data-dismiss="modal"
-                            data-toggle="modal" data-target="#cambioEnviado">Continuar</button>
-                    </div>
-                    <div class="col-12 text-center mt-20">
-                        <button type="button" class="btn btn-second col-6 c-white font-weight-800"
-                            data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="cambioEnviado" tabindex="-1" role="dialog" aria-labelledby="cambioEnviadoTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-            </div>
-            <div class="modal-body">
-                <div class="text-center p-25">
-                    <h4 class="c-header font-weight-800">Tu solicitud se ha enviado exitosamente</h4>
-                    <p class="c-header">En breve recibirás la nueva contraseña en tu correo electrónico</p>
-                    <div class="col-12 text-center mt-20">
-                        <button type="button" class="btn btn-first col-6 c-white font-weight-800"
-                            data-dismiss="modal">Aceptar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
