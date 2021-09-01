@@ -5,6 +5,7 @@
 /* @var $model app\models\LoginForm */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Ubbitt 360';
@@ -61,7 +62,8 @@ $this->title = 'Ubbitt 360';
                                     <div class="form-check p-0 prt-10">
                                         <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                                         <label class="form-check-label" for="defaultCheck1">
-                                            <span class="font-size-14 c-gray">Acepto <a href="#"
+                                            <span class="font-size-14 c-gray">Acepto <a
+                                                    href="<?= Url::toRoute(['terms-and-conditions/index']) ?>"
                                                     class="c-terminos">Términos
                                                     y Condiciones</a></span>
                                         </label>

@@ -20,7 +20,6 @@ class TermsAndConditionsController extends Controller
                     [
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => ['@'],
                     ],
                 ],
             ],
@@ -43,6 +42,16 @@ class TermsAndConditionsController extends Controller
                 'class' => 'yii\web\ErrorAction',
             ],
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        $this->layout = 'terms-and-conditions';
+        return parent::beforeAction($action);
     }
 
     /**
