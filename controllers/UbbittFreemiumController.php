@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\db\FreemiumSummaryGraph;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
 use Yii;
@@ -22,7 +23,7 @@ class UbbittFreemiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-calls'],
+                        'actions' => ['dashboard', 'find-calls', 'find-summary-graph-data'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -33,6 +34,7 @@ class UbbittFreemiumController extends Controller
                 'actions' => [
                     'dashboard' => ['get'],
                     'find-calls' => ['post'],
+                    'find-summary-graph-data' => ['post'],
                 ],
             ],
         ];
@@ -69,5 +71,15 @@ class UbbittFreemiumController extends Controller
         $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionFindSummaryGraphData()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $summaryGraphModel = new FreemiumSummaryGraph();
+        $data = $summaryGraphModel->findByDates($searchParams->startDate, $searchParams->endDate);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
     }
 }
