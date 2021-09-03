@@ -142,6 +142,9 @@ use yii\helpers\Url;
                         </ul>
                     </div>
                 </div>
+                <?php
+                if (in_array('menu_upload_report', Yii::$app->session->get("userPermissions"))) {
+                ?>
                 <div class="views_menu_option">
                     <div class="" id="headingFour">
                         <h5 class="mb-0">
@@ -154,6 +157,7 @@ use yii\helpers\Url;
                         </h5>
                     </div>
                 </div>
+                <?php } ?>
             </div>
         </div>
 
