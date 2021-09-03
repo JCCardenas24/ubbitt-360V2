@@ -36,20 +36,21 @@ class UploadReportBusiness
         $transaction = FreemiumSummaryGraph::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             $summary = new FreemiumSummaryGraph();
-            $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getFormattedValue();
-            $uploadDate = Date::excelToDateTimeObject($uploadDate);
-            $summary->uploadDate = $uploadDate->format('Y-m-d');
             $date = $sheet->getCellByColumnAndRow($currentColumnIndex, 2)->getFormattedValue();
             $date = Date::excelToDateTimeObject($date);
             $summary->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $summary->findByDate();
+            if ($previousData != null) {
+                $summary = $previousData;
+            }
+            $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getFormattedValue();
+            $uploadDate = Date::excelToDateTimeObject($uploadDate);
+            $summary->uploadDate = $uploadDate->format('Y-m-d');
             $summary->leads = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 3)->getValue());
             $summary->calls = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 4)->getValue());
             $summary->sales = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 5)->getValue());
             $summary->collected = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 6)->getValue());
-            if ($summary->findByDate() != null) {
-                $transaction->rollback();
-                throw new UploadBusinessException("Resumen Gráfica Freemium - La fecha {$uploadDate->format('d/m/Y')} ya ha sido previamente cargada");
-            }
             if (!$summary->save()) {
                 $currentColumnString = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($currentColumnIndex);
                 $transaction->rollback();
