@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\business\UploadReportBusiness;
 use app\exception\UploadBusinessException;
-use app\models\response\BaseResponse;
 use Exception;
 use Yii;
 use yii\filters\AccessControl;
@@ -62,7 +61,6 @@ class ReportController extends Controller
 
     public function actionUploadFile()
     {
-        $response = new BaseResponse();
         Yii::$app->response->format = Response::FORMAT_JSON;
         $file = UploadedFile::getInstanceByName('file');
         $uploadReportsBusiness = new UploadReportBusiness();
@@ -74,6 +72,5 @@ class ReportController extends Controller
             Yii::error($exception);
             throw new ServerErrorHttpException();
         }
-        return $response;
     }
 }
