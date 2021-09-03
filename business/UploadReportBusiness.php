@@ -31,6 +31,7 @@ class UploadReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $transaction = FreemiumSummaryGraph::getDb()->beginTransaction();
         for($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             $summary = new FreemiumSummaryGraph();
             $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getFormattedValue();
@@ -44,13 +45,16 @@ class UploadReportBusiness
             $summary->sales = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 5)->getValue());
             $summary->collected = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 6)->getValue());
             if ($summary->findByDate() != null) {
+                $transaction->rollback();
                 throw new UploadBusinessException("Resumen Gráfica Freemium - La fecha {$uploadDate->format('d/m/Y')} ya ha sido previamente cargada");
             }
             if (!$summary->save()) {
                 $currentColumnString = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($currentColumnIndex);
+                $transaction->rollback();
                 throw new UploadBusinessException('Resumen Gráfica Freemium - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($summary->errors));
             }
         }
+        $transaction->commit();
     }
 
     private function getValidationErrorsAsString($errors) {
