@@ -71,6 +71,15 @@ class FreemiumSummaryGraph extends ActiveRecord
 
     public function findByDate()
     {
-        return self::find()->where(['date' => $this->date])->one();
+        return self::find()
+            ->where(['date' => $this->date])
+            ->one();
+    }
+
+    public function findByDates($startDate, $endDate)
+    {
+        return self::find()
+            ->where(['between', 'date', $startDate, $endDate])
+            ->all();
     }
 }
