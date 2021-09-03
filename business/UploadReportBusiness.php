@@ -5,6 +5,7 @@ namespace app\business;
 use app\exception\UploadBusinessException;
 use app\models\db\FreemiumSummaryGraph;
 use Exception;
+use \PhpOffice\PhpSpreadsheet\Shared\Date;
 use \PhpOffice\PhpSpreadsheet\IOFactory;
 use \PhpOffice\PhpSpreadsheet\Spreadsheet;
 use yii\web\UploadedFile;
@@ -23,7 +24,8 @@ class UploadReportBusiness
         unset($spreadsheet);
     }
 
-    private function loadFreemiumInboundSummary(Spreadsheet $spreadsheet) {
+    private function loadFreemiumInboundSummary(Spreadsheet $spreadsheet)
+    {
         try {
             $spreadsheet->setActiveSheetIndexByName('Resumen Gráfica Freemium');
         } catch (Exception $exception) {
@@ -32,13 +34,13 @@ class UploadReportBusiness
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($sheet->getHighestColumn());
         $transaction = FreemiumSummaryGraph::getDb()->beginTransaction();
-        for($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             $summary = new FreemiumSummaryGraph();
             $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getFormattedValue();
-            $uploadDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($uploadDate);
+            $uploadDate = Date::excelToDateTimeObject($uploadDate);
             $summary->uploadDate = $uploadDate->format('Y-m-d');
             $date = $sheet->getCellByColumnAndRow($currentColumnIndex, 2)->getFormattedValue();
-            $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date);
+            $date = Date::excelToDateTimeObject($date);
             $summary->date = $date->format('Y-m-d');
             $summary->leads = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 3)->getValue());
             $summary->calls = intval($sheet->getCellByColumnAndRow($currentColumnIndex, 4)->getValue());
@@ -57,7 +59,8 @@ class UploadReportBusiness
         $transaction->commit();
     }
 
-    private function getValidationErrorsAsString($errors) {
+    private function getValidationErrorsAsString($errors)
+    {
         $errorsString = '';
         foreach ($errors as $key => $errorsDescription) {
             $errorsString .= implode($errorsDescription) . ', ';
