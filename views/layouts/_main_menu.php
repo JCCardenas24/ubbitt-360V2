@@ -21,6 +21,9 @@ use yii\helpers\Url;
         </div>
         <div class="menu-sidebar">
             <div id="accordion">
+                <?php
+                if (in_array('menu_ubbitt_freemium', Yii::$app->session->get("userPermissions"))) {
+                ?>
                 <div class="views_menu_option">
                     <div class="" id="headingOne">
                         <h5 class="mb-0">
@@ -34,7 +37,9 @@ use yii\helpers\Url;
                             </a>
                         </h5>
                     </div>
-
+                    <?php
+                        if (in_array('menu_ubbitt_freemium_inbound', Yii::$app->session->get("userPermissions"))) {
+                        ?>
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                         <li class="sub_ttl">
                             <?= Html::a("Inbound", Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound'])) ?>
@@ -48,7 +53,12 @@ use yii\helpers\Url;
                             </li>
                         </ul>
                     </div>
+                    <?php } ?>
                 </div>
+                <?php } ?>
+                <?php
+                //if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
+                ?>
                 <div class="views_menu_option">
                     <div class="" id="headingOne">
                         <h5 class="mb-0">
@@ -64,6 +74,11 @@ use yii\helpers\Url;
                     <div id="collapse_premium" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     </div>
                 </div>
+                <?php //} 
+                ?>
+                <?php
+                if (in_array('menu_ubbitt_beyond', Yii::$app->session->get("userPermissions"))) {
+                ?>
                 <div class="views_menu_option">
                     <div class="" id="headingTwo">
                         <h5 class="mb-0">
@@ -78,6 +93,9 @@ use yii\helpers\Url;
                         </h5>
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <?php
+                            if (in_array('menu_ubbitt_freemium_collection', Yii::$app->session->get("userPermissions"))) {
+                            ?>
                         <li class="sub_ttl"><a
                                 href="<?= Url::toRoute(['ubbitt-beyond/collection-dashboard']) ?>">Cobranza</a></li>
                         <ul>
@@ -86,6 +104,10 @@ use yii\helpers\Url;
                             <li><span>Reportes</span></li>
                             <li><span>Carga de base de datos</span></li>
                         </ul>
+                        <?php } ?>
+                        <?php
+                            if (in_array('menu_ubbitt_freemium_renewal', Yii::$app->session->get("userPermissions"))) {
+                            ?>
                         <li class="sub_ttl"><a
                                 href="<?= Url::toRoute(['ubbitt-beyond/renewal-dashboard']) ?>">Renovación</a></li>
                         <ul>
@@ -94,8 +116,10 @@ use yii\helpers\Url;
                             <li><span>Reportes</span></li>
                             <li><span>Carga de base de datos</span></li>
                         </ul>
+                        <?php } ?>
                     </div>
                 </div>
+                <?php } ?>
                 <div class="views_menu_option">
                     <div class="" id="headingThree">
                         <h5 class="mb-0">
@@ -116,6 +140,18 @@ use yii\helpers\Url;
                             <li class="cuenta"><span><a href="<?= Url::toRoute(['login/logout']) ?>">Cerrar
                                         sesión</a></span></li>
                         </ul>
+                    </div>
+                </div>
+                <div class="views_menu_option">
+                    <div class="" id="headingFour">
+                        <h5 class="mb-0">
+                            <a class="header_ttl collapsed" href="<?= Url::toRoute(['report/upload']) ?>">
+                                <span>
+                                    <i class="ri-upload-cloud-2-fill"></i>
+                                    Carga de reporte
+                                </span>
+                            </a>
+                        </h5>
                     </div>
                 </div>
             </div>

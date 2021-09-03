@@ -13,6 +13,8 @@ use yii\db\ActiveRecord;
  */
 class UserProfile extends ActiveRecord
 {
+    public $permission_code_name = null;
+
     /**
      * @inheritdoc
      */
@@ -30,6 +32,7 @@ class UserProfile extends ActiveRecord
             [['user_id', 'profile_id'], 'required'],
             [['user_id'], 'string'],
             [['profile_id'], 'integer'],
+            [['permission_code_name'], 'safe'],
         ];
     }
 
@@ -81,5 +84,15 @@ class UserProfile extends ActiveRecord
         return $this->findOne([
             'user_id' => $userId
         ]);
+    }
+
+    public function findAllPermissions()
+    {
+        return self::find()
+            ->select('permission.code_name as permission_code_name')
+            ->leftJoin('profile_permission', 'profile_permission.profile_id = user_profile.profile_id')
+            ->leftJoin('permission', 'permission.permission_id = profile_permission.permission_id')
+            ->where(['user_profile.profile_id' => $this->profileId])
+            ->all();
     }
 }
