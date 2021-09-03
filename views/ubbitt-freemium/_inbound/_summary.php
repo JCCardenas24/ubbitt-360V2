@@ -8,7 +8,7 @@
                         <div class="form-group wid-100 d-flex m-0">
                             <div id="freemium-summary-date-range" class="range-pick">
                                 <i class="fa fa-calendar"></i>&nbsp;
-                                <span></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                                <span class="text-date"></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                             </div>
                         </div>
                     </div>
