@@ -68,7 +68,7 @@ $('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
 });
 
 function summaryGraphCallback(start, end, label) {
-    $('.range-pick#freemium-calls-database-date-range').html(
+    $('.range-pick#freemium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     $.ajax({
@@ -166,7 +166,7 @@ function updateTransactionChart(data) {
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
-    $('.range-pick#freemium-calls-database-date-range').html(
+    $('.range-pick#freemium-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     $.ajax({
