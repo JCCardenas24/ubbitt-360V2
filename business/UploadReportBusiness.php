@@ -3,7 +3,7 @@
 namespace app\business;
 
 use app\exception\UploadBusinessException;
-use app\models\db\FreemiumSummary;
+use app\models\db\FreemiumSummaryGraph;
 use Exception;
 use \PhpOffice\PhpSpreadsheet\IOFactory;
 use \PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -32,7 +32,7 @@ class UploadReportBusiness
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($sheet->getHighestColumn());
         for($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
-            $summary = new FreemiumSummary();
+            $summary = new FreemiumSummaryGraph();
             $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getFormattedValue();
             $uploadDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($uploadDate);
             $summary->uploadDate = $uploadDate->format('Y-m-d');

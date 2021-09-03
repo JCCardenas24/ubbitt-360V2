@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the  class for table "freemium_summary".
+ * This is the  class for table "freemium_summary_graph".
  *
  * @property date $uploadDate
  * @property date $date
@@ -16,14 +16,14 @@ use yii\db\ActiveRecord;
  * @property integer $collected
  *
  */
-class FreemiumSummary extends ActiveRecord
+class FreemiumSummaryGraph extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'freemium_summary';
+        return 'freemium_summary_graph';
     }
 
     /**
