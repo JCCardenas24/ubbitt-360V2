@@ -78,7 +78,9 @@ class FreemiumSummaryGraph extends ActiveRecord
 
     public function findByDates($startDate, $endDate)
     {
+        $date = new \yii\db\Expression("DATE_FORMAT(upload_date, '%d/%m/%Y') as upload_date, DATE_FORMAT(`date`, '%d/%m/%Y') as `date`, leads, calls, sales, collected");
         return self::find()
+            ->select($date)
             ->where(['between', 'date', $startDate, $endDate])
             ->all();
     }
