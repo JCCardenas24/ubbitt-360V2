@@ -23,6 +23,10 @@ $(function () {
                 moment().subtract(6, 'days'),
                 moment().subtract(1, 'days'),
             ],
+            'Últimos 30 días': [
+                moment().subtract(29, 'days'),
+                moment().subtract(1, 'days'),
+            ],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -30,6 +34,12 @@ $(function () {
             customRangeLabel: 'Personalizado',
         },
     };
+
+    $('.range-pick#freemium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryGraphCallback
+    );
+    summaryGraphCallback(startDate, endDate);
 });
 
 $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
@@ -37,6 +47,7 @@ $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
     event.relatedTarget; // previous active tab
     $('.options_inbound_freemium').removeClass('font-weight-bold');
     $('#li_resumen_inbound_freemium').addClass('font-weight-bold');
+    summaryGraphCallback(startDate, endDate);
 });
 $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
     event.target; // newly activated tab
@@ -55,6 +66,104 @@ $('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
     $('.options_inbound_freemium').removeClass('font-weight-bold');
     $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
 });
+
+function summaryGraphCallback(start, end, label) {
+    $('.range-pick#freemium-calls-database-date-range').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    $.ajax({
+        url: '/ubbitt-freemium/find-summary-graph-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (response) => {
+            updateTransactionChart(response);
+        },
+        error: () => {
+            alert(
+                'Ocurrió un problema al la información del gráfico de transacciones'
+            );
+        },
+    });
+}
+
+function updateTransactionChart(data) {
+    let stackedChart = echarts.init(document.getElementById('stacked-line'));
+
+    let option = {
+        grid: {
+            left: '1%',
+            right: '2%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        tooltip: {
+            trigger: 'axis',
+        },
+        // Add legend
+        legend: {
+            data: ['Leads', 'Llamadas', 'Ventas', 'Cobrado'],
+        },
+
+        // Add custom colors
+        color: ['#47d182', '#211a19', '#ff6f61', '#ffd800'],
+
+        // Enable drag recalculate
+        calculable: true,
+
+        // Hirozontal axis
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: data.map((row) => row.date),
+            },
+        ],
+
+        // Vertical axis
+        yAxis: [
+            {
+                type: 'value',
+            },
+        ],
+
+        // Add series
+        series: [
+            {
+                name: 'Leads',
+                type: 'line',
+                stack: 'Total',
+                data: data.map((row) => row.leads),
+            },
+            {
+                name: 'Llamadas',
+                type: 'line',
+                stack: 'Total',
+                data: data.map((row) => row.calls),
+            },
+            {
+                name: 'Ventas',
+                type: 'line',
+                stack: 'Total',
+                data: data.map((row) => row.sales),
+            },
+            {
+                name: 'Cobrado',
+                type: 'line',
+                stack: 'Total',
+                data: data.map((row) => row.collected),
+            },
+        ],
+        lineStyle: {
+            width: 10,
+        },
+        // Add series
+    };
+    stackedChart.setOption(option);
+}
 
 function callDatabaseCallback(start, end, label, page = 1) {
     $('.range-pick#freemium-calls-database-date-range').html(

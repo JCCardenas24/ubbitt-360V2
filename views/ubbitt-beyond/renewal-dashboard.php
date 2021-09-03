@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 $this->title = 'Ubbitt 360';
 \app\assets\ChartsAsset::register($this);
-$this->registerJsFIle('assets/js/beyond-renovacion-charts.js');
+$this->registerJsFIle('@web/assets/js/beyond-renovacion-charts.js');
 ?>
 <div class="container container-beyond" id="dynamic-tabs">
     <?= $this->render('../_commons/_tabs/_plans.php') ?>
