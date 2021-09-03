@@ -8,14 +8,15 @@
                 <p class="c-header">Importa información de contactos, negocios, tickets y productos a Ubbitt.</p>
                 <form>
                     <div class="custom-file col-10">
-                        <label class="custom-file-label" id="nameFile1" for="f02">Seleccione su archivo</label>
-                        <input id="f02" type="file"
+                        <label class="custom-file-label" id="file-input-label" for="file-input">Seleccione su
+                            archivo</label>
+                        <input id="file-input" type="file"
                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                             class="custom-file-input" name="file">
                         <i style="display: none;" id="msjFile1">Formato válido para los archivos: xslx, xsl.</i>
                         <i style="display: none;" id="msjFilePeso1">El peso máximo para el archivo es de: 2M</i>
                     </div>
-                    <button class="btn btn-first c-white col-md-6 mt-15 mb-5">Subir</button>
+                    <button id="btn-upload-file" class="btn btn-first c-white col-md-6 mt-15 mb-5">Subir</button>
                 </form>
             </div>
         </div>
