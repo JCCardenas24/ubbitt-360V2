@@ -1114,8 +1114,8 @@ table.dataTable thead .sorting_desc:before {
  */
 
 .theme-primary [type=radio]:checked+label:after {
-    border: 2px solid #f9c22c;
-    background-color: #f9c22c;
+    border: 2px solid #FF6F61;
+    background-color: #FF6F61;
     z-index: 0;
 }
 
@@ -1513,6 +1513,7 @@ form#add_new_lead .form-control {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .pdf_button i {
