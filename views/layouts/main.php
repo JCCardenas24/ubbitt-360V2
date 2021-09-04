@@ -64,6 +64,7 @@ app\assets\AppAsset::register($this);
         <?= Alert::widget() ?>
         <div class="content-wrapper">
             <?= $content ?>
+            <?= $this->render('//_commons/_widgets/_toast') ?>
         </div>
 
         <?= $this->render('//layouts/_main_footer') ?>

@@ -7,6 +7,7 @@
             </div>
         </div>
     </div>
+    <a class="pdf_button"><i class="icon-download_pdf c-gray"></i></a>
 </div>
 <br>
 <div class="container_kpis_cards">
