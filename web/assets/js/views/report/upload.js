@@ -43,6 +43,10 @@ function uploadReport(e) {
                     'Ocurrió un problema al cargar el archivo de reportes'
                 );
             }
+            clearFileInput(
+                document.getElementById('file-input'),
+                document.getElementById('file-input-label')
+            );
         },
     });
 }
