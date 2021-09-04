@@ -2,7 +2,6 @@
 
 namespace app\models\db;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -51,12 +50,6 @@ class FreemiumSummaryGraph extends ActiveRecord
             'sales' => 'Ventas',
             'collected' => 'Cobrado',
         ];
-    }
-
-    public function beforeSave($insert)
-    {
-        $this->upload_date = Yii::$app->formatter->asDatetime(strtotime($this->upload_date), "php:Y-m-d");
-        return parent::beforeSave($insert);
     }
 
     public function getUploadDate()

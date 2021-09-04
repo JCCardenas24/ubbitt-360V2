@@ -35,6 +35,7 @@ $(function () {
         },
     };
 
+    // Initialize the date picker on summary tab
     $('.range-pick#freemium-summary-date-range').daterangepicker(
         dateRangePickerConfig,
         summaryGraphCallback
@@ -54,6 +55,19 @@ $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
     event.relatedTarget; // previous active tab
     $('.options_inbound_freemium').removeClass('font-weight-bold');
     $('#li_call_center_inbound_freemium').addClass('font-weight-bold');
+    // Initialize the date picker on the call center kpi's tab
+    $('.range-pick#freemium-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        loadKpis
+    );
+    loadKpis(startDate, endDate);
+});
+$('#freemium-call-center-bd-tab').on('shown.bs.tab', function (event) {
+    event.target; // newly activated tab
+    event.relatedTarget; // previous active tab
+    $('.options_inbound_freemium').removeClass('font-weight-bold');
+    $('#li_call_center_inbound_freemium').addClass('font-weight-bold');
+    // Initialize the date picker on the call center calls database tab
     $('.range-pick#freemium-calls-database-date-range').daterangepicker(
         dateRangePickerConfig,
         callDatabaseCallback
@@ -219,7 +233,7 @@ function createCallRecordRow(callRecord) {
             ` +
         callRecord.records.map(
             (record) =>
-                ` 
+                `
             <audio controls>
                 <source src="/assets/audio/` +
                 record +
@@ -233,4 +247,45 @@ function createCallRecordRow(callRecord) {
         </tr>
     `
     );
+}
+
+function loadKpis(start, end) {
+    $('.range-pick#freemium-kpis-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    $.ajax({
+        url: '/ubbitt-freemium/find-call-center-kpis',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (kpis) => {
+            $('#kpi-inbound-calls').text(kpis.inbound_calls);
+            $('#kpi-answered-calls').text(kpis.answered_calls);
+            $('#kpi-outbound-calls').text(kpis.outbound_calls);
+            $('#kpi-lost-calls').text(kpis.lost_calls);
+            $('#kpi-calls-answered-within-25-seconds').text(
+                kpis.calls_answered_within_25_seconds
+            );
+            $('#kpi-nsl-percentage').text(
+                kpis.nsl_percentage.replace('.00', '') + '%'
+            );
+            $('#kpi-abandoned-before-5-seconds').text(
+                kpis.abandoned_before_5_seconds
+            );
+            $('#kpi-abandonment').text(
+                kpis.abandonment.replace('.00', '') + '%'
+            );
+            $('#kpi-ath').text(kpis.ath.replace('.00', '') + ' min');
+            $('#kpi-average-time-in-answering-call').text(
+                kpis.average_time_in_answering_call + ' seg'
+            );
+            $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
+        },
+        error: () => {
+            alert("Ocurrió un problema al consultar los KPI's de telefonía");
+        },
+    });
 }

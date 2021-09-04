@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\db\FreemiumCallCenterKpi;
 use app\models\db\FreemiumSummaryGraph;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
@@ -23,7 +24,7 @@ class UbbittFreemiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-calls', 'find-summary-graph-data'],
+                        'actions' => ['dashboard', 'find-calls', 'find-summary-graph-data', 'find-call-center-kpis'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -35,6 +36,7 @@ class UbbittFreemiumController extends Controller
                     'dashboard' => ['get'],
                     'find-calls' => ['post'],
                     'find-summary-graph-data' => ['post'],
+                    'find-call-center-kpis' => ['post'],
                 ],
             ],
         ];
@@ -79,6 +81,16 @@ class UbbittFreemiumController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $summaryGraphModel = new FreemiumSummaryGraph();
         $data = $summaryGraphModel->findByDates($searchParams->startDate, $searchParams->endDate);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
+    }
+
+    public function actionFindCallCenterKpis()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new FreemiumCallCenterKpi();
+        $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
     }
