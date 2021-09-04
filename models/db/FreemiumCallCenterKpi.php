@@ -2,7 +2,9 @@
 
 namespace app\models\db;
 
+use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the  class for table "freemium_call_center_kpi".
@@ -163,10 +165,50 @@ class FreemiumCallCenterKpi extends ActiveRecord
             ->one();
     }
 
-    public function findByDates($startDate, $endDate)
+    public function findKpisReport($startDate, $endDate)
     {
-        return self::find()
+        $data = Yii::$app->db->createCommand('
+            SELECT COALESCE(SUM(inbound_calls), 0) AS inbound_calls,
+                COALESCE(SUM(answered_calls), 0) AS answered_calls,
+                COALESCE(SUM(outbound_calls), 0) AS outbound_calls,
+                COALESCE(SUM(outbound_calls), 0) AS outbound_calls,
+                COALESCE(SUM(lost_calls), 0) AS lost_calls,
+                COALESCE(SUM(calls_answered_within_25_seconds), 0) AS calls_answered_within_25_seconds,
+                COALESCE(CAST(AVG(nsl_percentage) AS DECIMAL(5,2)), 0) AS nsl_percentage,
+                COALESCE(SUM(abandoned_before_5_seconds), 0) AS abandoned_before_5_seconds,
+                COALESCE(CAST(AVG(abandonment) AS DECIMAL(5,2)), 0) AS abandonment,
+                COALESCE(CAST(AVG(ath) AS DECIMAL(5,2)), 0) AS ath,
+                COALESCE(CAST(AVG(average_time_in_answering_call) AS DECIMAL(5,2)), 0)
+                    AS average_time_in_answering_call
+                FROM freemium_call_center_kpi
+                WHERE date BETWEEN :startDate AND :endDate', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryOne();
+        $data['speaking_time'] = $this->findSpeakingTimeSum($startDate, $endDate);
+        return $data;
+    }
+
+    private function findSpeakingTimeSum($startDate, $endDate)
+    {
+        $kpis = self::find()
+            ->select('speaking_time')
             ->where(['between', 'date', $startDate, $endDate])
             ->all();
+        $minutesSum = 0;
+        $secondsSum = 0;
+        if ($kpis != null) {
+            foreach ($kpis as $kpi) {
+                $hoursTime = explode(':', $kpi->speakingTime);
+                $minutesSum += intval($hoursTime[0]);
+                $secondsSum += intval($hoursTime[1]);
+            }
+            $hoursFromMinutes = intdiv($secondsSum, 60);
+            $secondsSum -= $hoursFromMinutes * 60;
+            $minutesSum += $hoursFromMinutes;
+        }
+        $minutesSum = sprintf('%02d', $minutesSum);
+        $secondsSum = sprintf('%02d', $secondsSum);
+        return "$minutesSum:$secondsSum";
     }
 }
