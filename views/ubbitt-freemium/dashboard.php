@@ -7,9 +7,6 @@ use yii\web\View;
 
 $this->title = 'Ubbitt 360';
 \app\assets\ChartsAsset::register($this);
-$this->registerJs('d3.json("/jsonData.json", function(error, json) {
-    treeBoxes("", json.tree);
-});', View::POS_READY, 'web');
 $this->registerJsFile('@web/assets/js/views/ubbitt-freemium/freemium-dashboard.js', ['position' => View::POS_END, 'depends' => [\app\assets\ChartsAsset::class]]);
 ?>
 <div class="container" id="dynamic-tabs">
