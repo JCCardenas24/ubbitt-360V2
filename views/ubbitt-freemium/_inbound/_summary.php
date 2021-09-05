@@ -36,7 +36,7 @@
                             <h5>Total de llamadas</h5>
                         </div>
                         <div class="col-6 p-0 text-center">
-                            <small class="m-0">1000</small>
+                            <small class="m-0" id="nco-total-calls-1">0</small>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                             <h5>Total de llamadas</h5>
                         </div>
                         <div class="col-6 p-0 text-center">
-                            <small class="m-0">1000</small>
+                            <small class="m-0" id="nco-total-calls-2">0</small>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                             <h5>Total de llamadas</h5>
                         </div>
                         <div class="col-6 p-0 text-center">
-                            <small class="m-0">1000</small>
+                            <small class="m-0" id="nco-total-calls-3">0</small>
                         </div>
                     </div>
                 </div>
@@ -75,40 +75,40 @@
                 <div class="card">
                     <p class="m-0">Total <br>
                         de ventas</p>
-                    <!-- <small></small> -->
+                    <small id="total-sales">0</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
                     <p class="m-0">Monto total <br>
                         vendido</p>
-                    <small>$100,000</small>
+                    <small id="sales-total-amount">$0</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
                     <p class="m-0">% conversión</p>
-                    <small>10%</small>
+                    <small id="conversion-percentage">0%</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
                     <p class="m-0">Total de <br>
                         emisiones</p>
-                    <small>100</small>
+                    <small id="emissions-total">0</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
                     <p class="m-0">% de cobranza</p>
-                    <small>10%</small>
+                    <small id="collection-percentage">0%</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
                     <p class="m-0">Total de <br>
                         cobros</p>
-                    <small>50</small>
+                    <small id="total-collections">0</small>
                 </div>
             </div>
         </div>
@@ -128,11 +128,11 @@
             <div class="col-6">
                 <div class="card wid-100 pr-0">
                     <small>Venta emitida total</small>
-                    <p>$3,821,133.25</p>
+                    <p id="total-sale-issued">$0</p>
                 </div>
                 <div class="card wid-100">
                     <small>Venta pagada total</small>
-                    <p>$3,821,133.25</p>
+                    <p id="total-sale-paid">$0</p>
                 </div>
             </div>
         </div>

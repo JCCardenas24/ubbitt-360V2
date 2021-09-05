@@ -35,12 +35,11 @@ $(function () {
         },
     };
 
-    // Initialize the date picker on summary tab
     $('.range-pick#freemium-summary-date-range').daterangepicker(
         dateRangePickerConfig,
-        summaryGraphCallback
+        summaryCallback
     );
-    summaryGraphCallback(startDate, endDate);
+    summaryCallback(startDate, endDate);
 });
 
 $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
@@ -48,7 +47,7 @@ $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
     event.relatedTarget; // previous active tab
     $('.options_inbound_freemium').removeClass('font-weight-bold');
     $('#li_resumen_inbound_freemium').addClass('font-weight-bold');
-    summaryGraphCallback(startDate, endDate);
+    summaryCallback(startDate, endDate);
 });
 $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
     event.target; // newly activated tab
@@ -81,10 +80,15 @@ $('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
     $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
 });
 
-function summaryGraphCallback(start, end, label) {
+function summaryCallback(start, end) {
     $('.range-pick#freemium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    findSummaryGraphData(start, end);
+    findSummaryDetailData(start, end);
+}
+
+function findSummaryGraphData(start, end) {
     $.ajax({
         url: '/ubbitt-freemium/find-summary-graph-data',
         type: 'POST',
@@ -98,7 +102,7 @@ function summaryGraphCallback(start, end, label) {
         },
         error: () => {
             alert(
-                'Ocurrió un problema al la información del gráfico de transacciones'
+                'Ocurrió un problema al recuperar la información del gráfico de transacciones'
             );
         },
     });
@@ -177,6 +181,54 @@ function updateTransactionChart(data) {
         // Add series
     };
     stackedChart.setOption(option);
+}
+
+function findSummaryDetailData(start, end) {
+    $.ajax({
+        url: '/ubbitt-freemium/find-summary-detail-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (kpis) => {
+            updateSummaryKpis(kpis);
+        },
+        error: () => {
+            alert(
+                'Ocurrió un problema al recuperar la información del resumen'
+            );
+        },
+    });
+}
+
+function updateSummaryKpis(kpis) {
+    var formatter = new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+    });
+    $('#nco-total-calls-1').text(kpis.nco_total_calls);
+    $('#nco-total-calls-2').text(kpis.nco_total_calls);
+    $('#nco-total-calls-3').text(kpis.nco_total_calls);
+    $('#total-sales').text(kpis.total_sales);
+    $('#sales-total-amount').text(
+        formatter.format(kpis.sales_total_amount).replace('.00', '')
+    );
+    $('#conversion-percentage').text(
+        kpis.conversion_percentage.replace('.00', '') + '%'
+    );
+    $('#emissions-total').text(kpis.emissions_total);
+    $('#collection-percentage').text(
+        kpis.collection_percentage.replace('.00', '') + '%'
+    );
+    $('#total-collections').text(kpis.total_collections);
+    $('#total-sale-issued').text(
+        formatter.format(kpis.total_sale_issued).replace('.00', '')
+    );
+    $('#total-sale-paid').text(
+        formatter.format(kpis.total_sale_paid).replace('.00', '')
+    );
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
