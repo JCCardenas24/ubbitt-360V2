@@ -210,7 +210,7 @@ class UploadReportBusiness
             $summaryDetail->cust_serv_cust_serv_product_cancellation = $sheet->getCell("BW$currentRowIndex")->getValue();
             $summaryDetail->cust_serv_cust_serv_product_cancellation_percentage = $sheet->getCell("BX$currentRowIndex")->getValue() * 100;
             $summaryDetail->cust_serv_cust_serv_check_expiration_dates = $sheet->getCell("BY$currentRowIndex")->getValue();
-            $summaryDetail->cust_serv_cust_serv_check_expiration_dates_percentage = $sheet->getCell("CZ$currentRowIndex")->getValue() * 100;
+            $summaryDetail->cust_serv_cust_serv_check_expiration_dates_percentage = $sheet->getCell("BZ$currentRowIndex")->getValue() * 100;
             $summaryDetail->cust_serv_collection_questions = $sheet->getCell("CA$currentRowIndex")->getValue();
             $summaryDetail->cust_serv_collection_questions_percentage = $sheet->getCell("CB$currentRowIndex")->getValue() * 100;
             $summaryDetail->cust_serv_collection_questions_payment_track = $sheet->getCell("CC$currentRowIndex")->getValue();
