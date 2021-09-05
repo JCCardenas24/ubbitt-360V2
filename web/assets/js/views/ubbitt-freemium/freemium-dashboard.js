@@ -197,6 +197,7 @@ function findSummaryDetailData(start, end) {
                 style: 'currency',
                 currency: 'MXN',
             });
+            updateDashboardTree(kpis);
             updateSummaryKpis(kpis, formatter);
             updateSalesSummary(kpis, formatter);
             updateTotalTypification(kpis);
@@ -456,6 +457,816 @@ function updateCustomerServiceCallsKpis(kpis) {
     updateOtherProductsChart(kpis);
     updateCustomerServiceChart(kpis);
     updateCollectionQuestionsChart(kpis);
+}
+
+function updateDashboardTree(kpis) {
+    $('#tree-container').html(null);
+    let treeData = {
+        ttl_categoria: 'NCO (Total llamadas)',
+        type: 'type8',
+        total_llamadas: kpis.nco_total_calls,
+        efectivos: '',
+        label: '',
+        link: {
+            ttl_categoria: 'NODE NAME 1',
+            direction: 'ASYN',
+        },
+        children: [
+            {
+                ttl_categoria: 'Motivo de venta',
+                name: 'NODE NAME 2.1',
+                type: 'type2',
+                total_llamadas: kpis.sale_reason + ' / ',
+                label: 'Node name 2.1',
+                efectivos: kpis.sale_reason_percentage.replace('.00', '') + '%',
+                link: {
+                    name: 'Link node 1 to 2.1',
+                    ttl_categoria: 'NODE NAME 2.1',
+                    direction: 'SYNC',
+                },
+                children: [
+                    {
+                        ttl_categoria: 'Acepta venta',
+                        name: 'NODE NAME 3.1',
+                        type: 'type2',
+                        total_llamadas: kpis.sale_accepted + ' / ',
+                        label: 'Node name 3.1',
+                        efectivos:
+                            kpis.sale_accepted_percentage.replace('.00', '') +
+                            '%',
+                        link: {
+                            name: 'Link node 2.1 to 3.1',
+                            ttl_categoria: 'NODE NAME 3.1',
+                            direction: 'SYNC',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Ventas',
+                                name: 'NODE NAME 3.1',
+                                type: 'type2',
+                                total_llamadas:
+                                    kpis.sale_accepted_sales + ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.sale_accepted_sales_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [
+                                    {
+                                        ttl_categoria: 'Cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type2',
+                                        total_llamadas:
+                                            kpis.sale_accepted_charged + ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.sale_accepted_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                    {
+                                        ttl_categoria: 'No cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type4',
+                                        total_llamadas:
+                                            kpis.sale_accepted_not_charged +
+                                            ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.sale_accepted_not_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                ttl_categoria: 'En seguimiento',
+                                name: 'NODE NAME 3.1',
+                                type: 'type7',
+                                total_llamadas:
+                                    kpis.sale_accepted_on_track + ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.sale_accepted_on_track_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        ttl_categoria: 'Agenda llamada',
+                        name: 'NODE NAME 3.1',
+                        type: 'type2',
+                        total_llamadas: kpis.call_scheduled + ' / ',
+                        label: 'Node name 3.1',
+                        efectivos:
+                            kpis.call_scheduled_percentage.replace('.00', '') +
+                            '%',
+                        link: {
+                            name: 'Link node 2.1 to 3.1',
+                            ttl_categoria: 'NODE NAME 3.1',
+                            direction: 'SYNC',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Ventas',
+                                name: 'NODE NAME 3.1',
+                                type: 'type2',
+                                total_llamadas:
+                                    kpis.call_scheduled_sales + ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.call_scheduled_sales_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [
+                                    {
+                                        ttl_categoria: 'Cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type2',
+                                        total_llamadas:
+                                            kpis.call_scheduled_charged + ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.call_scheduled_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                    {
+                                        ttl_categoria: 'No cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type4',
+                                        total_llamadas:
+                                            kpis.call_scheduled_not_charged +
+                                            ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.call_scheduled_not_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                ttl_categoria: 'En seguimiento',
+                                name: 'NODE NAME 3.1',
+                                type: 'type7',
+                                total_llamadas:
+                                    kpis.call_scheduled_on_track + ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.call_scheduled_on_track_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        ttl_categoria: 'Agenda de promesa pago',
+                        name: 'NODE NAME 3.1',
+                        type: 'type2',
+                        total_llamadas: kpis.payment_promise_scheduled + ' / ',
+                        label: 'Node name 3.1',
+                        efectivos:
+                            kpis.payment_promise_scheduled_percentage.replace(
+                                '.00',
+                                ''
+                            ) + '%',
+                        link: {
+                            name: 'Link node 2.1 to 3.1',
+                            ttl_categoria: 'NODE NAME 3.1',
+                            direction: 'SYNC',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Ventas',
+                                name: 'NODE NAME 3.1',
+                                type: 'type2',
+                                total_llamadas:
+                                    kpis.payment_promise_scheduled_sales +
+                                    ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.payment_promise_scheduled_sales_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [
+                                    {
+                                        ttl_categoria: 'Cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type2',
+                                        total_llamadas:
+                                            kpis.payment_promise_scheduled_charged +
+                                            ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.payment_promise_scheduled_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                    {
+                                        ttl_categoria: 'No cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type4',
+                                        total_llamadas:
+                                            kpis.payment_promise_scheduled_not_charged +
+                                            ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.payment_promise_scheduled_not_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                ttl_categoria: 'En seguimiento',
+                                name: 'NODE NAME 3.1',
+                                type: 'type7',
+                                total_llamadas:
+                                    kpis.payment_promise_scheduled_on_track +
+                                    ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.payment_promise_scheduled_on_track_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        ttl_categoria: 'Envía ficha de depósito',
+                        name: 'NODE NAME 3.1',
+                        type: 'type2',
+                        total_llamadas: kpis.deposit_slip_sent + ' / ',
+                        label: 'Node name 3.1',
+                        efectivos:
+                            kpis.deposit_slip_sent_percentage.replace(
+                                '.00',
+                                ''
+                            ) + '%',
+                        link: {
+                            name: 'Link node 2.1 to 3.1',
+                            ttl_categoria: 'NODE NAME 3.1',
+                            direction: 'SYNC',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Ventas',
+                                name: 'NODE NAME 3.1',
+                                type: 'type2',
+                                total_llamadas:
+                                    kpis.deposit_slip_sent_sales + ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.deposit_slip_sent_sales_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [
+                                    {
+                                        ttl_categoria: 'Cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type2',
+                                        total_llamadas:
+                                            kpis.deposit_slip_sent_charged +
+                                            ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.deposit_slip_sent_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                    {
+                                        ttl_categoria: 'No cobrado',
+                                        name: 'NODE NAME 3.1',
+                                        type: 'type4',
+                                        total_llamadas:
+                                            kpis.deposit_slip_sent_not_charged +
+                                            ' / ',
+                                        label: 'Node name 3.1',
+                                        efectivos:
+                                            kpis.deposit_slip_sent_not_charged_percentage.replace(
+                                                '.00',
+                                                ''
+                                            ) + '%',
+                                        link: {
+                                            name: 'Link node 2.1 to 3.1',
+                                            ttl_categoria: 'NODE NAME 3.1',
+                                            direction: 'SYNC',
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                ttl_categoria: 'En seguimiento',
+                                name: 'NODE NAME 3.1',
+                                type: 'type7',
+                                total_llamadas:
+                                    kpis.deposit_slip_sent_on_track + ' / ',
+                                label: 'Node name 3.1',
+                                efectivos:
+                                    kpis.deposit_slip_sent_on_track_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 2.1 to 3.1',
+                                    ttl_categoria: 'NODE NAME 3.1',
+                                    direction: 'SYNC',
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                ttl_categoria: 'Atención a clientes',
+                type: 'type7',
+                total_llamadas: kpis.cust_serv_calls + ' / ',
+                efectivos:
+                    kpis.cust_serv_calls_percentage.replace('.00', '') + '%',
+                label: 'Node name 2.3',
+                link: {
+                    ttl_categoria: 'NODE NAME 2.3',
+                    direction: 'ASYN',
+                },
+                children: [
+                    {
+                        ttl_categoria: 'Asistencia Ubbitt',
+                        name: 'NODE NAME 3.3',
+                        type: 'type5',
+                        total_llamadas:
+                            kpis.cust_serv_calls_ubbitt_assistance + ' / ',
+                        label: 'Node name 3.3',
+                        efectivos:
+                            kpis.cust_serv_calls_ubbitt_assistance_percentage.replace(
+                                '.00',
+                                ''
+                            ) + '%',
+                        link: {
+                            name: 'Link node 2.3 to 3.3',
+                            ttl_categoria: 'NODE NAME 3.3',
+                            direction: 'ASYN',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Dudas de producto',
+                                name: 'NODE NAME 4.1',
+                                type: 'type5',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_product_questions +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_calls_product_questions_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.1',
+                                link: {
+                                    name: 'Link node 3.3 to 4.1',
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Asesorías de producto',
+                                name: 'NODE NAME 4.1',
+                                type: 'type5',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_product_advisory +
+                                    ' / ',
+                                label: 'Node name 4.1',
+                                efectivos:
+                                    kpis.cust_serv_calls_product_advisory_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 3.3 to 4.1',
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Enlace de producto',
+                                name: 'NODE NAME 4.1',
+                                type: 'type5',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_product_linkage +
+                                    ' / ',
+                                label: 'Node name 4.1',
+                                efectivos:
+                                    kpis.cust_serv_calls_product_linkage_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 3.3 to 4.1',
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Enlace de coberturas',
+                                name: 'NODE NAME 4.1',
+                                type: 'type5',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_coverage_linkage +
+                                    ' / ',
+                                label: 'Node name 4.1',
+                                efectivos:
+                                    kpis.cust_serv_calls_coverage_linkage_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                link: {
+                                    name: 'Link node 3.3 to 4.1',
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'SYNC',
+                                },
+                                children: [],
+                            },
+                        ],
+                    },
+                    {
+                        ttl_categoria: 'Otros productos',
+                        type: 'type1',
+                        total_llamadas:
+                            kpis.cust_serv_calls_other_products + ' / ',
+                        label: 'Node name 3.4',
+                        efectivos:
+                            kpis.cust_serv_calls_other_products_percentage.replace(
+                                '.00',
+                                ''
+                            ) + '%',
+                        link: {
+                            ttl_categoria: 'NODE NAME 3.4',
+                            direction: 'ASYN',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Gastos médicos',
+                                type: 'type1',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_other_products_medical_expenses +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_calls_other_products_medical_expenses_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Vida',
+                                type: 'type1',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_other_products_life +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_calls_other_products_life_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Legalizados',
+                                type: 'type1',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_other_products_legalized +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_calls_other_products_legalized_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Plataformas',
+                                type: 'type1',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_other_products_platforms +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_calls_other_products_platforms_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Residenciales',
+                                type: 'type1',
+                                total_llamadas:
+                                    kpis.cust_serv_calls_other_products_residential +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_calls_other_products_residential_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                        ],
+                    },
+                    {
+                        ttl_categoria: 'Atención a clientes',
+                        type: 'type6',
+                        total_llamadas: kpis.cust_serv_cust_serv + ' / ',
+                        efectivos:
+                            kpis.cust_serv_cust_serv_percentage.replace(
+                                '.00',
+                                ''
+                            ) + '%',
+                        label: 'Node name 3.4',
+                        link: {
+                            ttl_categoria: 'NODE NAME 3.4',
+                            direction: 'ASYN',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Reportar atención de asesor',
+                                type: 'type6',
+                                total_llamadas:
+                                    kpis.cust_serv_cust_serv_report_advisor_care +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_cust_serv_report_advisor_care_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Revisión renovación póliza',
+                                type: 'type6',
+                                total_llamadas:
+                                    kpis.cust_serv_cust_serv_policy_renewal_review +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_cust_serv_policy_renewal_review_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Cancelación de producto',
+                                type: 'type6',
+                                total_llamadas:
+                                    kpis.cust_serv_cust_serv_product_cancellation +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_cust_serv_product_cancellation_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Checar fechas de vigencia',
+                                type: 'type6',
+                                total_llamadas:
+                                    kpis.cust_serv_cust_serv_check_expiration_dates +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_cust_serv_check_expiration_dates_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                        ],
+                    },
+                    {
+                        ttl_categoria: 'Dudas de cobranza',
+                        type: 'type3',
+                        total_llamadas:
+                            kpis.cust_serv_collection_questions + ' / ',
+                        efectivos:
+                            kpis.cust_serv_collection_questions_percentage.replace(
+                                '.00',
+                                ''
+                            ) + '%',
+                        label: 'Node name 3.4',
+                        link: {
+                            ttl_categoria: 'NODE NAME 3.4',
+                            direction: 'ASYN',
+                        },
+                        children: [
+                            {
+                                ttl_categoria: 'Seguimiento pago',
+                                type: 'type3',
+                                total_llamadas:
+                                    kpis.cust_serv_collection_questions_payment_track +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_collection_questions_payment_track_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Reembolsos',
+                                type: 'type3',
+                                total_llamadas:
+                                    kpis.cust_serv_collection_questions_refund +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_collection_questions_refund_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Aclaración pagos',
+                                type: 'type3',
+                                total_llamadas:
+                                    kpis.cust_serv_collection_questions_payment_clarification +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_collection_questions_payment_clarification_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                            {
+                                ttl_categoria: 'Reaiizar pago',
+                                type: 'type3',
+                                total_llamadas:
+                                    kpis.cust_serv_collection_questions_make_payment +
+                                    ' / ',
+                                efectivos:
+                                    kpis.cust_serv_collection_questions_make_payment_percentage.replace(
+                                        '.00',
+                                        ''
+                                    ) + '%',
+                                label: 'Node name 4.2',
+                                link: {
+                                    ttl_categoria: 'NODE NAME 4.1',
+                                    direction: 'ASYN',
+                                },
+                                children: [],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    };
+    treeBoxes('', treeData);
 }
 
 function updateUbbittAssistanceCharts(kpis) {
