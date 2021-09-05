@@ -192,7 +192,6 @@
             </div>
         </div>
     </div>
-    <!-- <button id="btn_prueba" class="d-none">test</button> -->
     <div class="container_graficas_llamadas">
         <h1 class="ttl_llamadas">Llamadas ATC</h1>
         <div class="row m-0">
@@ -200,160 +199,194 @@
             <div class="col-3 pl-0">
                 <div class="card atc_cards">
                     <h1>Asistencia Ubbitt</h1>
-                    <p>22 / <span>25%</span></p>
+                    <p id="cust-serv-calls-ubbitt-assistance">0 / <span>0%</span></p>
                     <h4>Dudas de producto</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-product-questions">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar aqua" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-product-questions-percentage" class="progress-bar aqua"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Asesorías de producto</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-product-advisory">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar aqua" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-product-advisory-percentage" class="progress-bar aqua"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Enlace de producto</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-product-linkage">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar aqua" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-product-linkage-percentage" class="progress-bar aqua"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Enlace de coberturas</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-coverage-linkage">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar aqua" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-coverage-linkage-percentage" class="progress-bar aqua"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="card atc_cards">
                     <h1>Otros productos</h1>
-                    <p>12 / <span>10%</span></p>
+                    <p id="cust-serv-calls-other-products">0 / <span>0%</span></p>
                     <h4>Gastos médicos</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-other-products-medical-expenses">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar navy" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-other-products-medical-expenses-percentage" class="progress-bar navy"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Vida</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-other-products-life">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar navy" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-other-products-life-percentage" class="progress-bar navy"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Legalizados</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-other-products-legalized">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar navy" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-other-products-legalized-percentage" class="progress-bar navy"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Plataformas</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-other-products-platforms">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar navy" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-other-products-platforms-percentage" class="progress-bar navy"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Residénciales</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-calls-other-products-residential">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar navy" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-calls-other-products-residential-percentage" class="progress-bar navy"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="card atc_cards">
                     <h1>Atención clientes</h1>
-                    <p>16 / <span>12%</span></p>
+                    <p id="cust-serv-cust-serv">0 / <span>0%</span></p>
                     <h4>Reportar atención de asesor</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-cust-serv-report-advisor-care">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar orange" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-cust-serv-report-advisor-care-percentage" class="progress-bar orange"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Revisión renovación póliza</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-cust-serv-policy-renewal-review">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar orange" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-cust-serv-policy-renewal-review-percentage" class="progress-bar orange"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Cancelación de producto</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-cust-serv-product-cancellation">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar orange" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-cust-serv-product-cancellation-percentage" class="progress-bar orange"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Checar fechas de vigencia</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-cust-serv-check-expiration-dates">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar orange" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-cust-serv-check-expiration-dates-percentage" class="progress-bar orange"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
             <div class="col-3 pr-0">
                 <div class="card atc_cards">
                     <h1>Dudas de cobranza</h1>
-                    <p>22 / <span>25%</span></p>
+                    <p id="cust-serv-collection-questions">0 / <span>0%</span></p>
                     <h4>Seguimiento pago</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-collection-questions-payment-track">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar yellow" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-collection-questions-payment-track-percentage" class="progress-bar yellow"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Reembolsos</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-collection-questions-refund">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar yellow" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-collection-questions-refund-percentage" class="progress-bar yellow"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <h4>Aclaración pagos</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-collection-questions-payment-clarification">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar yellow" role="progressbar" style="width: 25%" aria-valuenow="25"
+                        <div id="cust-serv-collection-questions-payment-clarification-percentage"
+                            class="progress-bar yellow" role="progressbar" style="width: 0%" aria-valuenow="0"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <h4>Realizar pago</h4>
                     <div class="d-flex">
-                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number">10</span>
+                        <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                            id="cust-serv-collection-questions-make-payment">0</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar yellow" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="cust-serv-collection-questions-make-payment-percentage" class="progress-bar yellow"
+                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                 </div>
 

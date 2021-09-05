@@ -200,6 +200,7 @@ function findSummaryDetailData(start, end) {
             updateSummaryKpis(kpis, formatter);
             updateSalesSummary(kpis, formatter);
             updateTotalTypification(kpis);
+            updateCustomerServiceCallsKpis(kpis);
         },
         error: () => {
             alert(
@@ -448,6 +449,171 @@ function updateTotalTypificationGraph(kpis) {
         stackedChart.resize();
         totalTypificationGraph.resize();
     });
+}
+
+function updateCustomerServiceCallsKpis(kpis) {
+    updateUbbittAssistanceCharts(kpis);
+    updateOtherProductsChart(kpis);
+    updateCustomerServiceChart(kpis);
+    updateCollectionQuestionsChart(kpis);
+}
+
+function updateUbbittAssistanceCharts(kpis) {
+    $('#cust-serv-calls-ubbitt-assistance').html(
+        kpis.cust_serv_calls_ubbitt_assistance +
+            ' / <span>' +
+            kpis.cust_serv_calls_ubbitt_assistance_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+    $('#cust-serv-calls-product-questions').text(
+        kpis.cust_serv_calls_product_questions
+    );
+    updateProgressBar(
+        'cust-serv-calls-product-questions-percentage',
+        kpis.cust_serv_calls_product_questions_percentage
+    );
+    $('#cust-serv-calls-product-advisory').text(
+        kpis.cust_serv_calls_product_advisory
+    );
+    updateProgressBar(
+        'cust-serv-calls-product-advisory-percentage',
+        kpis.cust_serv_calls_product_advisory_percentage
+    );
+    $('#cust-serv-calls-product-linkage').text(
+        kpis.cust_serv_calls_product_linkage
+    );
+    updateProgressBar(
+        'cust-serv-calls-product-linkage-percentage',
+        kpis.cust_serv_calls_product_linkage_percentage
+    );
+    $('#cust-serv-calls-coverage-linkage').text(
+        kpis.cust_serv_calls_coverage_linkage
+    );
+    updateProgressBar(
+        'cust-serv-calls-coverage-linkage-percentage',
+        kpis.cust_serv_calls_coverage_linkage_percentage
+    );
+}
+
+function updateOtherProductsChart(kpis) {
+    $('#cust-serv-calls-other-products').html(
+        kpis.cust_serv_calls_other_products +
+            ' / <span>' +
+            kpis.cust_serv_calls_other_products_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#cust-serv-calls-other-products-medical-expenses').text(
+        kpis.cust_serv_calls_other_products_medical_expenses
+    );
+    updateProgressBar(
+        'cust-serv-calls-other-products-medical-expenses-percentage',
+        kpis.cust_serv_calls_other_products_medical_expenses_percentage
+    );
+    $('#cust-serv-calls-other-products-life').text(
+        kpis.cust_serv_calls_other_products_life
+    );
+    updateProgressBar(
+        'cust-serv-calls-other-products-life-percentage',
+        kpis.cust_serv_calls_other_products_life_percentage
+    );
+    $('#cust-serv-calls-other-products-legalized').text(
+        kpis.cust_serv_calls_other_products_legalized
+    );
+    updateProgressBar(
+        'cust-serv-calls-other-products-legalized-percentage',
+        kpis.cust_serv_calls_other_products_legalized_percentage
+    );
+    $('#cust-serv-calls-other-products-platforms').text(
+        kpis.cust_serv_calls_other_products_platforms
+    );
+    updateProgressBar(
+        'cust-serv-calls-other-products-platforms-percentage',
+        kpis.cust_serv_calls_other_products_platforms_percentage
+    );
+    $('#cust-serv-calls-other-products-residential').text(
+        kpis.cust_serv_calls_other_products_residential
+    );
+    updateProgressBar(
+        'cust-serv-calls-other-products-residential-percentage',
+        kpis.cust_serv_calls_other_products_residential_percentage
+    );
+}
+
+function updateCustomerServiceChart(kpis) {
+    $('#cust-serv-cust-serv').html(
+        kpis.cust_serv_cust_serv +
+            ' / <span>' +
+            kpis.cust_serv_cust_serv_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#cust-serv-cust-serv-report-advisor-care').text(
+        kpis.cust_serv_cust_serv_report_advisor_care
+    );
+    updateProgressBar(
+        'cust-serv-cust-serv-report-advisor-care-percentage',
+        kpis.cust_serv_cust_serv_report_advisor_care_percentage
+    );
+    $('#cust-serv-cust-serv-policy-renewal-review').text(
+        kpis.cust_serv_cust_serv_policy_renewal_review
+    );
+    updateProgressBar(
+        'cust-serv-cust-serv-policy-renewal-review-percentage',
+        kpis.cust_serv_cust_serv_policy_renewal_review_percentage
+    );
+    $('#cust-serv-cust-serv-product-cancellation').text(
+        kpis.cust_serv_cust_serv_product_cancellation
+    );
+    updateProgressBar(
+        'cust-serv-cust-serv-product-cancellation-percentage',
+        kpis.cust_serv_cust_serv_product_cancellation_percentage
+    );
+    $('#cust-serv-cust-serv-check-expiration-dates').text(
+        kpis.cust_serv_cust_serv_check_expiration_dates
+    );
+    updateProgressBar(
+        'cust-serv-cust-serv-check-expiration-dates-percentage',
+        kpis.cust_serv_cust_serv_check_expiration_dates_percentage
+    );
+}
+
+function updateCollectionQuestionsChart(kpis) {
+    $('#cust-serv-collection-questions').html(
+        kpis.cust_serv_collection_questions +
+            ' / <span>' +
+            kpis.cust_serv_collection_questions_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#cust-serv-collection-questions-payment-track').text(
+        kpis.cust_serv_collection_questions_payment_track
+    );
+    updateProgressBar(
+        'cust-serv-collection-questions-payment-track-percentage',
+        kpis.cust_serv_collection_questions_payment_track_percentage
+    );
+    $('#cust-serv-collection-questions-refund').text(
+        kpis.cust_serv_collection_questions_refund
+    );
+    updateProgressBar(
+        'cust-serv-collection-questions-refund-percentage',
+        kpis.cust_serv_collection_questions_refund_percentage
+    );
+    $('#cust-serv-collection-questions-payment-clarification').text(
+        kpis.cust_serv_collection_questions_payment_clarification
+    );
+    updateProgressBar(
+        'cust-serv-collection-questions-payment-clarification-percentage',
+        kpis.cust_serv_collection_questions_payment_clarification_percentage
+    );
+    $('#cust-serv-collection-questions-make-payment').text(
+        kpis.cust_serv_collection_questions_make_payment
+    );
+    updateProgressBar(
+        'cust-serv-collection-questions-make-payment-percentage',
+        kpis.cust_serv_collection_questions_make_payment_percentage
+    );
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
