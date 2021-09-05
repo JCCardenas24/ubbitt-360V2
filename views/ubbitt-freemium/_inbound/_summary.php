@@ -118,10 +118,7 @@
             <div class="col-6 wid-100 pl-0">
                 <div class="card fst_card">
                     <div class="col-12 p-0">
-
-                        <div id="basic-doughnut" style="height:350px;"></div>
-
-
+                        <div id="sales-concentrate-graph" style="height:350px;"></div>
                     </div>
                 </div>
             </div>
@@ -142,7 +139,7 @@
             <div class="col-6 pl-0">
                 <div class="card fst_card mb-0">
                     <div class="col-12 p-0">
-                        <div id="basic-doughnut2" style="height:350px;"></div>
+                        <div id="total-typification-graph" style="height:350px;"></div>
                     </div>
                 </div>
             </div>
@@ -151,52 +148,44 @@
                     <div class="wid-100">
                         <div class="big_ttl_">
                             <h1>Motivo de venta</h1>
-                            <h1>24 / <span>18%</span></h1>
+                            <h1 id="sale-reason">0 / <span>0%</span></h1>
                         </div>
                         <p class="">Agenda llamada</p>
                         <div class="d-flex href_detalle">
-                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span
-                                class="ttl_number">10</span>
+                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                                id="call-scheduled">0</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar magenta" role="progressbar" style="width: 25%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"></div>
+                            <div id="call-scheduled-percentage" class="progress-bar magenta" role="progressbar"
+                                style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <p>Acepta venta</p>
                         <div class="d-flex href_detalle">
-                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span
-                                class="ttl_number">10</span>
+                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                                id="sale-accepted">0</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar magenta" role="progressbar" style="width: 25%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"></div>
+                            <div id="sale-accepted-percentage" class="progress-bar magenta" role="progressbar"
+                                style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <p>Agenda promesa de pago</p>
                         <div class="d-flex href_detalle">
-                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span
-                                class="ttl_number">10</span>
+                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                                id="payment-promise-scheduled">0</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar magenta" role="progressbar" style="width: 50%" aria-valuenow="50"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <p>Agenda llamada</p>
-                        <div class="d-flex href_detalle">
-                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span
-                                class="ttl_number">10</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar magenta" role="progressbar" style="width: 75%" aria-valuenow="75"
-                                aria-valuemin="0" aria-valuemax="100"></div>
+                            <div id="payment-promise-scheduled-percentage" class="progress-bar magenta"
+                                role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                aria-valuemax="100"></div>
                         </div>
                         <p>Envía ficha de pago</p>
                         <div class="d-flex href_detalle">
-                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span
-                                class="ttl_number">10</span>
+                            <span class="ttl_detalle href_bd_freemium">Ver detalle</span><span class="ttl_number"
+                                id="deposit-slip-sent">0</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar magenta" role="progressbar" style="width: 100%" aria-valuenow="100"
-                                aria-valuemin="0" aria-valuemax="100"></div>
+                            <div id="deposit-slip-sent-percentage" class="progress-bar magenta" role="progressbar"
+                                style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>

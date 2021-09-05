@@ -193,7 +193,13 @@ function findSummaryDetailData(start, end) {
             'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
         },
         success: (kpis) => {
-            updateSummaryKpis(kpis);
+            var formatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+            });
+            updateSummaryKpis(kpis, formatter);
+            updateSalesSummary(kpis, formatter);
+            updateTotalTypification(kpis);
         },
         error: () => {
             alert(
@@ -203,11 +209,7 @@ function findSummaryDetailData(start, end) {
     });
 }
 
-function updateSummaryKpis(kpis) {
-    var formatter = new Intl.NumberFormat('es-MX', {
-        style: 'currency',
-        currency: 'MXN',
-    });
+function updateSummaryKpis(kpis, formatter) {
     $('#nco-total-calls-1').text(kpis.nco_total_calls);
     $('#nco-total-calls-2').text(kpis.nco_total_calls);
     $('#nco-total-calls-3').text(kpis.nco_total_calls);
@@ -223,12 +225,229 @@ function updateSummaryKpis(kpis) {
         kpis.collection_percentage.replace('.00', '') + '%'
     );
     $('#total-collections').text(kpis.total_collections);
+}
+
+function updateSalesSummary(kpis, formatter) {
     $('#total-sale-issued').text(
         formatter.format(kpis.total_sale_issued).replace('.00', '')
     );
     $('#total-sale-paid').text(
         formatter.format(kpis.total_sale_paid).replace('.00', '')
     );
+    updateSalesConcentrateGraph(kpis);
+}
+
+function updateSalesConcentrateGraph(kpis) {
+    let salesConcentrateGraph = echarts.init(
+        document.getElementById('sales-concentrate-graph')
+    );
+    let options = {
+        // Add title
+        title: {
+            text: 'Concentrado de ventas',
+            subtext: 'Emisiones / Cobro',
+            x: '',
+        },
+
+        // Add legend
+        legend: {
+            orient: 'vertical',
+            x: 'right',
+            top: '40%',
+            data: ['Emitidas', 'Cobradas'],
+            right: 0,
+        },
+
+        // Add custom colors
+        color: ['#f36f63', '#555'],
+
+        // Enable drag recalculate
+        calculable: true,
+
+        // Add series
+        series: [
+            {
+                name: 'Pólizas',
+                type: 'pie',
+                center: ['30%', '50%'],
+                radius: ['35%', '70%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            position: 'inner',
+                            formatter: function (params) {
+                                return params.value + '\n';
+                            },
+                        },
+                        labelLine: {
+                            show: false,
+                        },
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            formatter: '{b}' + '\n\n' + '{c} ({d}%)',
+                            position: 'center',
+                            textStyle: {
+                                fontSize: '17',
+                                fontWeight: '500',
+                            },
+                        },
+                    },
+                },
+
+                data: [
+                    {
+                        value: kpis.emissions_total,
+                        name: 'Emitidas',
+                    },
+                    {
+                        value: kpis.total_collections,
+                        name: 'Cobradas',
+                    },
+                ],
+            },
+        ],
+    };
+
+    salesConcentrateGraph.setOption(options);
+}
+
+function updateTotalTypification(kpis) {
+    updateTotalTypificationGraph(kpis);
+    $('#sale-reason').html(
+        kpis.sale_reason +
+            ' / <span>' +
+            kpis.sale_reason_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#call-scheduled').text(kpis.call_scheduled);
+    updateProgressBar(
+        'call-scheduled-percentage',
+        kpis.call_scheduled_percentage
+    );
+    $('#sale-accepted').text(kpis.sale_accepted);
+    updateProgressBar(
+        'sale-accepted-percentage',
+        kpis.sale_accepted_percentage
+    );
+    $('#payment-promise-scheduled').text(kpis.payment_promise_scheduled);
+    updateProgressBar(
+        'payment-promise-scheduled-percentage',
+        kpis.payment_promise_scheduled_percentage
+    );
+    $('#deposit-slip-sent').text(kpis.deposit_slip_sent);
+    updateProgressBar(
+        'deposit-slip-sent-percentage',
+        kpis.deposit_slip_sent_percentage
+    );
+}
+
+function updateProgressBar(id, value) {
+    $('#' + id).prop('style', 'width: ' + value.replace('.00', '') + '%');
+    $('#' + id).prop('aria-valuenow', value.replace('.00', ''));
+}
+
+function updateTotalTypificationGraph(kpis) {
+    let totalTypificationGraph = echarts.init(
+        document.getElementById('total-typification-graph')
+    );
+    let option = {
+        // Add title
+        title: {
+            text: 'Tipificación general total',
+            subtext: '(Total de llamadas)',
+            x: '',
+        },
+
+        // Add legend
+        legend: {
+            orient: 'vertical',
+            top: '40%',
+            x: 'right',
+            data: [
+                'Motivo de venta',
+                'Asistencia Ubbitt',
+                'Otros productos',
+                'Atención clientes',
+                'Dudas de cobranza',
+            ],
+        },
+
+        // Add custom colors
+        color: ['#ec4497', '#4bb6cc', '#2c72f0', '#f06c39', '#FF5757'],
+
+        // Enable drag recalculate
+        calculable: true,
+
+        // Add series
+        series: [
+            {
+                name: 'Llamadas',
+                type: 'pie',
+                radius: ['35%', '70%'],
+                center: ['30%', '50%'],
+                // center: ['50%', '57.5%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            position: 'inner',
+                            formatter: function (params) {
+                                return params.value + '\n';
+                            },
+                        },
+                        labelLine: {
+                            show: false,
+                        },
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            formatter: '{b}' + '\n\n' + '{c} ({d}%)',
+                            position: 'center',
+                            textStyle: {
+                                fontSize: '17',
+                                fontWeight: '500',
+                            },
+                        },
+                    },
+                },
+
+                data: [
+                    {
+                        value: kpis.sale_reason,
+                        name: 'Motivo de venta',
+                    },
+                    {
+                        value: kpis.cust_serv_calls_ubbitt_assistance,
+                        name: 'Asistencia Ubbitt',
+                    },
+                    {
+                        value: kpis.cust_serv_calls_other_products,
+                        name: 'Otros productos',
+                    },
+                    {
+                        value: kpis.cust_serv_cust_serv,
+                        name: 'Atención clientes',
+                    },
+                    {
+                        value: kpis.cust_serv_collection_questions,
+                        name: 'Dudas de cobranza',
+                    },
+                ],
+            },
+        ],
+    };
+
+    totalTypificationGraph.setOption(option);
+
+    window.addEventListener('resize', function () {
+        totalTypificationGraph.resize();
+        stackedChart.resize();
+        totalTypificationGraph.resize();
+    });
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
