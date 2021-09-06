@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\models\db\UserProfile;
-use app\models\db\Permission;
 use Yii;
 use yii\base\Model;
 
@@ -17,6 +16,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $termsConditions;
 
     private $_user = false;
 
@@ -29,6 +29,7 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+            ['termsConditions', 'required', 'requiredValue' => 1, 'message' => 'Para ingresar primero debes aceptar los términos y condiciones.'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
