@@ -81,14 +81,14 @@ $('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
 });
 
 // Show upload report form
-$("#upload_report_btn").click(function() {
-    $("#reports_info_contents").toggle();
-    $("#view_upload_report_form").toggle();
+$('#upload_report_btn').click(function () {
+    $('#reports_info_contents').toggle();
+    $('#view_upload_report_form').toggle();
 });
 // Cancel upload report form
-$("#cancel_upload_report").click(function() {
-    $("#view_upload_report_form").toggle();
-    $("#reports_info_contents").toggle();
+$('#cancel_upload_report').click(function () {
+    $('#view_upload_report_form').toggle();
+    $('#reports_info_contents').toggle();
 });
 
 function summaryCallback(start, end) {
@@ -112,7 +112,8 @@ function findSummaryGraphData(start, end) {
             updateTransactionChart(response);
         },
         error: () => {
-            alert(
+            showAlert(
+                'error',
                 'Ocurrió un problema al recuperar la información del gráfico de transacciones'
             );
         },
@@ -215,7 +216,8 @@ function findSummaryDetailData(start, end) {
             updateCustomerServiceCallsKpis(kpis);
         },
         error: () => {
-            alert(
+            showAlert(
+                'error',
                 'Ocurrió un problema al recuperar la información del resumen'
             );
         },
