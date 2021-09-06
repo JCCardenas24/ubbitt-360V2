@@ -62,7 +62,9 @@ $this->registerJsFile('@web/assets/js/views/login/index.js', ['position' => View
                             <div class="row">
                                 <div class="col-12 text-center pos-check">
                                     <div class="form-check p-0 prt-10 pt-10">
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                        <?= $form->field($model, 'termsConditions', [
+                                            'template' => "{input}"
+                                        ])->checkbox(['id' => 'defaultCheck1', 'class' => 'form-check-input', 'checked' => false, 'required' => true, 'label' => null], false) ?>
                                         <label class="form-check-label" for="defaultCheck1">
                                             <span class="font-size-14 c-gray">Acepto <a
                                                     href="<?= Url::toRoute(['terms-and-conditions/index']) ?>"
@@ -72,7 +74,7 @@ $this->registerJsFile('@web/assets/js/views/login/index.js', ['position' => View
                                     </div>
                                 </div>
                                 <?= Html::submitButton('iniciar
-                                        sesión', ['class' => 'btn_login btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase d-block mx-auto', 'name' => 'login-button']) ?>
+                                        sesión', ['id' => 'submit-login-form', 'class' => 'btn_login btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase d-block mx-auto', 'name' => 'login-button', 'disabled' => true]) ?>
                                 <a id="btn_go_to_recover" class="wid-100  text-center d-block mx-auto">Olvidé mi
                                     contraseña</a>
                             </div>

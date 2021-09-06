@@ -1483,8 +1483,10 @@ function createCallRecordRow(callRecord) {
             <td>` +
         callRecord.answered_by +
         `</td>
-            <td>55125486</td>
-            <td>Mapre</td>
+            <td>` +
+        callRecord.callpicker_number +
+        `</td>
+            <td>Mapfre</td>
             <td>` +
         callRecord.date +
         `</td>
