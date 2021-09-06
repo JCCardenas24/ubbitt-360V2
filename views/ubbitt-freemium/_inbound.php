@@ -38,7 +38,7 @@
             </div>
             <div class="tab-pane fade" id="freemium-inbound-reportes" role="tabpanel"
                 aria-labelledby="freemium-inbound-reportes-tab">
-                <?= $this->render('_inbound/_reports', ['reportFileModel' => $reportFileModel]) ?>
+                <?= $this->render('_inbound/_reports', ['reportFileModel' => $reportFileModel, 'dataReportFileProvider' => $dataReportFileProvider]) ?>
             </div>
         </div>
     </div>

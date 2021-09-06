@@ -28,7 +28,7 @@
 <div class="tab-content" id="freemium-inbound-reportes-optionsContent">
     <div class="tab-pane fade show active" id="freemium-inbound-reportes-detalle-kpis" role="tabpanel"
         aria-labelledby="freemium-inbound-reportes-detalle-kpis-tab">
-        <?= $this->render('_reports/_kpis-detail', ['reportFileModel' => $reportFileModel]) ?>
+        <?= $this->render('_reports/_kpis-detail', ['reportFileModel' => $reportFileModel, 'dataReportFileProvider' => $dataReportFileProvider]) ?>
     </div>
 
 </div>

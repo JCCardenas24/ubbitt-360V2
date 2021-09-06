@@ -42,11 +42,11 @@ class ReportFile extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'file_path' => 'File Path',
-            'user_id' => 'User ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'deleted_at' => 'Deleted At',
+            'file_path' => 'Archivo',
+            'user_id' => 'Usuario',
+            'created_at' => 'Fecha de creación',
+            'updated_at' => 'Última actualización',
+            'deleted_at' => 'Fecha de eliminación',
         ];
     }
 }

@@ -17,7 +17,7 @@ use yii\helpers\Url;
         <a href="#" id="upload_report_btn" class="pdf_button"><i class="icon-agegarnuevo"></i></a>
     </div>
     <br>
-    <?= $this->render('_kpis-detail/_kpis-table') ?>
+    <?= $this->render('_kpis-detail/_kpis-table', ['dataReportFileProvider' => $dataReportFileProvider]) ?>
 </div>    
 <div id="view_upload_report_form" style="display: none;">
     <a id="cancel_upload_report" class="cancel_upload_report">< Regresar a la lista</a>
