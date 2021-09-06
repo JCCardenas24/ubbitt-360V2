@@ -57,7 +57,7 @@ use yii\helpers\Url;
                 </div>
                 <?php } ?>
                 <?php
-                //if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
+                if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
                 ?>
                 <div class="views_menu_option">
                     <div class="" id="headingOne">
@@ -74,7 +74,7 @@ use yii\helpers\Url;
                     <div id="collapse_premium" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     </div>
                 </div>
-                <?php //} 
+                <?php }
                 ?>
                 <?php
                 if (in_array('menu_ubbitt_beyond', Yii::$app->session->get("userPermissions"))) {
@@ -94,9 +94,9 @@ use yii\helpers\Url;
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <?php
-                            if (in_array('menu_ubbitt_freemium_collection', Yii::$app->session->get("userPermissions"))) {
+                            if (in_array('menu_ubbitt_beyond_collection', Yii::$app->session->get("userPermissions"))) {
                             ?>
-                        <li class="sub_ttl"><a
+                        <li class="sub_ttl" id="beyond-collection-call-center-tab"><a
                                 href="<?= Url::toRoute(['ubbitt-beyond/collection-dashboard']) ?>">Cobranza</a></li>
                         <ul>
                             <li><span>Resumen</span></li>
@@ -106,7 +106,7 @@ use yii\helpers\Url;
                         </ul>
                         <?php } ?>
                         <?php
-                            if (in_array('menu_ubbitt_freemium_renewal', Yii::$app->session->get("userPermissions"))) {
+                            if (in_array('menu_ubbitt_beyond_renewal', Yii::$app->session->get("userPermissions"))) {
                             ?>
                         <li class="sub_ttl"><a
                                 href="<?= Url::toRoute(['ubbitt-beyond/renewal-dashboard']) ?>">Renovación</a></li>
