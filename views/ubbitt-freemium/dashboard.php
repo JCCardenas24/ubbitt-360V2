@@ -28,7 +28,7 @@ $this->registerJsFile('@web/assets/js/views/ubbitt-freemium/freemium-dashboard.j
     <div class="tab-content" id="main_tabs_panelsContent">
         <div class="tab-pane fade show active" id="freemium_option" role="tabpanel"
             aria-labelledby="freemium_option-tab">
-            <?= $this->render('_inbound') ?>
+            <?= $this->render('_inbound', ['reportFileModel' => $reportFileModel]) ?>
         </div>
 
     </div>

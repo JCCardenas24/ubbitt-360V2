@@ -12,7 +12,9 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-
+// use app\models\UploadReportForm;
+use app\models\ReportFile;
+use yii\web\UploadedFile;
 class UbbittFreemiumController extends Controller
 {
     /**
@@ -34,7 +36,7 @@ class UbbittFreemiumController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                    'dashboard' => ['get'],
+                    'dashboard' => ['get','post'],
                     'find-calls' => ['post'],
                     'find-summary-graph-data' => ['post'],
                     'find-call-center-kpis' => ['post'],
@@ -63,7 +65,11 @@ class UbbittFreemiumController extends Controller
      */
     public function actionDashboard()
     {
-        return $this->render('dashboard');
+        $reportFileModel = new ReportFile();
+
+        return $this->render('dashboard', [
+            'reportFileModel' => $reportFileModel
+        ]);
     }
 
     public function actionFindCalls()

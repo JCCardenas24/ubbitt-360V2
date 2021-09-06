@@ -80,6 +80,17 @@ $('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
     $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
 });
 
+// Show upload report form
+$("#upload_report_btn").click(function() {
+    $("#reports_info_contents").toggle();
+    $("#view_upload_report_form").toggle();
+});
+// Cancel upload report form
+$("#cancel_upload_report").click(function() {
+    $("#view_upload_report_form").toggle();
+    $("#reports_info_contents").toggle();
+});
+
 function summaryCallback(start, end) {
     $('.range-pick#freemium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')

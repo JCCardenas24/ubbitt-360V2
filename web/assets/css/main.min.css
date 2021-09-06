@@ -2074,3 +2074,15 @@ audio {
   margin-top: 30px;
 }
 /*# sourceMappingURL=main.min.css.map */
+
+.cancel_upload_report {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  text-align: left;
+  color: #fd8377 !important;
+}
+
+.cancel_upload_report:hover {
+  text-decoration: underline !important;
+}
