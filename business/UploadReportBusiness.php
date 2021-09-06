@@ -3,6 +3,7 @@
 namespace app\business;
 
 use app\exception\UploadBusinessException;
+use app\models\db\BeyondCallCenterKpi;
 use app\models\db\BeyondSummaryGraph;
 use app\models\db\FreemiumCallCenterKpi;
 use app\models\db\FreemiumSummaryDetail;
@@ -242,10 +243,12 @@ class UploadReportBusiness
 
     private function saveBeyondData(Spreadsheet $spreadsheet)
     {
-        $this->saveFreemiumInboundSummary($spreadsheet);
+        $pass = password_hash('Admin2021', PASSWORD_BCRYPT);
+        $this->saveBeyondInboundSummary($spreadsheet);
+        $this->saveBeyondCallCenterKpis($spreadsheet);
     }
 
-    private function saveFreemiumInboundSummary(Spreadsheet $spreadsheet)
+    private function saveBeyondInboundSummary(Spreadsheet $spreadsheet)
     {
         try {
             $spreadsheet->setActiveSheetIndexByName('Resumen Gráfica Beyond Cobranza');
@@ -275,6 +278,45 @@ class UploadReportBusiness
                 $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
                 $transaction->rollback();
                 throw new UploadBusinessException('Resumen Gráfica Beyond Cobranza - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($summary->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveBeyondCallCenterKpis(Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Call center KPIS Beyond Cobranz');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Call center KPIS Beyond Cobranz" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = BeyondCallCenterKpi::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $kpi = new BeyondCallCenterKpi();
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $kpi->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $kpi->findByDate();
+            if ($previousData != null) {
+                $kpi = $previousData;
+            }
+            $kpi->inboundCalls = $sheet->getCell("B$currentRowIndex")->getValue();
+            $kpi->answeredCalls = $sheet->getCell("C$currentRowIndex")->getValue();
+            $kpi->outboundCalls = $sheet->getCell("D$currentRowIndex")->getValue();
+            $kpi->lostCalls = $sheet->getCell("E$currentRowIndex")->getValue();
+            $kpi->callsAnsweredWithin25Seconds = intval($sheet->getCell("F$currentRowIndex")->getValue());
+            $kpi->nslPercentage = $sheet->getCell("G$currentRowIndex")->getValue() * 100;
+            $kpi->abandonedBefore5Seconds = $sheet->getCell("H$currentRowIndex")->getValue();
+            $kpi->abandonment = $sheet->getCell("I$currentRowIndex")->getValue() * 100;
+            $kpi->ath = $sheet->getCell("J$currentRowIndex")->getValue();
+            $kpi->averageTimeInAnsweringCall = $sheet->getCell("K$currentRowIndex")->getValue();
+            $kpi->speakingTime = $sheet->getCell("L$currentRowIndex")->getValue();
+            if (!$kpi->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Call center KPIS Beyond Cobranza - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($kpi->errors));
             }
         }
         $transaction->commit();
