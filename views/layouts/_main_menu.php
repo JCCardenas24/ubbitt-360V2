@@ -57,7 +57,7 @@ use yii\helpers\Url;
                 </div>
                 <?php } ?>
                 <?php
-                //if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
+                if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
                 ?>
                 <div class="views_menu_option">
                     <div class="" id="headingOne">
@@ -74,7 +74,7 @@ use yii\helpers\Url;
                     <div id="collapse_premium" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     </div>
                 </div>
-                <?php //} 
+                <?php }
                 ?>
                 <?php
                 if (in_array('menu_ubbitt_beyond', Yii::$app->session->get("userPermissions"))) {
