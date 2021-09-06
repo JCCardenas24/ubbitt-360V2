@@ -1,9 +1,12 @@
 <?php
 
 /* @var $this yii\web\View */
+
+use yii\web\View;
+
 $this->title = 'Ubbitt 360';
 \app\assets\ChartsAsset::register($this);
-$this->registerJsFIle('assets/js/beyond-cobranza-charts.js');
+$this->registerJsFile('@web/assets/js/views/ubbitt-beyond/collection-dashboard.js', ['position' => View::POS_END, 'depends' => [\app\assets\ChartsAsset::class]]);
 ?>
 <div class="container container-beyond" id="dynamic-tabs">
     <?= $this->render('../_commons/_tabs/_plans.php') ?>

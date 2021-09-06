@@ -3,6 +3,7 @@
 namespace app\business;
 
 use app\exception\UploadBusinessException;
+use app\models\db\BeyondSummaryGraph;
 use app\models\db\FreemiumCallCenterKpi;
 use app\models\db\FreemiumSummaryDetail;
 use app\models\db\FreemiumSummaryGraph;
@@ -24,6 +25,7 @@ class UploadReportBusiness
         $this->loadFreemiumInboundSummary($spreadsheet);
         $this->loadFreemiumCallCenterKpis($spreadsheet);
         $this->loadFreemiumSummaryDetail($spreadsheet);
+        $this->saveBeyondData($spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -233,6 +235,46 @@ class UploadReportBusiness
             if (!$summaryDetail->save()) {
                 $transaction->rollback();
                 throw new UploadBusinessException('Detalle de resumen Freemium - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($summaryDetail->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveBeyondData(Spreadsheet $spreadsheet)
+    {
+        $this->saveFreemiumInboundSummary($spreadsheet);
+    }
+
+    private function saveFreemiumInboundSummary(Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Resumen Gráfica Beyond Cobranza');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Resumen Gráfica Beyond Cobranza" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $transaction = BeyondSummaryGraph::getDb()->beginTransaction();
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+            $summary = new BeyondSummaryGraph();
+            $date = $sheet->getCellByColumnAndRow($currentColumnIndex, 2)->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $summary->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $summary->findByDate();
+            if ($previousData != null) {
+                $summary = $previousData;
+            }
+            $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getValue();
+            $uploadDate = Date::excelToDateTimeObject($uploadDate);
+            $summary->uploadDate = $uploadDate->format('Y-m-d');
+            $summary->registries = $sheet->getCellByColumnAndRow($currentColumnIndex, 3)->getValue();
+            $summary->calls = $sheet->getCellByColumnAndRow($currentColumnIndex, 4)->getValue();
+            $summary->collected = $sheet->getCellByColumnAndRow($currentColumnIndex, 5)->getValue();
+            if (!$summary->save()) {
+                $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
+                $transaction->rollback();
+                throw new UploadBusinessException('Resumen Gráfica Beyond Cobranza - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($summary->errors));
             }
         }
         $transaction->commit();
