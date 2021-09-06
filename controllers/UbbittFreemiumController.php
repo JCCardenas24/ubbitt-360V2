@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use app\models\ReportFile;
 use app\models\ReportFileSearch;
+
 class UbbittFreemiumController extends Controller
 {
     /**
@@ -35,7 +36,7 @@ class UbbittFreemiumController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                    'dashboard' => ['get','post'],
+                    'dashboard' => ['get', 'post'],
                     'find-calls' => ['post'],
                     'find-summary-graph-data' => ['post'],
                     'find-call-center-kpis' => ['post'],
