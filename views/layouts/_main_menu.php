@@ -99,10 +99,10 @@ use yii\helpers\Url;
                         <li class="sub_ttl" id="beyond-collection-call-center-tab"><a
                                 href="<?= Url::toRoute(['ubbitt-beyond/collection-dashboard']) ?>">Cobranza</a></li>
                         <ul>
-                            <li><span>Resumen</span></li>
-                            <li><span>Call Center</span></li>
-                            <li><span>Reportes</span></li>
-                            <li><span>Carga de base de datos</span></li>
+                            <li><span id="li-beyond-collection-summary">Resumen</span></li>
+                            <li><span id="li-beyond-collection-call-center">Call Center</span></li>
+                            <li><span id="li-beyond-collection-reports">Reportes</span></li>
+                            <li><span id="li-beyond-collection-database-upload">Carga de base de datos</span></li>
                         </ul>
                         <?php } ?>
                         <?php
