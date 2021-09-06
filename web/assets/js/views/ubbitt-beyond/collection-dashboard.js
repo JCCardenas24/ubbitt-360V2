@@ -3,6 +3,7 @@ let startDate = null;
 let endDate = null;
 
 $(function () {
+    $('#li-beyond-collection-summary').addClass('font-weight-bold');
     const urlParams = new URLSearchParams(window.location.search);
     const initialDate = urlParams.get('initial_date');
     const finalDate = urlParams.get('final_date');
@@ -40,6 +41,38 @@ $(function () {
         summaryCallback
     );
     summaryCallback(startDate, endDate);
+});
+
+/** TAB CHANGE EVENTS  **/
+$('#resumen-cobranza-tab').on('shown.bs.tab', function (event) {
+    event.target; // newly activated tab
+    event.relatedTarget; // previous active tab
+    $('.menu-sidebar li span').removeClass('font-weight-bold');
+    $('#li-beyond-collection-summary').addClass('font-weight-bold');
+});
+$('#beyond-cobranza-callcenter-tab').on('shown.bs.tab', function (event) {
+    event.target; // newly activated tab
+    event.relatedTarget; // previous active tab
+    $('.menu-sidebar li span').removeClass('font-weight-bold');
+    $('#li-beyond-collection-call-center').addClass('font-weight-bold');
+    // Initialize the date picker on the call center kpi's tab
+    $('.range-pick#beyond-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        loadKpis
+    );
+    loadKpis(startDate, endDate);
+});
+$('#beyond-cobranza-reportes-tab').on('shown.bs.tab', function (event) {
+    event.target; // newly activated tab
+    event.relatedTarget; // previous active tab
+    $('.menu-sidebar li span').removeClass('font-weight-bold');
+    $('#li-beyond-collection-reports').addClass('font-weight-bold');
+});
+$('#beyond-cobranza-carga-base-datos-tab').on('shown.bs.tab', function (event) {
+    event.target; // newly activated tab
+    event.relatedTarget; // previous active tab
+    $('.menu-sidebar li span').removeClass('font-weight-bold');
+    $('#li-beyond-collection-database-upload').addClass('font-weight-bold');
 });
 
 function summaryCallback(start, end) {
@@ -136,4 +169,45 @@ function updateTransactionChart(data) {
         },
     };
     stackedChart.setOption(option);
+}
+
+function loadKpis(start, end) {
+    $('.range-pick#beyond-kpis-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    $.ajax({
+        url: '/ubbitt-beyond/find-call-center-kpis',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (kpis) => {
+            $('#kpi-inbound-calls').text(kpis.inbound_calls);
+            $('#kpi-answered-calls').text(kpis.answered_calls);
+            $('#kpi-outbound-calls').text(kpis.outbound_calls);
+            $('#kpi-lost-calls').text(kpis.lost_calls);
+            $('#kpi-calls-answered-within-25-seconds').text(
+                kpis.calls_answered_within_25_seconds
+            );
+            $('#kpi-nsl-percentage').text(
+                kpis.nsl_percentage.replace('.00', '') + '%'
+            );
+            $('#kpi-abandoned-before-5-seconds').text(
+                kpis.abandoned_before_5_seconds
+            );
+            $('#kpi-abandonment').text(
+                kpis.abandonment.replace('.00', '') + '%'
+            );
+            $('#kpi-ath').text(kpis.ath.replace('.00', '') + ' min');
+            $('#kpi-average-time-in-answering-call').text(
+                kpis.average_time_in_answering_call + ' seg'
+            );
+            $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
+        },
+        error: () => {
+            alert("Ocurrió un problema al consultar los KPI's de telefonía");
+        },
+    });
 }
