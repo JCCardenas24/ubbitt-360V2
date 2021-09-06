@@ -40,7 +40,9 @@ use yii\helpers\Url;
                     <?php
                         if (in_array('menu_ubbitt_freemium_inbound', Yii::$app->session->get("userPermissions"))) {
                         ?>
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div id="collapseOne"
+                        class="collapse <?= Url::current() == '/ubbitt-freemium/dashboard' ? 'show' : '' ?>"
+                        aria-labelledby="headingOne" data-parent="#accordion">
                         <li class="sub_ttl">
                             <?= Html::a("Inbound", Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound'])) ?>
                         </li>
@@ -92,7 +94,9 @@ use yii\helpers\Url;
                             </a>
                         </h5>
                     </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div id="collapseTwo"
+                        class="collapse <?= Url::current() == '/ubbitt-beyond/collection-dashboard' || Url::current() == '/ubbitt-beyond/renewal-dashboard' ? 'show' : '' ?>"
+                        aria-labelledby="headingTwo" data-parent="#accordion">
                         <?php
                             if (in_array('menu_ubbitt_beyond_collection', Yii::$app->session->get("userPermissions"))) {
                             ?>
@@ -133,7 +137,8 @@ use yii\helpers\Url;
                             </a>
                         </h5>
                     </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div id="collapseThree" class="collapse <?= Url::current() == '/account/profile' ? 'show' : '' ?>"
+                        aria-labelledby="headingThree" data-parent="#accordion">
                         <ul class="mt-3">
                             <li class="cuenta"><span><a href="<?= Url::toRoute(['account/profile']) ?>">Mis
                                         datos</a></span></li>
