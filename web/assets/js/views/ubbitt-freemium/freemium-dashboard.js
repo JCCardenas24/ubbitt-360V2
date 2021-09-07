@@ -12,7 +12,7 @@ $(function () {
             ? moment().subtract(6, 'days')
             : moment(initialDate);
     endDate =
-        finalDate == null ? moment().subtract(1, 'days') : moment(finalDate);
+        finalDate == null ? moment() : moment(finalDate);
 
     dateRangePickerConfig = {
         showDropdowns: true,
@@ -21,11 +21,11 @@ $(function () {
         ranges: {
             'Últimos 7 días': [
                 moment().subtract(6, 'days'),
-                moment().subtract(1, 'days'),
+                moment(),
             ],
             'Últimos 30 días': [
                 moment().subtract(29, 'days'),
-                moment().subtract(1, 'days'),
+                moment(),
             ],
         },
         locale: {

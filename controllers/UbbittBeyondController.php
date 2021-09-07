@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\db\BeyondCallCenterKpi;
 use app\models\db\BeyondSummaryGraph;
+use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -23,7 +24,7 @@ class UbbittBeyondController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['collection-dashboard', 'renewal-dashboard', 'find-collection-summary-graph-data', 'find-call-center-kpis'],
+                        'actions' => ['collection-dashboard', 'renewal-dashboard', 'find-collection-summary-graph-data', 'find-call-center-kpis', 'find-collection-calls'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -81,6 +82,17 @@ class UbbittBeyondController extends Controller
         $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
+    }
+
+    public function actionFindCollectionCalls()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $calls = new WebHookCalls();
+        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_beyond_collection_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $callsArray;
     }
 
     /**
