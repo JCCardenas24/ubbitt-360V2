@@ -8,8 +8,7 @@ use yii\helpers\Url;
     <?php if (in_array('menu_ubbitt_beyond', Yii::$app->session->get("userPermissions"))) { ?>
     <li class="nav-item" role="presentation">
         <a class="nav-link <?= Yii::$app->controller->id == 'ubbitt-beyond' ? 'active' : '' ?>" id="beyond_option-tab"
-            data-toggle="pill" href="<?= Url::toRoute(['ubbitt-beyond/renewal-dashboard']) ?>" role="tab"
-            aria-controls="beyond_option" aria-selected="false">Ubbitt Beyond</a>
+            href="<?= Url::toRoute(['ubbitt-beyond/collection-dashboard']) ?>">Ubbitt Beyond</a>
     </li>
     <?php } ?>
     <?php
