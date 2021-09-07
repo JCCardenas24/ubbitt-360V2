@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use yii\data\Pagination;
 
 use Yii;
 
@@ -47,6 +48,24 @@ class ReportFile extends \yii\db\ActiveRecord
             'created_at' => 'Fecha de creación',
             'updated_at' => 'Última actualización',
             'deleted_at' => 'Fecha de eliminación',
+        ];
+    }
+
+    /**
+     * Finds a Permission by its id
+     * @param integer $id
+     * @return array[] \app\models\ReportFile
+     */
+    public function findByDate($startDate, $endDate, $page)
+    {
+        $query = self::find()
+            ->where(['between', 'created_at', $startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
+        $reports = $query->offset($pages->offset)->limit($pages->limit)->all();
+        return [
+            'reportsRecords' => $reports,
+            'totalPages' => $pages->pageCount
         ];
     }
 }

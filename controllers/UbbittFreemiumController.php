@@ -13,8 +13,6 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use app\models\ReportFile;
-use app\models\ReportFileSearch;
-
 class UbbittFreemiumController extends Controller
 {
     /**
@@ -66,12 +64,9 @@ class UbbittFreemiumController extends Controller
     public function actionDashboard()
     {
         $reportFileModel = new ReportFile();
-        $searchReportFileModel = new ReportFileSearch();
-        $dataReportFileProvider = $searchReportFileModel->search($this->request->queryParams);
 
         return $this->render('dashboard', [
-            'reportFileModel' => $reportFileModel,
-            'dataReportFileProvider' => $dataReportFileProvider
+            'reportFileModel' => $reportFileModel
         ]);
     }
 

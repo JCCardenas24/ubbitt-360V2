@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Yii;
 use yii\web\UploadedFile;
+use app\models\forms\SearchByDateForm;
+use yii\web\Response;
 
 /**
  * ReportFileController implements the CRUD actions for ReportFile model.
@@ -27,7 +29,7 @@ class ReportFileController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'delete' => ['GET'],
                     ],
                 ],
             ]
@@ -126,9 +128,15 @@ class ReportFileController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        
+        if(file_exists($model->file_path)) {
+            unlink($model->file_path);
+        }
+        
+        $model->delete();
+        
+        return $this->redirect('/ubbitt-freemium/dashboard');
     }
 
     /**
@@ -145,5 +153,16 @@ class ReportFileController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionFindReports()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $reports = new ReportFile();
+        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $reportsArray;
     }
 }
