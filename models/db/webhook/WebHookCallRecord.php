@@ -2,7 +2,6 @@
 
 namespace app\models\db\webhook;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -15,9 +14,6 @@ use yii\db\ActiveRecord;
  */
 class WebHookCallRecord extends ActiveRecord
 {
-
-    public $db = null;
-
     /**
      * @inheritdoc
      */
@@ -27,20 +23,12 @@ class WebHookCallRecord extends ActiveRecord
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public static function getDb()
-    {
-        return Yii::$app->webhookDb;
-    }
-
-    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['callpicker_record_id', 'name', 'pk_callpicker_id'], 'required'],
+            [['name', 'pk_callpicker_id'], 'required'],
             [['callpicker_record_id', 'pk_callpicker_id'], 'integer'],
             [['name',], 'string'],
         ];
@@ -65,6 +53,11 @@ class WebHookCallRecord extends ActiveRecord
     public function getPkCallpickerId()
     {
         return $this->pk_callpicker_id;
+    }
+
+    public function setPkCallpickerId($pkCallpickerId)
+    {
+        return $this->pk_callpicker_id = $pkCallpickerId;
     }
 
     /**

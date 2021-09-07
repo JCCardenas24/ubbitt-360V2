@@ -23,8 +23,6 @@ use yii\db\ActiveRecord;
  */
 class WebHookCalls extends ActiveRecord
 {
-
-    public $db = null;
     public $records = [];
 
     /**
@@ -36,24 +34,16 @@ class WebHookCalls extends ActiveRecord
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public static function getDb()
-    {
-        return Yii::$app->webhookDb;
-    }
-
-    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['call_id', 'status', 'type', 'dialed_by', 'answered_by', 'dialed_number', 'callpicker_number', 'duration', 'pk_callpicker_id', 'date'], 'required'],
+            //[['call_id', 'status', 'type', 'dialed_by', 'answered_by', 'dialed_number', 'callpicker_number', 'duration', 'pk_callpicker_id', 'date'], 'required'],
             [['call_id', 'dialed_number', 'callpicker_number', 'pk_callpicker_id'], 'integer'],
             [['duration',], 'double'],
             [['status', 'type', 'dialed_by', 'answered_by',], 'string'],
-            [['date',], 'datetime'],
+            [['date',], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             [['records',], 'safe'],
         ];
     }
