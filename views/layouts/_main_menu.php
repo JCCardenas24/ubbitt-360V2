@@ -41,7 +41,7 @@ use yii\helpers\Url;
                         if (in_array('menu_ubbitt_freemium_inbound', Yii::$app->session->get("userPermissions"))) {
                         ?>
                     <div id="collapseOne"
-                        class="collapse <?= Url::current() == '/ubbitt-freemium/dashboard' ? 'show' : '' ?>"
+                        class="collapse <?= Yii::$app->controller->id == 'ubbitt-freemium' ? 'show' : '' ?>"
                         aria-labelledby="headingOne" data-parent="#accordion">
                         <li class="sub_ttl">
                             <?= Html::a("Inbound", Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound'])) ?>
@@ -73,7 +73,9 @@ use yii\helpers\Url;
                         </h5>
                     </div>
 
-                    <div id="collapse_premium" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div id="collapse_premium"
+                        class="collapse <?= Yii::$app->controller->id == 'ubbitt-premium' ? 'show' : '' ?>"
+                        aria-labelledby="headingOne" data-parent="#accordion">
                     </div>
                 </div>
                 <?php }
@@ -95,7 +97,7 @@ use yii\helpers\Url;
                         </h5>
                     </div>
                     <div id="collapseTwo"
-                        class="collapse <?= Url::current() == '/ubbitt-beyond/collection-dashboard' || Url::current() == '/ubbitt-beyond/renewal-dashboard' ? 'show' : '' ?>"
+                        class="collapse <?= Yii::$app->controller->id == 'ubbitt-beyond' ? 'show' : '' ?>"
                         aria-labelledby="headingTwo" data-parent="#accordion">
                         <?php
                             if (in_array('menu_ubbitt_beyond_collection', Yii::$app->session->get("userPermissions"))) {
@@ -137,7 +139,7 @@ use yii\helpers\Url;
                             </a>
                         </h5>
                     </div>
-                    <div id="collapseThree" class="collapse <?= Url::current() == '/account/profile' ? 'show' : '' ?>"
+                    <div id="collapseThree" class="collapse <?= Yii::$app->controller->id == 'account' ? 'show' : '' ?>"
                         aria-labelledby="headingThree" data-parent="#accordion">
                         <ul class="mt-3">
                             <li class="cuenta"><span><a href="<?= Url::toRoute(['account/profile']) ?>">Mis
