@@ -17,6 +17,7 @@ class SearchByDateForm extends Model
     public $startDate;
     public $endDate;
     public $page;
+    public $type;
 
     /**
      * @return array the validation rules.
@@ -27,6 +28,7 @@ class SearchByDateForm extends Model
             [['startDate', 'endDate'], 'required'],
             [['startDate', 'endDate'], 'date'],
             [['page'], 'integer'],
+            [['type'], 'default', 'value' => null]
         ];
     }
 }

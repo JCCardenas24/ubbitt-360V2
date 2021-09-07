@@ -32,6 +32,8 @@ class ReportFile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['file', 'type'], 'required'],
+            ['type', 'string', 'max' => '255'],
             [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'xls, xlsx'],
         ];
     }
@@ -43,6 +45,7 @@ class ReportFile extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'type' => 'Tipo',
             'file_path' => 'Archivo',
             'user_id' => 'Usuario',
             'created_at' => 'Fecha de creación',
@@ -56,10 +59,10 @@ class ReportFile extends \yii\db\ActiveRecord
      * @param integer $id
      * @return array[] \app\models\ReportFile
      */
-    public function findByDate($startDate, $endDate, $page)
+    public function findByDate($startDate, $endDate, $page, $type)
     {
         $query = self::find()
-            ->where(['between', 'created_at', $startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            ->where(['between', 'created_at', $startDate . ' 00:00:00', $endDate . ' 23:59:59'])->andWhere(['=', 'type', Yii::$app->params['report_type_dict'][$type]]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
         $reports = $query->offset($pages->offset)->limit($pages->limit)->all();

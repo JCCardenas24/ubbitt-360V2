@@ -5,7 +5,7 @@ use yii\helpers\Url;
 ?>
 <div id="reports_info_contents">
     <div class="d-flex wid-100 justify-content-end">
-        <div class="col-4 d-flex justify-content-between">
+        <div class="col-5 d-flex justify-content-between">
             <div class="form-group wid-100 d-flex m-0">
                 <div id="freemium-report-date-range" class="range-pick">
                     <i class="fa fa-calendar"></i>&nbsp;
@@ -13,7 +13,6 @@ use yii\helpers\Url;
                 </div>
             </div>
         </div>
-        <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a>
         <a href="#" id="upload_report_btn" class="pdf_button"><i class="icon-agegarnuevo"></i></a>
     </div>
     <br>
@@ -48,6 +47,7 @@ use yii\helpers\Url;
                         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                         class="custom-file-input" name="file"> -->
                         <?= $formUploadReport->field($reportFileModel, 'file')->fileInput(['id' => 'reportFile', 'class' => 'custom-file-input', 'accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel']) ?>
+                        <?= $formUploadReport->field($reportFileModel, 'type')->hiddenInput(['id' => 'type-file', 'value' => 'kpis']) ?>
                     <i style="display: none;" id="msjFile1">Formato válido para los archivos: xslx, xsl.</i>
                     <i style="display: none;" id="msjFilePeso1">El peso máximo para el archivo es de: 2M</i>
                 </div>

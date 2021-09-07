@@ -73,11 +73,13 @@ $('#freemium-call-center-bd-tab').on('shown.bs.tab', function (event) {
     );
     callDatabaseCallback(startDate, endDate, null, 1);
 });
-$('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
+$('#freemium-inbound-reportes-tab, .nav-link-freemium-reports').on('shown.bs.tab', function (event) {
     event.target; // newly activated tab
     event.relatedTarget; // previous active tab
     $('.options_inbound_freemium').removeClass('font-weight-bold');
     $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
+    var tab_report_type = $('.nav-link-freemium-reports.active').data('tab-type');
+    $('#type-file').val(tab_report_type);
     // Initialize the date picker on the call center kpi's tab
     $('.range-pick#freemium-report-date-range').daterangepicker(
         dateRangePickerConfig,
@@ -85,6 +87,20 @@ $('#freemium-inbound-reportes-tab').on('shown.bs.tab', function (event) {
     );
     reportsListCallback(startDate, endDate, null, 1)
 });
+
+/* $('.nav-link-freemium-reports').on('shown.bs.tab', function (event) {
+    event.target; // newly activated tab
+    event.relatedTarget; // previous active tab
+    console.log('reload reports tab');
+    var tab_report_type = $('.nav-link-freemium-reports.active').data('tab-type');
+   $('#type-file').val(tab_report_type);
+    // Initialize the date picker on the call center kpi's tab
+    $('.range-pick#freemium-report-date-range').daterangepicker(
+        dateRangePickerConfig,
+        reportsListCallback
+    );
+    reportsListCallback(startDate, endDate, null, 1, tab_report_type)
+}); */
 
 // Show upload report form
 $('#upload_report_btn').click(function () {
@@ -1563,7 +1579,7 @@ function reportsListCallback(start, end, label, page=1) {
     $('.range-pick#freemium-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
-
+    var report_type = $('.nav-link-freemium-reports.active').data('tab-type');
     $.ajax({
         url: '/report-file/find-reports',
         type: 'POST',
@@ -1572,6 +1588,7 @@ function reportsListCallback(start, end, label, page=1) {
             'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
             'SearchByDateForm[page]': page,
+            'SearchByDateForm[type]': report_type,
         },
         success: (response) => {
             $('#freemium-reports-table tbody').html(null);

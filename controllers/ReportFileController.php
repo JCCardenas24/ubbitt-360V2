@@ -81,6 +81,7 @@ class ReportFileController extends Controller
                     if ($model->file->saveAs($filePath)) {
                         $model->file_path = $filePath;
                         $model->user_id = Yii::$app->user->id;
+                        $model->type = Yii::$app->params['report_type_dict'][$model->type];
                         $now = new DateTime('now');
                         $model->created_at = $now->format("Y-m-d H:i:s");
                         $model->updated_at = $now->format("Y-m-d H:i:s");
@@ -161,7 +162,7 @@ class ReportFileController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $reports = new ReportFile();
-        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page, $searchParams->type);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $reportsArray;
     }
