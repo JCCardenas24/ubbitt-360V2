@@ -17,45 +17,50 @@ class ImportCallPickerCallsBusiness
     {
         $config = new BatchConfig();
         $callPickerDownloadConfig = $config->findById(1);
-        $lastId = $callPickerDownloadConfig->lastId;
-        $callpickerCallsModel = new WebHookCallPicker();
-        $callpickerCalls = $callpickerCallsModel->findFromId($lastId);
+        $fetchAgain = true;
 
-        /**
-         * @var $call \app\models\db\webhook\WebHookCallpicker
-         */
-        foreach ($callpickerCalls as $call) {
-            try {
-                $transaction = WebHookCalls::getDb()->beginTransaction();
-                $callData = json_decode($call->string);
-                Yii::info('CALL ID: ' . $call->id, __METHOD__);
-                Yii::info('TYPE: ' . $callData->call_type, __METHOD__);
-                if ('525588547978' == $callData->callpicker_number || '525589571959' == $callData->callpicker_number || '525589505362' == $callData->callpicker_number) {
-                    if ('Ansuz Oscar Vilchis' != trim($callData->answered_by)) {
-                        Yii::info('Getting records for: ' . $call->id, __METHOD__);
-                        $recordsNumber = count($callData->record_keys) > 0 ? count($callData->record_keys) > 0 : (isset($callData->records) ? count($callData->records) > 0 : 0);
-                        if ($recordsNumber > 0) {
-                            Yii::info($recordsNumber . ' records found', __METHOD__);
-                            Yii::info('------------------------------------------------------', __METHOD__);
-                            $isUrlRecord = count($callData->record_keys) == 0;
-                            $records = count($callData->record_keys) > 0 ? $callData->record_keys : $callData->records;
-                            $filename = $this->getFilename($callData);
-                            $recordNames = $this->downloadRecords($isUrlRecord, $records, $filename);
-                            $this->saveRecordNames($call->id, $recordNames);
-                        } else {
-                            Yii::info('No recordings found. Skipping....', __METHOD__);
+        while ($fetchAgain) {
+            $callpickerCallsModel = new WebHookCallPicker();
+            $limit = 100;
+            $callpickerCalls = $callpickerCallsModel->findFromId($callPickerDownloadConfig->lastId, $limit);
+            $fetchAgain = count($callpickerCalls) == $limit;
+
+            /**
+             * @var $call \app\models\db\webhook\WebHookCallpicker
+             */
+            foreach ($callpickerCalls as $call) {
+                try {
+                    $transaction = WebHookCalls::getDb()->beginTransaction();
+                    $callData = json_decode($call->string);
+                    Yii::info('CALL ID: ' . $call->id, __METHOD__);
+                    Yii::info('TYPE: ' . $callData->call_type, __METHOD__);
+                    if ('525588547978' == $callData->callpicker_number || '525589571959' == $callData->callpicker_number || '525589505362' == $callData->callpicker_number) {
+                        if ('Ansuz Oscar Vilchis' != trim($callData->answered_by)) {
+                            Yii::info('Getting records for: ' . $call->id, __METHOD__);
+                            $recordsNumber = count($callData->record_keys) > 0 ? count($callData->record_keys) > 0 : (isset($callData->records) ? count($callData->records) > 0 : 0);
+                            if ($recordsNumber > 0) {
+                                Yii::info($recordsNumber . ' records found', __METHOD__);
+                                Yii::info('------------------------------------------------------', __METHOD__);
+                                $isUrlRecord = count($callData->record_keys) == 0;
+                                $records = count($callData->record_keys) > 0 ? $callData->record_keys : $callData->records;
+                                $filename = $this->getFilename($callData);
+                                $recordNames = $this->downloadRecords($isUrlRecord, $records, $filename);
+                                $this->saveRecordNames($call->id, $recordNames);
+                            } else {
+                                Yii::info('No recordings found. Skipping....', __METHOD__);
+                            }
+                            $phoneNumber = "outbound" == $callData->call_type ? $callData->dialed_number : $callData->callpicker_number;
+                            $this->saveHubspotContact($call->id, $phoneNumber);
+                            $this->saveCall($call->id, $callData);
                         }
-                        $phoneNumber = "outbound" == $callData->call_type ? $callData->dialed_number : $callData->callpicker_number;
-                        $this->saveHubspotContact($call->id, $phoneNumber);
-                        $this->saveCall($call->id, $callData);
                     }
+                    $callPickerDownloadConfig->lastId = $call->id;
+                    $callPickerDownloadConfig->save();
+                    $transaction->commit();
+                    Yii::info('#############################################################', __METHOD__);
+                } catch (Exception $e) {
+                    $transaction->rollback();
                 }
-                $callPickerDownloadConfig->lastId = $call->id;
-                $callPickerDownloadConfig->save();
-                $transaction->commit();
-                Yii::info('#############################################################', __METHOD__);
-            } catch (Exception $e) {
-                $transaction->rollback();
             }
         }
     }
