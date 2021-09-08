@@ -212,3 +212,9 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+
+######################
+# Project specific
+######################
+/web/assets/audio
+/web/uploads/*

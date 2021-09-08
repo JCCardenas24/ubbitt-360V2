@@ -53,7 +53,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getId()
     {
-        return $this->username;
+        return $this->user_id;
     }
 
     /**

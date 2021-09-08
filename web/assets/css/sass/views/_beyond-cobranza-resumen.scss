@@ -1,0 +1,71 @@
+.resumen-beyond-cobranza {
+    .container_chart-2 {
+        height: 345px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .card-gestion {
+            height: 280px;
+            border-radius: 15px;
+            background: #f4f4f4;
+            padding: 14px 7px 0;
+            margin-bottom: 0 !important;
+            .header {
+                padding: 8px 13px;
+                height: 60px;
+                background: #4d4d4d;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
+                p {
+                    font-weight: 900;
+                    font-size: 12px;
+                    text-align: left;
+                    color: #fff;
+                    margin-bottom: 5px;
+                }
+                h5 {
+                    font-weight: 900;
+                    font-size: 20px;
+                    text-align: left;
+                    color: #fff;
+                    margin-bottom: 0;
+                    span {
+                        color: #ffbe2c;
+                    }
+                }
+            }
+            .info_gestion {
+                padding: 4px 13px;
+                border-radius: 10px;
+                background-color: white;
+                height: 55px;
+                margin-bottom: 10px;
+                p {
+                    font-weight: 900;
+                    font-size: 12px;
+                    text-align: left;
+                    color: #4d4d4d;
+                    margin-bottom: 0;
+                }
+                h5 {
+                    font-weight: 900;
+                    font-size: 20px;
+                    text-align: left;
+                    color: #4d4d4d;
+                    span {
+                        color: #ffbe2c;
+                    }
+                    span.mini_price {
+                        color: #32D900;
+                    }
+                }
+            }
+        }
+    }
+    .container_graficas_llamadas {
+        .atc_cards p span {
+            color: #ffbe2c;
+        }
+    }
+}

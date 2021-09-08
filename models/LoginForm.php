@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\db\UserProfile;
 use Yii;
 use yii\base\Model;
 
@@ -15,6 +16,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $termsConditions;
 
     private $_user = false;
 
@@ -27,6 +29,7 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+            ['termsConditions', 'required', 'requiredValue' => 1, 'message' => 'Para ingresar primero debes aceptar los términos y condiciones.'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
@@ -48,8 +51,19 @@ class LoginForm extends Model
                 $this->addError($attribute, 'Usuario o contraseña incorrecto.');
             } else {
                 Yii::$app->session->set("userIdentity", $this->_user);
+                Yii::$app->session->set("userPermissions", $this->getPermissions());
             }
         }
+    }
+
+    private function getPermissions()
+    {
+        $userProfile = new UserProfile();
+        $userProfile = $userProfile->findUserProfileByUserId($this->getUser()->getId());
+        $permissions = $userProfile->findAllPermissions();
+        return array_map(function ($permission) {
+            return $permission->permission_code_name;
+        }, $permissions);
     }
 
     /**

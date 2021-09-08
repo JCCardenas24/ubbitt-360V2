@@ -2,13 +2,14 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$webhookDb = require __DIR__ . '/webhookDb.php';
 
 $config = [
     'id' => 'ubbitt-360-v2',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'es-MX',
-    'defaultRoute' => 'site/index',
+    'defaultRoute' => 'ubbitt-freemium/dashboard',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -46,10 +47,12 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logFile' => '@runtime/logs/app-' . date('Y') . '-' . date('m') . '-' . date('d') . '.log',
                 ],
             ],
         ],
         'db' => $db,
+        'webhookDb' => $webhookDb,
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -57,6 +60,20 @@ $config = [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+            ],
+        ],
+        'assetManager' => [
+            'basePath' => '@webroot/yii-assets',
+            'baseUrl' => '@web/yii-assets/',
+            'bundles' => [
+                'yii\bootstrap4\BootstrapAsset' => [
+                    'css' => [],
+                ],
+                'yii\web\JqueryAsset' => [
+                    'js' => [
+                        'https://code.jquery.com/jquery-3.6.0.min.js',
+                    ]
+                ],
             ],
         ],
     ],
