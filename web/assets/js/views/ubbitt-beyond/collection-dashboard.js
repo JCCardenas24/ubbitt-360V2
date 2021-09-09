@@ -85,7 +85,7 @@ function summaryCallback(start, end) {
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     findSummaryGraphData(start, end);
-    //findSummaryDetailData(start, end);
+    findSummaryDetailData(start, end);
 }
 
 function findSummaryGraphData(start, end) {
@@ -176,12 +176,155 @@ function updateTransactionChart(data) {
     stackedChart.setOption(option);
 }
 
+function findSummaryDetailData(start, end) {
+    $.ajax({
+        url: '/ubbitt-beyond/find-collection-summary-detail-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (kpis) => {
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+            });
+            updateManagementSummaryKpis(kpis, moneyFormatter);
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del resumen'
+            );
+        },
+    });
+}
+
+function updateManagementSummaryKpis(kpis, moneyFormatter) {
+    $('#delivered-base').text(kpis.delivered_base);
+    $('#delivered-base-accepted').html(
+        kpis.delivered_base_accepted +
+            ' / <span>' +
+            kpis.delivered_base_accepted_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#delivered-base-rejected').html(
+        kpis.delivered_base_rejected +
+            ' / <span>' +
+            kpis.delivered_base_rejected_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#first-management').html(
+        kpis.first_management +
+            ' / <span>' +
+            kpis.first_management_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#first-management-effective-registries').html(
+        kpis.first_management_effective_registries +
+            ' / <span>' +
+            kpis.first_management_percentage.replace('.00', '') +
+            '%</span><span class="mini_price"> (' +
+            moneyFormatter
+                .format(kpis.first_management_effective_registries_amount)
+                .replace('.00', '') +
+            ')</span>'
+    );
+    $('#first-management-on-track-registries').html(
+        kpis.first_management_on_track_registries +
+            ' / <span>' +
+            kpis.first_management_on_track_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+    $('#first-management-out-of-management-registries').html(
+        kpis.first_management_out_of_management_registries +
+            ' / <span>' +
+            kpis.first_management_out_of_management_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+    $('#second-management').html(
+        kpis.second_management +
+            ' / <span>' +
+            kpis.second_management_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#second-management-effective-registries').html(
+        kpis.second_management_effective_registries +
+            ' / <span>' +
+            kpis.second_management_percentage.replace('.00', '') +
+            '%</span><span class="mini_price"> (' +
+            moneyFormatter
+                .format(kpis.second_management_effective_registries_amount)
+                .replace('.00', '') +
+            ')</span>'
+    );
+    $('#second-management-on-track-registries').html(
+        kpis.second_management_on_track_registries +
+            ' / <span>' +
+            kpis.second_management_on_track_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+    $('#second-management-out-of-management-registries').html(
+        kpis.second_management_out_of_management_registries +
+            ' / <span>' +
+            kpis.second_management_out_of_management_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+    $('#third-management').html(
+        kpis.third_management +
+            ' / <span>' +
+            kpis.third_management_percentage.replace('.00', '') +
+            '%</span>'
+    );
+    $('#third-management-effective-registries').html(
+        kpis.third_management_effective_registries +
+            ' / <span>' +
+            kpis.third_management_percentage.replace('.00', '') +
+            '%</span><span class="mini_price"> (' +
+            moneyFormatter
+                .format(kpis.third_management_effective_registries_amount)
+                .replace('.00', '') +
+            ')</span>'
+    );
+    $('#third-management-on-track-registries').html(
+        kpis.third_management_on_track_registries +
+            ' / <span>' +
+            kpis.third_management_on_track_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+    $('#third-management-out-of-management-registries').html(
+        kpis.third_management_out_of_management_registries +
+            ' / <span>' +
+            kpis.third_management_out_of_management_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
+            '%</span>'
+    );
+}
+
 function loadKpis(start, end) {
     $('.range-pick#beyond-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     $.ajax({
-        url: '/ubbitt-beyond/find-call-center-kpis',
+        url: '/ubbitt-beyond/find-collection-call-center-kpis',
         type: 'POST',
         dataType: 'json',
         data: {

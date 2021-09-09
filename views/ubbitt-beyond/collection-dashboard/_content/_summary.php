@@ -29,15 +29,15 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Base entregada (Registros)</p>
-                        <h5>3000</h5>
+                        <h5 id="delivered-base">0</h5>
                     </div>
                     <div class="info_gestion">
                         <p>Aceptados</p>
-                        <h5>1000 / <span>33%</span></h5>
+                        <h5 id="delivered-base-accepted">0 / <span>0%</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Rechazados</p>
-                        <h5>2000 / <span>66%</span></h5>
+                        <h5 id="delivered-base-rejected">0 / <span>0%</span></h5>
                     </div>
                 </div>
             </div>
@@ -45,19 +45,20 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Primera gestión</p>
-                        <h5>1000 / <span>33%</span> </h5>
+                        <h5 id="first-management">0 / <span>0%</span> </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros efectivos</p>
-                        <h5>1000 / <span>33%</span> <span class="mini_price">($200)</span></h5>
+                        <h5 id="first-management-effective-registries">0 / <span>0%</span> <span
+                                class="mini_price">($0)</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros en seguimiento</p>
-                        <h5>800 / <span>22%</span></h5>
+                        <h5 id="first-management-on-track-registries">0 / <span>0%</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros fuera de gestión</p>
-                        <h5>200 / <span>5%</span></h5>
+                        <h5 id="first-management-out-of-management-registries">0 / <span>0%</span></h5>
                     </div>
                 </div>
             </div>
@@ -65,19 +66,20 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Segunda gestión</p>
-                        <h5>800 / <span>25%</span></h5>
+                        <h5 id="second-management">0 / <span>0%</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros efectivos</p>
-                        <h5>800 / <span>33%</span> <span class="mini_price">($200)</span></h5>
+                        <h5 id="second-management-effective-registries">0 / <span>0%</span> <span
+                                class="mini_price">($0)</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros en seguimiento</p>
-                        <h5>700 / <span>22%</span></h5>
+                        <h5 id="second-management-on-track-registries">0 / <span>0%</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros fuera de gestión</p>
-                        <h5>100 / <span>5%</span></h5>
+                        <h5 id="second-management-out-of-management-registries">0 / <span>0%</span></h5>
                     </div>
                 </div>
             </div>
@@ -85,19 +87,20 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Tercera gestión</p>
-                        <h5>700 / <span>33%</span></h5>
+                        <h5 id="third-management">0 / <span>0%</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros efectivos</p>
-                        <h5>700 / <span>33%</span> <span class="mini_price">($200)</span></h5>
+                        <h5 id="third-management-effective-registries">0 / <span>0%</span> <span
+                                class="mini_price">($0)</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros en seguimiento</p>
-                        <h5>500 / <span>22%</span></h5>
+                        <h5 id="third-management-on-track-registries">0 / <span>0%</span></h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros fuera de gestión</p>
-                        <h5>200 / <span>5%</span></h5>
+                        <h5 id="third-management-out-of-management-registries">0 / <span>0%</span></h5>
                     </div>
                 </div>
             </div>

@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  * @property integer $collected
  *
  */
-class BeyondSummaryGraph extends ActiveRecord
+class BeyondCollectionSummaryGraph extends ActiveRecord
 {
     /**
      * @inheritdoc
