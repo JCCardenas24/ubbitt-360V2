@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the  class for table "beyond_call_center_kpi".
+ * This is the  class for table "beyond_collection_call_center_kpi".
  *
  * @property date $date
  * @property integer $inboundCalls
@@ -22,14 +22,14 @@ use yii\db\ActiveRecord;
  * @property string $speakingTime
  *
  */
-class BeyondCallCenterKpi extends ActiveRecord
+class BeyondCollectionCallCenterKpi extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'beyond_call_center_kpi';
+        return 'beyond_collection_call_center_kpi';
     }
 
     /**
@@ -179,7 +179,7 @@ class BeyondCallCenterKpi extends ActiveRecord
                 COALESCE(CAST(AVG(ath) AS DECIMAL(5,2)), 0) AS ath,
                 COALESCE(CAST(AVG(average_time_in_answering_call) AS DECIMAL(5,2)), 0)
                     AS average_time_in_answering_call
-                FROM beyond_call_center_kpi
+                FROM beyond_collection_call_center_kpi
                 WHERE date BETWEEN :startDate AND :endDate', [
             'startDate' => $startDate,
             'endDate' => $endDate,
