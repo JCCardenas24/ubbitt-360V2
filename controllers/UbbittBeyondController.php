@@ -2,8 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\db\BeyondCallCenterKpi;
-use app\models\db\BeyondSummaryGraph;
+use app\models\db\BeyondCollectionCallCenterKpi;
+use app\models\db\BeyondCollectionSummaryDetail;
+use app\models\db\BeyondCollectionSummaryGraph;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
 use Yii;
@@ -24,7 +25,7 @@ class UbbittBeyondController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['collection-dashboard', 'renewal-dashboard', 'find-collection-summary-graph-data', 'find-call-center-kpis', 'find-collection-calls'],
+                        'actions' => ['collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis', 'find-collection-calls', 'find-collection-summary-detail-data', 'renewal-dashboard'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -34,9 +35,10 @@ class UbbittBeyondController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'collection-dashboard' => ['get'],
-                    'renewal-dashboard' => ['get'],
                     'find-collection-summary-graph-data' => ['post'],
-                    'find-call-center-kpis' => ['post'],
+                    'find-collection-call-center-kpis' => ['post'],
+                    'find-collection-summary-detail-data' => ['post'],
+                    'renewal-dashboard' => ['get'],
                 ],
             ],
         ];
@@ -68,17 +70,17 @@ class UbbittBeyondController extends Controller
     {
         $searchParams = new SearchByDateForm();
         $searchParams->load(Yii::$app->request->post());
-        $summaryGraphModel = new BeyondSummaryGraph();
+        $summaryGraphModel = new BeyondCollectionSummaryGraph();
         $data = $summaryGraphModel->findByDates($searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
     }
 
-    public function actionFindCallCenterKpis()
+    public function actionFindCollectionCallCenterKpis()
     {
         $searchParams = new SearchByDateForm();
         $searchParams->load(Yii::$app->request->post());
-        $model = new BeyondCallCenterKpi();
+        $model = new BeyondCollectionCallCenterKpi();
         $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
@@ -93,6 +95,16 @@ class UbbittBeyondController extends Controller
         $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_beyond_collection_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionFindCollectionSummaryDetailData()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new BeyondCollectionSummaryDetail();
+        $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
     }
 
     /**
