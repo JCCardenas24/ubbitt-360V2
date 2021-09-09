@@ -244,7 +244,6 @@ class UploadReportBusiness
 
     private function saveBeyondData(Spreadsheet $spreadsheet)
     {
-        $pass = password_hash('Admin2021', PASSWORD_BCRYPT);
         $this->saveBeyondCollectionInboundSummary($spreadsheet);
         $this->saveBeyondCollectionCallCenterKpis($spreadsheet);
         $this->saveBeyondCollectionSummaryDetail($spreadsheet);
