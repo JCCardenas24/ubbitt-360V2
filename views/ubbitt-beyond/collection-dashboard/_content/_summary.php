@@ -108,15 +108,6 @@
     </div>
 
     <div class="container_cards_ventas_info">
-        <div class="d-flex justify-content-between align-items-center mb-30">
-            <h4 class="mb-0">Por gestión</h4>
-            <select class="form-control form-control-sm">
-                <option selected>Todas las gestiones</option>
-                <option value="1">Primera gestión</option>
-                <option value="2">Segunda gestión</option>
-                <option value="3">Tercera gestión</option>
-            </select>
-        </div>
         <div class="row ml-0 mr-0">
             <div class="col-2 pl-0">
                 <div class="card">
@@ -153,6 +144,15 @@
         </div>
     </div>
     <div class="container_graficas_llamadas">
+        <div class="d-flex justify-content-between align-items-center mb-30">
+            <h4 class="mb-0">Por gestión</h4>
+            <select class="form-control form-control-sm">
+                <option selected>Todas las gestiones</option>
+                <option value="1">Primera gestión</option>
+                <option value="2">Segunda gestión</option>
+                <option value="3">Tercera gestión</option>
+            </select>
+        </div>
         <div class="row m-0">
             <div class="col-4 pl-0">
                 <div class="card atc_cards">
