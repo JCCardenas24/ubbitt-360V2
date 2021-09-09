@@ -11,22 +11,15 @@ $(function () {
         initialDate == null
             ? moment().subtract(6, 'days')
             : moment(initialDate);
-    endDate =
-        finalDate == null ? moment() : moment(finalDate);
+    endDate = finalDate == null ? moment() : moment(finalDate);
 
     dateRangePickerConfig = {
         showDropdowns: true,
         startDate,
         endDate,
         ranges: {
-            'Últimos 7 días': [
-                moment().subtract(6, 'days'),
-                moment(),
-            ],
-            'Últimos 30 días': [
-                moment().subtract(29, 'days'),
-                moment(),
-            ],
+            'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
+            'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -73,20 +66,39 @@ $('#freemium-call-center-bd-tab').on('shown.bs.tab', function (event) {
     );
     callDatabaseCallback(startDate, endDate, null, 1);
 });
-$('#freemium-inbound-reportes-tab, .nav-link-freemium-reports').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
-    var tab_report_type = $('.nav-link-freemium-reports.active').data('tab-type');
-    $('#type-file').val(tab_report_type);
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#freemium-report-date-range').daterangepicker(
-        dateRangePickerConfig,
-        reportsListCallback
-    );
-    reportsListCallback(startDate, endDate, null, 1)
-});
+$('#freemium-inbound-reportes-tab, .nav-link-freemium-reports').on(
+    'shown.bs.tab',
+    function (event) {
+        event.target; // newly activated tab
+        event.relatedTarget; // previous active tab
+        $('.options_inbound_freemium').removeClass('font-weight-bold');
+        $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
+        var tab_report_type = $('.nav-link-freemium-reports.active').data(
+            'tab-type'
+        );
+        $('#type-file').val(tab_report_type);
+        // Initialize the date picker on the call center kpi's tab
+        $('.range-pick#freemium-report-date-range').daterangepicker(
+            dateRangePickerConfig,
+            reportsListCallback
+        );
+        reportsListCallback(startDate, endDate, null, 1);
+        showHideAddButton(tab_report_type);
+    }
+);
+
+function showHideAddButton(reportType) {
+    if (userHasPermission(reportType + '-add')) {
+        $('#upload_report_btn').show();
+    } else {
+        $('#upload_report_btn').hide();
+    }
+}
+
+function userHasPermission(checkedPermission) {
+    let requiredPermission = permissionsMap[checkedPermission];
+    return userPermissions.indexOf(requiredPermission) > -1;
+}
 
 /* $('.nav-link-freemium-reports').on('shown.bs.tab', function (event) {
     event.target; // newly activated tab
@@ -1575,7 +1587,7 @@ function loadKpis(start, end) {
     });
 }
 
-function reportsListCallback(start, end, label, page=1) {
+function reportsListCallback(start, end, label, page = 1) {
     $('.range-pick#freemium-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -1617,7 +1629,7 @@ function createReportRecordRow(record) {
         `
         <tr>
             <td scope="row">
-                ${record.id} 
+                ${record.id}
             </td>
             <td>
                 ${record.file_path}
@@ -1631,19 +1643,31 @@ function createReportRecordRow(record) {
             <td>
                 <a href="${record.file_path}" download>
                     <i class="fa fa-download" aria-hidden="true"></i>
-                </a>
-                <a href="#" class="btn-delete-report" data-report-id="${record.id}">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                </a>
+                </a>` +
+        (userHasPermission(
+            $('.nav-link-freemium-reports.active').data('tab-type') + '-delete'
+        )
+            ? `<a href="#" class="btn-delete-report" data-report-id="${record.id}">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>`
+            : '') +
+        `
             </td>
         </tr>
     `
     );
 }
 
-$('#freemium-reports-table tbody').on('click','.btn-delete-report', function(evt) {
-    evt.preventDefault();
-    var report_id = $(this).data('report-id');
-    $('#btn-confirm-delete-report').attr('href', `/report-file/delete?id=${report_id}`);
-    $('#modal-delete-report').modal('show');
-})
+$('#freemium-reports-table tbody').on(
+    'click',
+    '.btn-delete-report',
+    function (evt) {
+        evt.preventDefault();
+        var report_id = $(this).data('report-id');
+        $('#btn-confirm-delete-report').attr(
+            'href',
+            `/report-file/delete?id=${report_id}`
+        );
+        $('#modal-delete-report').modal('show');
+    }
+);
