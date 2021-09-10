@@ -342,20 +342,16 @@
             <div class="col-6 wid-100 pl-0">
                 <div class="card fst_card">
                     <div class="col-12 p-0">
-                        <div id="basic-doughnut-beyond-cobranza" style="height:350px;"></div>
+                        <div id="concentrate-on-track-graph" style="height:350px;"></div>
                     </div>
                 </div>
             </div>
             <div class="col-6 pr-0">
                 <div class="card wid-100 "><small>Venta pendiente total</small>
-                    <p>$3,
-                        821,
-                        133.25</p>
+                    <p id="total-pending-sale-amount">$0</p>
                 </div>
                 <div class="card wid-100"><small>Venta cobrada total</small>
-                    <p>$3,
-                        821,
-                        133.25</p>
+                    <p id="total-collected-sale-amount">$0</p>
                 </div>
             </div>
         </div>
