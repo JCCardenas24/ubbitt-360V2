@@ -36,6 +36,12 @@ $(function () {
     summaryCallback(startDate, endDate);
 
     $('#management-selector').on('change', updateKpisByManagement);
+
+    let initialChartKpis = {
+        on_track_registries_total: 0,
+        collected_total: 0,
+    };
+    updateConcentrateOnTrackGraph(initialChartKpis);
 });
 
 /** TAB CHANGE EVENTS  **/
@@ -197,6 +203,7 @@ function findSummaryDetailData(start, end) {
             updateTotalKpis(kpis, moneyFormatter);
             savedKpis = addAllManagement(kpis);
             updateKpisByManagement();
+            updateConcentrateKpis(kpis, moneyFormatter);
         },
         error: () => {
             showAlert(
@@ -682,6 +689,94 @@ function getPercentage(total, value) {
 function updateProgressBar(id, value) {
     $('#' + id).prop('style', 'width: ' + value.replace('.00', '') + '%');
     $('#' + id).prop('aria-valuenow', value.replace('.00', ''));
+}
+
+function updateConcentrateKpis(kpis, moneyFormatter) {
+    $('#total-pending-sale-amount').text(
+        moneyFormatter.format(kpis.total_pending_sale_amount).replace('.00', '')
+    );
+    $('#total-collected-sale-amount').text(
+        moneyFormatter
+            .format(kpis.total_collected_sale_amount)
+            .replace('.00', '')
+    );
+    updateConcentrateOnTrackGraph(kpis);
+}
+
+function updateConcentrateOnTrackGraph(kpis) {
+    let concentrateOnTrackGraph = echarts.init(
+        document.getElementById('concentrate-on-track-graph')
+    );
+    let option = {
+        // Add title
+        title: {
+            text: 'Concentrado de registros en seguimiento',
+            subtext: '',
+            x: '',
+        },
+
+        // Add legend
+        legend: {
+            orient: 'vertical',
+            x: 'right',
+            top: '40%',
+            data: ['Registros en seguimiento', 'Cobrados'],
+            right: 0,
+        },
+
+        // Add custom colors
+        color: ['#f36f63', '#555'],
+
+        // Enable drag recalculate
+        calculable: true,
+
+        // Add series
+        series: [
+            {
+                name: 'Pólizas',
+                type: 'pie',
+                center: ['30%', '50%'],
+                radius: ['35%', '70%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            position: 'inner',
+                            formatter: function (params) {
+                                return params.value + '\n';
+                            },
+                        },
+                        labelLine: {
+                            show: false,
+                        },
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            formatter: '{b}' + '\n\n' + '{c} ({d}%)',
+                            position: 'center',
+                            textStyle: {
+                                fontSize: '17',
+                                fontWeight: '500',
+                            },
+                        },
+                    },
+                },
+
+                data: [
+                    {
+                        value: kpis.on_track_registries_total,
+                        name: 'Registros en seguimiento',
+                    },
+                    {
+                        value: kpis.collected_total,
+                        name: 'Cobrados',
+                    },
+                ],
+            },
+        ],
+    };
+    concentrateOnTrackGraph.setOption(option);
 }
 
 function loadKpis(start, end) {
