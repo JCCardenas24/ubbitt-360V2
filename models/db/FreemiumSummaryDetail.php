@@ -56,18 +56,18 @@ class FreemiumSummaryDetail extends ActiveRecord
             ], 'required'],
             [[
                 'nco_total_calls',
-                'sale_reason', 'sale_accepted', 'sale_accepted_sales', 'sale_accepted_on_track', 'sale_accepted_charged', 'sale_accepted_charged_percentage', 'sale_accepted_not_charged',
+                'sale_reason', 'sale_accepted', 'sale_accepted_sales', 'sale_accepted_on_track', 'sale_accepted_charged', 'sale_accepted_not_charged',
                 'call_scheduled', 'call_scheduled_sales', 'call_scheduled_on_track', 'call_scheduled_charged', 'call_scheduled_not_charged',
                 'payment_promise_scheduled', 'payment_promise_scheduled_sales', 'payment_promise_scheduled_on_track', 'payment_promise_scheduled_charged', 'payment_promise_scheduled_not_charged',
                 'deposit_slip_sent', 'deposit_slip_sent_sales', 'deposit_slip_sent_on_track', 'deposit_slip_sent_charged', 'deposit_slip_sent_not_charged',
-                'cust_serv_calls', 'cust_serv_calls_ubbitt_assistance', 'cust_serv_calls_product_questions', 'cust_serv_calls_product_advisory', 'cust_serv_calls_product_advisory_percentage', 'cust_serv_calls_product_linkage', 'cust_serv_calls_coverage_linkage',
+                'cust_serv_calls', 'cust_serv_calls_ubbitt_assistance', 'cust_serv_calls_product_questions', 'cust_serv_calls_product_advisory', 'cust_serv_calls_product_linkage', 'cust_serv_calls_coverage_linkage',
                 'cust_serv_calls_other_products', 'cust_serv_calls_other_products_medical_expenses', 'cust_serv_calls_other_products_life', 'cust_serv_calls_other_products_legalized', 'cust_serv_calls_other_products_platforms', 'cust_serv_calls_other_products_residential',
                 'cust_serv_cust_serv', 'cust_serv_cust_serv_report_advisor_care', 'cust_serv_cust_serv_policy_renewal_review', 'cust_serv_cust_serv_product_cancellation', 'cust_serv_cust_serv_check_expiration_dates',
                 'cust_serv_collection_questions', 'cust_serv_collection_questions_payment_track', 'cust_serv_collection_questions_refund', 'cust_serv_collection_questions_payment_clarification', 'cust_serv_collection_questions_make_payment',
-                'total_sales', 'sales_total_amount', 'emissions_total', 'total_collections',
+                'total_sales', 'emissions_total', 'total_collections',
             ], 'integer'],
             [[
-                'sale_reason_percentage', 'sale_accepted_percentage', 'sale_accepted_sales_percentage', 'sale_accepted_on_track_percentage', 'sale_accepted_not_charged_percentage',
+                'sale_reason_percentage', 'sale_accepted_percentage', 'sale_accepted_sales_percentage', 'sale_accepted_on_track_percentage', 'sale_accepted_charged_percentage', 'sale_accepted_not_charged_percentage',
                 'call_scheduled_percentage', 'call_scheduled_sales_percentage', 'call_scheduled_on_track_percentage', 'call_scheduled_charged_percentage', 'call_scheduled_not_charged_percentage',
                 'payment_promise_scheduled_percentage', 'payment_promise_scheduled_sales_percentage', 'payment_promise_scheduled_on_track_percentage', 'payment_promise_scheduled_charged_percentage', 'payment_promise_scheduled_not_charged_percentage',
                 'deposit_slip_sent_percentage', 'deposit_slip_sent_sales_percentage', 'deposit_slip_sent_on_track_percentage', 'deposit_slip_sent_charged_percentage', 'deposit_slip_sent_not_charged_percentage',
@@ -75,7 +75,7 @@ class FreemiumSummaryDetail extends ActiveRecord
                 'cust_serv_calls_other_products_percentage', 'cust_serv_calls_other_products_medical_expenses_percentage', 'cust_serv_calls_other_products_life_percentage', 'cust_serv_calls_other_products_legalized_percentage', 'cust_serv_calls_other_products_platforms_percentage', 'cust_serv_calls_other_products_residential_percentage',
                 'cust_serv_cust_serv_percentage', 'cust_serv_cust_serv_report_advisor_care_percentage', 'cust_serv_cust_serv_policy_renewal_review_percentage', 'cust_serv_cust_serv_product_cancellation_percentage', 'cust_serv_cust_serv_check_expiration_dates_percentage',
                 'cust_serv_collection_questions_percentage', 'cust_serv_collection_questions_payment_track_percentage', 'cust_serv_collection_questions_refund_percentage', 'cust_serv_collection_questions_payment_clarification_percentage', 'cust_serv_collection_questions_make_payment_percentage',
-                'conversion_percentage', 'collection_percentage', 'total_sale_issued', 'total_sale_paid',
+                'sales_total_amount', 'conversion_percentage', 'collection_percentage', 'total_sale_issued', 'total_sale_paid',
             ], 'double'],
             [['upload_date'], 'date', 'format' => 'php:Y-m-d']
         ];
