@@ -45,11 +45,10 @@
                 <div class="card bg-c-orange">
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
-                            <p class="m-0">NCO</p> <br>
-                            <h5>Total de llamadas</h5>
+                            <p class="m-0">Motivo de<br>venta</p>
                         </div>
                         <div class="col-6 p-0 text-center">
-                            <small class="m-0" id="nco-total-calls-2">0</small>
+                            <small class="m-0" id="sale-reason">0</small>
                         </div>
                     </div>
                 </div>
@@ -58,11 +57,10 @@
                 <div class="card">
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
-                            <p class="m-0">NCO</p> <br>
-                            <h5>Total de llamadas</h5>
+                            <p class="m-0">Atención a clientes</p>
                         </div>
                         <div class="col-6 p-0 text-center">
-                            <small class="m-0" id="nco-total-calls-3">0</small>
+                            <small class="m-0" id="cust-serv-calls">0</small>
                         </div>
                     </div>
                 </div>
