@@ -1475,14 +1475,9 @@ function callDatabaseCallback(start, end, label, page = 1) {
         success: (response) => {
             $('#freemium-calls-table tbody').html(null);
             $.each(response.callsRecords, (index, callRecord) => {
-                if (
-                    callRecord.records != null &&
-                    callRecord.records.length > 0
-                ) {
-                    $('#freemium-calls-table tbody').append(
-                        createCallRecordRow(callRecord)
-                    );
-                }
+                $('#freemium-calls-table tbody').append(
+                    createCallRecordRow(callRecord)
+                );
             });
             updatePaginator(
                 '#freemium-calls-paginator',
