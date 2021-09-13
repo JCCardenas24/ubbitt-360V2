@@ -245,8 +245,8 @@ function findSummaryDetailData(start, end) {
 
 function updateSummaryKpis(kpis, formatter) {
     $('#nco-total-calls-1').text(kpis.nco_total_calls);
-    $('#nco-total-calls-2').text(kpis.nco_total_calls);
-    $('#nco-total-calls-3').text(kpis.nco_total_calls);
+    $('#sale-reason').text(kpis.sale_reason);
+    $('#cust-serv-calls').text(kpis.cust_serv_calls);
     $('#total-sales').text(kpis.total_sales);
     $('#sales-total-amount').text(
         formatter.format(kpis.sales_total_amount).replace('.00', '')
