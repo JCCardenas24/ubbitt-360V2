@@ -3,6 +3,7 @@ let startDate = null;
 let endDate = null;
 
 $(function () {
+    $('#freemium-inbound-resumen_side_menu').addClass('font-weight-bold');
     const urlParams = new URLSearchParams(window.location.search);
     const initialDate = urlParams.get('initial_date');
     const finalDate = urlParams.get('final_date');
@@ -36,17 +37,9 @@ $(function () {
 });
 
 $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_resumen_inbound_freemium').addClass('font-weight-bold');
     summaryCallback(startDate, endDate);
 });
 $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_call_center_inbound_freemium').addClass('font-weight-bold');
     // Initialize the date picker on the call center kpi's tab
     $('.range-pick#freemium-kpis-date-range').daterangepicker(
         dateRangePickerConfig,
@@ -55,10 +48,6 @@ $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
     loadKpis(startDate, endDate);
 });
 $('#freemium-call-center-bd-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_call_center_inbound_freemium').addClass('font-weight-bold');
     // Initialize the date picker on the call center calls database tab
     $('.range-pick#freemium-calls-database-date-range').daterangepicker(
         dateRangePickerConfig,
@@ -69,10 +58,6 @@ $('#freemium-call-center-bd-tab').on('shown.bs.tab', function (event) {
 $('#freemium-inbound-reportes-tab, .nav-link-freemium-reports').on(
     'shown.bs.tab',
     function (event) {
-        event.target; // newly activated tab
-        event.relatedTarget; // previous active tab
-        $('.options_inbound_freemium').removeClass('font-weight-bold');
-        $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
         var tab_report_type = $('.nav-link-freemium-reports.active').data(
             'tab-type'
         );

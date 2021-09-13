@@ -1133,10 +1133,6 @@ table.dataTable thead .sorting_desc:before {
  * Checkbox rounded
  */
 
-.light-skin .sidebar-menu>li.menu-open>a {
-    color: #f9c22c;
-}
-
 
 /**
  * BreadCumb
@@ -1486,18 +1482,6 @@ form#add_new_lead .form-control {
     color: #151515;
 }
 
-.theme-primary.light-skin .sidebar-menu>li.active a {
-    color: #151515 !important;
-}
-
-.light-skin .sidebar-menu>li.menu-open>a {
-    color: #151515 !important;
-}
-
-.sidebar-menu>li.menu-open>a>i {
-    color: #151515 !important;
-}
-
 .ref-menu:hover {
     color: #151515 !important;
 }
@@ -1762,4 +1746,14 @@ table.table tbody {
 
 .collapsing a {
     color: white;
+}
+
+
+/* laptop media query */
+
+@media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
+    hr.top {
+        width: 365px;
+        bottom: -2px;
+    }
 }
