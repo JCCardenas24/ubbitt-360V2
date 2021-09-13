@@ -245,8 +245,8 @@ function findSummaryDetailData(start, end) {
 
 function updateSummaryKpis(kpis, formatter) {
     $('#nco-total-calls-1').text(kpis.nco_total_calls);
-    $('#sale-reason').text(kpis.sale_reason);
-    $('#cust-serv-calls').text(kpis.cust_serv_calls);
+    $('#sale-reason-det').text(kpis.sale_reason);
+    $('#cust-serv-calls-det').text(kpis.cust_serv_calls);
     $('#total-sales').text(kpis.total_sales);
     $('#sales-total-amount').text(
         formatter.format(kpis.sales_total_amount).replace('.00', '')
@@ -1475,9 +1475,14 @@ function callDatabaseCallback(start, end, label, page = 1) {
         success: (response) => {
             $('#freemium-calls-table tbody').html(null);
             $.each(response.callsRecords, (index, callRecord) => {
-                $('#freemium-calls-table tbody').append(
-                    createCallRecordRow(callRecord)
-                );
+                if (
+                    callRecord.records != null &&
+                    callRecord.records.length > 0
+                ) {
+                    $('#freemium-calls-table tbody').append(
+                        createCallRecordRow(callRecord)
+                    );
+                }
             });
             updatePaginator(
                 '#freemium-calls-paginator',
