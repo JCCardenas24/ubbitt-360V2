@@ -135,8 +135,10 @@ class WebHookCalls extends ActiveRecord
     {
         $query = self::find()
             ->with('callRecords')
+            ->leftJoin('callpicker_records', 'callpicker_records.pk_callpicker_id = calls.pk_callpicker_id')
             ->where(['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59'])
-            ->andWhere(['like', 'callpicker_number', $phoneNumber]);
+            ->andWhere(['like', 'callpicker_number', $phoneNumber])
+            ->andWhere('callpicker_records.callpicker_record_id IS NOT NULL');
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
         $calls = $query->offset($pages->offset)->limit($pages->limit)->all();
