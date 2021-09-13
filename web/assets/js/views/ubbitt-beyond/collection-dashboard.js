@@ -3,7 +3,7 @@ let startDate = null;
 let endDate = null;
 
 $(function () {
-    $('#li-beyond-collection-summary').addClass('font-weight-bold');
+    $('#resumen-cobranza_side_menu').addClass('font-weight-bold');
     const urlParams = new URLSearchParams(window.location.search);
     const initialDate = urlParams.get('initial_date');
     const finalDate = urlParams.get('final_date');
@@ -45,17 +45,8 @@ $(function () {
 });
 
 /** TAB CHANGE EVENTS  **/
-$('#resumen-cobranza-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-summary').addClass('font-weight-bold');
-});
+$('#resumen-cobranza-tab').on('shown.bs.tab', function (event) {});
 $('#beyond-cobranza-callcenter-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-call-center').addClass('font-weight-bold');
     // Initialize the date picker on the call center kpi's tab
     $('.range-pick#beyond-kpis-date-range').daterangepicker(
         dateRangePickerConfig,
@@ -64,10 +55,6 @@ $('#beyond-cobranza-callcenter-tab').on('shown.bs.tab', function (event) {
     loadKpis(startDate, endDate);
 });
 $('#beyond-cobranza-callcenter-bd-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-call-center').addClass('font-weight-bold');
     // Initialize the date picker on the call center calls database tab
     $('.range-pick#beyond-calls-database-date-range').daterangepicker(
         dateRangePickerConfig,
@@ -75,18 +62,11 @@ $('#beyond-cobranza-callcenter-bd-tab').on('shown.bs.tab', function (event) {
     );
     callDatabaseCallback(startDate, endDate, null, 1);
 });
-$('#beyond-cobranza-reportes-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-reports').addClass('font-weight-bold');
-});
-$('#beyond-cobranza-carga-base-datos-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-database-upload').addClass('font-weight-bold');
-});
+$('#beyond-cobranza-reportes-tab').on('shown.bs.tab', function (event) {});
+$('#beyond-cobranza-carga-base-datos-tab').on(
+    'shown.bs.tab',
+    function (event) {}
+);
 
 function summaryCallback(start, end) {
     $('.range-pick#beyond-collection-summary-date-range  > .text-date').html(

@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
     public $js = [
         'assets/js/vendors.min.js',
         'assets/js/common/alert.js',
+        'assets/js/common/menu.js',
         'assets/js/functions.js',
         'assets/icons/feather-icons/feather.min.js',
         'assets/js/template.js',
