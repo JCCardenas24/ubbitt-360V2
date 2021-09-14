@@ -61,8 +61,10 @@ class AccountController extends Controller
     {
         $userId = Yii::$app->session->get("userIdentity")->user_id;
         $userInfo = UserInfo::findById($userId);
+        $username = Yii::$app->session->get("userIdentity")->username;
+        $user = User::findByUsername($username);
         return $this->render('profile', [
-            'email' => Yii::$app->session->get("userIdentity")->email,
+            'email' => $user->email,
             'userInfo' => $userInfo
         ]);
     }
