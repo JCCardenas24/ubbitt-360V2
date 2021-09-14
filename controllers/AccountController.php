@@ -3,10 +3,14 @@
 namespace app\controllers;
 
 use app\models\db\UserInfo;
+use app\models\forms\ChangePassword;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
+use yii\web\Response;
 
 class AccountController extends Controller
 {
@@ -20,7 +24,7 @@ class AccountController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['profile'],
+                        'actions' => ['profile', 'update-password'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -30,6 +34,7 @@ class AccountController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'profile' => ['get'],
+                    'update-password' => ['post'],
                 ],
             ],
         ];
@@ -60,5 +65,20 @@ class AccountController extends Controller
             'email' => Yii::$app->session->get("userIdentity")->email,
             'userInfo' => $userInfo
         ]);
+    }
+
+    public function actionUpdatePassword()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $changePasswordRequest = new ChangePassword();
+        $changePasswordRequest->load(Yii::$app->request->post());
+        $username = Yii::$app->session->get("userIdentity")->username;
+        $user = User::findByUsername($username);
+        if (password_verify($changePasswordRequest->currentPassword, $user->password)) {
+            $user->password = password_hash($changePasswordRequest->newPassword, PASSWORD_BCRYPT);
+            $user->save();
+        } else {
+            throw new BadRequestHttpException('La contraseña actual es incorrecta');
+        }
     }
 }

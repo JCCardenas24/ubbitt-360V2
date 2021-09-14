@@ -91,32 +91,21 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                         <p>Para continuar con tu solicitud, por favor ingresa los siguientes datos.</p>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Contraseña actual</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="current-password">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nueva contraseña</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="new-password">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Confirmar nueva contraseña</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="new-password-confirm">
                         </div>
                         <div class="d-flex btns_wrappers">
                             <a class="cancel_btn" data-dismiss="modal">Cancelar</a>
-                            <a class="btn_continuar" data-dismiss="modal">Continuar</a>
+                            <a class="btn_continuar" id="btn-change-password">Continuar</a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <!-- Toast -->
-        <div class="toast_wrapper" style="z-index: 5;">
-            <div id="sucess" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-                <div class="toast-body">
-                    <button type="button" class="close" data-dismiss="toast" aria-label="Close">
-                        X
-                    </button>
-                    <p class="m-0">¡Tu contraseña se ha cambiado con éxito!</p>
                 </div>
             </div>
         </div>
