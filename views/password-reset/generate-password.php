@@ -20,7 +20,7 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
             <div class="row justify-content-center no-gutters">
                 <div class="col-lg-5 col-md-5 col-12">
                     <div id="login_container" class="bg-white rounded10 shadow-lg container-login">
-                        <div>
+                        <div class="col-12">
                             <div class="content-top-agile">
                                 <img class="logo_ubbitt d-block m-auto"
                                     src="<?= Yii::getAlias('@web') ?>/assets/images/ubbitt_color.svg" alt="logo"
@@ -28,7 +28,7 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
                                 <p class="mb-0 c-header">Ingresa tus datos para continuar.</p>
                             </div>
                             <?php $form = ActiveForm::begin([
-                                'id' => 'login-form',
+                                'id' => 'reset-password-form',
                                 'fieldConfig' => [
                                     'template' => "{input}{error}",
                                     'options' => [
@@ -44,11 +44,11 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
                                     <div class="input-group-prepend">
                                         <span
                                             class="input-group-text bg-transparent border-right-0 brd-gray font-size-16">
-                                            <i class="icon-User"><span class="path1"></span><span
+                                            <i class="fa fa-key"><span class="path1"></span><span
                                                     class="path2"></span></i>
                                         </span>
                                     </div>
-                                    <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'id' => 'user', 'class' => 'form-control pl-10 bg-transparent border-left-0 brd-gray', 'placeholder' => 'Nombre de usuario']) ?>
+                                    <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'form-control brd-gray pl-15 bg-transparent border-left-0', 'placeholder' => 'Nueva contraseña']) ?>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -56,63 +56,16 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
                                     <div class="input-group-prepend">
                                         <span
                                             class="input-group-text brd-gray bg-transparent border-right-0 font-size-16"><i
-                                                class="fa fa-lock"></i></span>
+                                                class="fa fa-check"></i></span>
                                     </div>
-                                    <?= $form->field($model, 'password')->passwordInput(['id' => 'pass', 'class' => 'form-control brd-gray pl-15 bg-transparent border-left-0', 'placeholder' => 'Password']) ?>
+                                    <?= $form->field($model, 'password_confirm')->passwordInput(['id' => 'password_confirm', 'class' => 'form-control brd-gray pl-15 bg-transparent border-left-0', 'placeholder' => 'Confirmar nueva contraseña']) ?>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12 text-center pos-check">
-                                    <div class="form-check p-0 prt-10 pt-10">
-                                        <?= $form->field($model, 'termsConditions', [
-                                            'template' => "{input}"
-                                        ])->checkbox(['id' => 'defaultCheck1', 'class' => 'form-check-input', 'checked' => false, 'required' => true, 'label' => null], false) ?>
-                                        <label class="form-check-label" for="defaultCheck1">
-                                            <span class="font-size-14 c-gray">Acepto <a
-                                                    href="<?= Url::toRoute(['terms-and-conditions/index']) ?>"
-                                                    class="c-terminos">Términos y
-                                                    Condiciones</a></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <?= Html::submitButton('iniciar
-                                        sesión', ['id' => 'submit-login-form', 'class' => 'btn_login btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase d-block mx-auto', 'name' => 'login-button', 'disabled' => true]) ?>
-                                <a id="btn_go_to_recover" class="wid-100  text-center d-block mx-auto">Olvidé mi
-                                    contraseña</a>
+                                <?= Html::submitButton('Continuar', ['id' => 'submit-reset-password-form', 'class' => 'btn_login btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase d-block mx-auto', 'name' => 'reset-password-button']) ?>
                             </div>
                             <?php ActiveForm::end(); ?>
                         </div>
-                    </div>
-                    <div id="recovery_psw_container" style="display: none;">
-                        <?php $formPasswordReset = ActiveForm::begin([
-                            'id' => 'password-reset-form',
-                            'fieldConfig' => [
-                                'template' => "{input}{error}",
-                                'options' => [
-                                    'tag' => false,
-                                ],
-                            ],
-                            'action' => [Url::toRoute(['password-reset/request-reset'])],
-                            'options' => [
-                                'class' => 'mt-10',
-
-                            ]
-                        ]); ?>
-                        <div class="recovery_step_1">
-                            <h5>Recuperar contraseña</h5>
-                            <p>Ingresa tu correo electrónico y se te enviará un link para reestabecer tu contraseña
-                            </p>
-                            <div class="form-group">
-                                <label for="email_recovery_input">Email</label>
-                                <!-- <input type="email" class="form-control email_input" id="email_recovery_input"
-                                    placeholder="test@gmail.com"> -->
-                                <?= $formPasswordReset->field($modelPasswordReset, 'email')->textInput(['id' => 'email_recovery_input', 'class' => 'form-control email_input', 'placeholder' => 'test@gmail.com']) ?>
-                            </div>
-                            <!-- <a class="send_request_email">Enviar</a> -->
-                            <?= Html::submitButton('Enviar', ['class' => 'send_request_email']) ?>
-                            <a class="cancel_request_email">Cancelar</a>
-                        </div>
-                        <?php ActiveForm::end(); ?>
                     </div>
                 </div>
             </div>

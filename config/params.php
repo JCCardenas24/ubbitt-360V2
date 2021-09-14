@@ -5,6 +5,7 @@ return [
     'ubbitt_freemium_did' => '5588547978',
     'ubbitt_beyond_collection_did' => '5589571959',
     'ubbitt_beyond_renewal_did' => '5589505362',
+    'email_sender' => 'no-reply@soyubbitt.com',
     'report_type_dict' => [
         "kpis" => "Detalles de KPI's",
         "advisor" => "Productividad de asesores",
@@ -12,5 +13,6 @@ return [
         "quality-daily" => "De calidad diario",
         "quality-general" => "General de calidad",
         "calibrations" => "Resultado de calibraciones"
-    ]
+    ],
+    'reset_password_token_expires' => 60
 ];

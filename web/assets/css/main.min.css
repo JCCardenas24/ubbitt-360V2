@@ -1268,7 +1268,7 @@ audio {
   margin-bottom: 54px;
 }
 
-.recovery_step_1 a.send_request_email {
+.recovery_step_1 button.send_request_email {
   width: 100%;
   height: 43px;
   background: linear-gradient(#272727 0%, #000 100%);
@@ -1285,7 +1285,7 @@ audio {
   cursor: pointer;
 }
 
-.recovery_step_1 a.send_request_email:hover {
+.recovery_step_1 button.send_request_email:hover {
   color: #fff;
 }
 
