@@ -34,6 +34,8 @@ $(function () {
         summaryCallback
     );
     summaryCallback(startDate, endDate);
+    $('.nav-link-freemium-reports').first().addClass('active');
+    $('#freemium-inbound-options .nav-link').first().tab('show');
 });
 
 $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {

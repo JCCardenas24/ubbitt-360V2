@@ -44,21 +44,33 @@ use yii\helpers\Url;
                                     class="path1"></span><span class="path2"></span></i>Inbound', Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound-resumen-tab']), ['class' => 'li_first_level' . (Yii::$app->controller->id == 'ubbitt-freemium' ? ' current' : '')]) ?>
                     </li>
                     <?php } ?>
+                    <?php
+                        if (in_array('menu_ubbitt_freemium_inbound_summary', Yii::$app->session->get("userPermissions"))) {
+                        ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Resumen', Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound-resumen-tab']), ['id' => 'freemium-inbound-resumen_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
+                    <?php
+                        if (in_array('menu_ubbitt_freemium_inbound_call_center', Yii::$app->session->get("userPermissions"))) {
+                        ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Call Center', Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound-call-center-tab']), ['id' => 'freemium-inbound-call-center_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
+                    <?php
+                        if (in_array('menu_ubbitt_freemium_inbound_reports', Yii::$app->session->get("userPermissions"))) {
+                        ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Reportes', Url::toRoute(['ubbitt-freemium/dashboard', '#' => 'freemium-inbound-reportes-tab']), ['id' => 'freemium-inbound-reportes_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
                 </ul>
             </li>
             <?php } ?>
@@ -99,11 +111,10 @@ use yii\helpers\Url;
                         <?= Html::a('<i class="icon-Commit c-transparent"><span
                                     class="path1"></span><span class="path2"></span></i>Cobranza', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'resumen-cobranza-tab']), ['class' => 'li_first_level' . (Url::current() == '/ubbitt-beyond/collection-dashboard' ? ' current' : '')]) ?>
                     </li>
-                    <?php } ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
-                                    class="path2"></span></i>Resumen', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'resumen-cobranza-tab']), ['id' => 'resumen-cobranza_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
+                                class="path2"></span></i>Resumen', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'resumen-cobranza-tab']), ['id' => 'resumen-cobranza_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
                     <li>
                         <?= Html::a('<i
@@ -120,6 +131,35 @@ use yii\helpers\Url;
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Carga de base de datos', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'beyond-cobranza-carga-base-datos-tab']), ['id' => 'beyond-cobranza-carga-base-datos_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
+                    <?php
+                        if (in_array('menu_ubbitt_beyond_renewal', Yii::$app->session->get("userPermissions"))) {
+                        ?>
+                    <li>
+                        <?= Html::a('<i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Renovación', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'resumen-renovacion-tab']), ['class' => 'li_first_level' . (Url::current() == '/ubbitt-beyond/renewal-dashboard' ? ' current' : '')]) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('<i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                class="path2"></span></i>Resumen', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'resumen-renovacion-tab']), ['id' => 'resumen-renovacion_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('<i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i>Call Center', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-callcenter-tab']), ['id' => 'beyond-renovacion-callcenter_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('<i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i>Reportes', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-reportes-tab']), ['id' => 'beyond-renovacion-reportes_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('<i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i>Carga de base de datos', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-carga-base-datos-tab']), ['id' => 'beyond-renovacion-carga-base-datos_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
+                    </li>
+                    <?php } ?>
                 </ul>
             </li>
             <?php } ?>
@@ -148,6 +188,9 @@ use yii\helpers\Url;
                 </ul>
             </li>
             <!-- Report Upload -->
+            <?php
+            if (in_array('menu_upload_report', Yii::$app->session->get("userPermissions"))) {
+            ?>
             <li>
                 <a href="<?= Url::toRoute(['report/upload']) ?>"
                     class="wrapper_main_ttl_view <?= Yii::$app->controller->id == 'report' ? 'font-weight-bold' : '' ?>">
@@ -157,6 +200,7 @@ use yii\helpers\Url;
                     <span class="main_ttl_view">Carga de reporte</span>
                 </a>
             </li>
+            <?php } ?>
         </ul>
     </section>
 </aside>
