@@ -69,14 +69,14 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                         <h4>Código postal</h4>
                         <p><?= $userInfo->company->zipCode ?></p>
                     </div>
-                    <div class="col-4">
+                    <!-- <div class="col-4">
                         <h4>Email</h4>
                         <p><?= $userInfo->company->email ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Teléfono</h4>
                         <p><?= $userInfo->company->phone ?></p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
