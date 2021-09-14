@@ -14,7 +14,7 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 <h5>Datos personales</h5>
                 <div class="d-flex avatar_container">
                     <img src="<?= Yii::getAlias('@web') ?>/assets/images/avatar_ubbitt.png" alt="">
-                    <h4>Oscar Fady</h4>
+                    <h4><?= $userInfo->name ?></h4>
                 </div>
                 <hr>
                 <div class="form-group">
@@ -31,8 +31,8 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                         contraseña</small></a>
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Teléfono contacto</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="5566778899"
-                        readonly>
+                    <input type="text" class="form-control" id="exampleFormControlInput1"
+                        placeholder="<?= $userInfo->phoneNumber ?>" readonly>
                 </div>
             </div>
         </div>
@@ -42,40 +42,40 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 <div class="row m-0">
                     <div class="col-4">
                         <h4>Nombre</h4>
-                        <p>Nombre empresa</p>
+                        <p><?= $userInfo->company->name ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Razón social</h4>
-                        <p>Razón social</p>
+                        <p><?= $userInfo->company->businessName ?></p>
                     </div>
                     <div class="col-4"></div>
                 </div>
                 <div class="row m-0">
                     <div class="col-4">
                         <h4>Dirección</h4>
-                        <p>Calle y número</p>
+                        <p><?= $userInfo->company->address ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Ciudad</h4>
-                        <p>Ciudad de México</p>
+                        <p><?= $userInfo->company->city ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Municipio</h4>
-                        <p>Municipio</p>
+                        <p><?= $userInfo->company->municipality ?></p>
                     </div>
                 </div>
                 <div class="row m-0">
                     <div class="col-4">
                         <h4>Código postal</h4>
-                        <p>12345</p>
+                        <p><?= $userInfo->company->zipCode ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Email</h4>
-                        <p>Ciudad de México</p>
+                        <p><?= $userInfo->company->email ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Teléfono</h4>
-                        <p>Municipio</p>
+                        <p><?= $userInfo->company->phone ?></p>
                     </div>
                 </div>
             </div>

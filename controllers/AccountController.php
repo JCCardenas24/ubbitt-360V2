@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\db\UserInfo;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -52,6 +54,11 @@ class AccountController extends Controller
      */
     public function actionProfile()
     {
-        return $this->render('profile');
+        $userId = Yii::$app->session->get("userIdentity")->user_id;
+        $userInfo = UserInfo::findById($userId);
+        return $this->render('profile', [
+            'email' => Yii::$app->session->get("userIdentity")->email,
+            'userInfo' => $userInfo
+        ]);
     }
 }
