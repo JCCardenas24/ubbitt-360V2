@@ -6,17 +6,17 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the  class for table "beyond_summary_detail".
+ * This is the  class for table "beyond_renewal_summary_detail".
  *
  */
-class BeyondCollectionSummaryDetail extends ActiveRecord
+class BeyondRenewalSummaryDetail extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'beyond_collection_summary_detail';
+        return 'beyond_renewal_summary_detail';
     }
 
     /**
@@ -64,7 +64,7 @@ class BeyondCollectionSummaryDetail extends ActiveRecord
                 'four_man_det_out_of_management_registries', 'four_man_det_out_of_management_registries_percentage', 'four_man_det_out_of_management_registries_wrong_number', 'four_man_det_out_of_management_registries_policy_cancelled',
                 'four_man_det_out_of_management_registries_does_not_answer', 'four_man_det_out_of_management_registries_complaint', 'four_man_det_out_of_management_registries_not_manageable', 'four_man_det_out_of_management_registries_lost_registry',
 
-                'on_track_registries_total', 'collected_total', 'total_pending_sale_amount', 'total_collected_sale_amount',
+                'on_track_registries_total', 'renewed_total', 'total_pending_sale_amount', 'total_renewed_sale_amount',
             ], 'required'],
             [[
                 'delivered_base', 'delivered_base_accepted', 'delivered_base_rejected', 'first_management', 'first_management_effective_registries', 'first_management_on_track_registries',
@@ -97,7 +97,7 @@ class BeyondCollectionSummaryDetail extends ActiveRecord
                 'four_man_det_out_of_management_registries', 'four_man_det_out_of_management_registries_wrong_number', 'four_man_det_out_of_management_registries_policy_cancelled', 'four_man_det_out_of_management_registries_does_not_answer',
                 'four_man_det_out_of_management_registries_complaint', 'four_man_det_out_of_management_registries_not_manageable', 'four_man_det_out_of_management_registries_lost_registry',
 
-                'on_track_registries_total', 'collected_total',
+                'on_track_registries_total', 'renewed_total',
             ], 'integer'],
             [[
                 'delivered_base_accepted_percentage', 'delivered_base_rejected_percentage', 'first_management_percentage', 'first_management_effective_registries_percentage',
@@ -116,7 +116,7 @@ class BeyondCollectionSummaryDetail extends ActiveRecord
 
                 'four_man_det_effective_registries_percentage', 'four_man_det_on_track_registries_percentage',
 
-                'total_pending_sale_amount', 'total_collected_sale_amount',
+                'total_pending_sale_amount', 'total_renewed_sale_amount',
             ], 'double'],
             [['upload_date'], 'date', 'format' => 'php:Y-m-d']
         ];
@@ -252,9 +252,9 @@ class BeyondCollectionSummaryDetail extends ActiveRecord
             'four_man_det_out_of_management_registries_lost_registry' => 'Por gestión - Cuarta Gestión - Registros fuera de gestión - Registro perdido',
 
             'on_track_registries_total' => 'Concentrado - Registros en seguimiento',
-            'collected_total' => 'Concentrado - Cobrados',
+            'renewed_total' => 'Concentrado - Renovados',
             'total_pending_sale_amount' => 'Venta pendiente total',
-            'total_collected_sale_amount' => 'Venta cobrada total',
+            'total_renewed_sale_amount' => 'Venta renovada cobrada total',
         ];
     }
 
@@ -397,10 +397,10 @@ class BeyondCollectionSummaryDetail extends ActiveRecord
                     COALESCE(SUM(four_man_det_out_of_management_registries_not_manageable), 0) AS four_man_det_out_of_management_registries_not_manageable,
                     COALESCE(SUM(four_man_det_out_of_management_registries_lost_registry), 0) AS four_man_det_out_of_management_registries_lost_registry,
                     COALESCE(SUM(on_track_registries_total), 0) AS on_track_registries_total,
-                    COALESCE(SUM(collected_total), 0) AS collected_total,
+                    COALESCE(SUM(renewed_total), 0) AS renewed_total,
                     COALESCE(CAST(AVG(total_pending_sale_amount) AS DECIMAL(18,2)), 0) AS total_pending_sale_amount,
-                    COALESCE(CAST(AVG(total_collected_sale_amount) AS DECIMAL(18,2)), 0) AS total_collected_sale_amount
-                FROM beyond_collection_summary_detail
+                    COALESCE(CAST(AVG(total_renewed_sale_amount) AS DECIMAL(18,2)), 0) AS total_renewed_sale_amount
+                FROM beyond_renewal_summary_detail
                 WHERE upload_date BETWEEN :startDate AND :endDate', [
             'startDate' => $startDate,
             'endDate' => $endDate,
