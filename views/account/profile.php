@@ -19,8 +19,8 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 <hr>
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Email</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="email@mail.com"
-                        readonly>
+                    <input type="email" class="form-control" id="exampleFormControlInput1"
+                        placeholder="<?= Yii::$app->session->get("userIdentity")->email ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Contraseña</label>
