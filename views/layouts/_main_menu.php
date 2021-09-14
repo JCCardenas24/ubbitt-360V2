@@ -15,7 +15,8 @@ use yii\helpers\Url;
                 </div>
                 <div class="info">
                     <span class="px-20 font-size-14 font-weight-900 c-white">Ubbitt - Admin</span><br>
-                    <span class="px-20 font-size-12 c-white">Administrador</span>
+                    <span
+                        class="px-20 font-size-12 c-white"><?= ucwords(Yii::$app->session->get("userInfo")->name) ?></span>
                 </div>
             </div>
         </div>
