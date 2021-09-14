@@ -12,7 +12,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="pdf_button mr-5"><i class="icon-download_pdf c-gray" aria-hidden="true"></i></a>
+                    <!-- <a href="#" class="pdf_button mr-5"><i class="icon-download_pdf c-gray" aria-hidden="true"></i></a> -->
                 </div>
             </div>
         </div>
@@ -154,8 +154,9 @@
                     <p id="by-management-effective-registries">0 / <span>0%</span></p>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Agenda promesa de pago</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Agenda promesa de pago</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-effective-registries-payment-promise-scheduled">0</span>
                     </div>
@@ -166,8 +167,9 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Pago en línea</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Pago en línea</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number" id="by-management-effective-registries-online-payment">0</span>
                     </div>
                     <div class="progress">
@@ -177,8 +179,9 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Acepta Póliza nueva</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Acepta Póliza nueva</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-effective-registries-new-policy-accepted">0</span>
                     </div>
@@ -189,9 +192,10 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Acepta Pago con 5% por domiciliación </h4><span
+                            <h4 class="mb-0">Acepta Pago con 5% por domiciliación </h4>
+                            <!-- <span
                                 class="ml-5 mr-5"><b>|</b></span><span class="ttl_detalle href_bd_cobra">Ver
-                                detalle</span>
+                                detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-effective-registries-accepted-direct-debit-payment">0</span>
                     </div>
@@ -202,9 +206,10 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Se envía ficha de deposito </h4><span
+                            <h4 class="mb-0">Se envía ficha de deposito </h4>
+                            <!-- <span
                                 class="ml-5 mr-5"><b>|</b></span><span class="ttl_detalle href_bd_cobra">Ver
-                                detalle</span>
+                                detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-effective-registries-deposit-slip-sent">0</span>
                     </div>
@@ -221,8 +226,9 @@
                     <p id="by-management-on-track-registries">0 / <span>0%</span></p>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Agenda llamada</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Agenda llamada</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number" id="by-management-on-track-registries-call-scheduled">0</span>
                     </div>
                     <div class="progress">
@@ -232,8 +238,9 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">No contesta</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">No contesta</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number" id="by-management-on-track-registries-does-not_answer">0</span>
                     </div>
                     <div class="progress">
@@ -243,8 +250,9 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Buzón</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Buzón</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number" id="by-management-on-track-registries-voice-mail">0</span>
                     </div>
                     <div class="progress">
@@ -260,8 +268,9 @@
                     <p id="by-management-out-of-management-registries">0 / <span>0%</span></p>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Número equivocado</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Número equivocado</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-wrong-number">0</span>
                     </div>
@@ -272,8 +281,9 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Póliza cancelada</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Póliza cancelada</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-policy-cancelled">0</span>
                     </div>
@@ -284,9 +294,10 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">No contesta</h4><span class="ml-5 mr-5"><b>|</b></span><span
+                            <h4 class="mb-0">No contesta</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
                                 class="ttl_detalle href_bd_cobra">Ver
-                                detalle</span>
+                                detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-does-not-answer">0</span>
                     </div>
@@ -297,9 +308,10 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Queja</h4><span class="ml-5 mr-5"><b>|</b></span><span
+                            <h4 class="mb-0">Queja</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
                                 class="ttl_detalle href_bd_cobra">Ver
-                                detalle</span>
+                                detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-complaint">0</span>
                     </div>
@@ -310,9 +322,10 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">No gestionable en portal (ZA)</h4><span
+                            <h4 class="mb-0">No gestionable en portal (ZA)</h4>
+                            <!-- <span
                                 class="ml-5 mr-5"><b>|</b></span><span class="ttl_detalle href_bd_cobra">Ver
-                                detalle</span>
+                                detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-not-manageable">0</span>
                     </div>
@@ -323,8 +336,9 @@
                     </div>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h4 class="mb-0">Registro perdido</h4><span class="ml-5 mr-5"><b>|</b></span><span
-                                class="ttl_detalle href_bd_cobra">Ver detalle</span>
+                            <h4 class="mb-0">Registro perdido</h4>
+                            <!-- <span class="ml-5 mr-5"><b>|</b></span><span
+                                class="ttl_detalle href_bd_cobra">Ver detalle</span> -->
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-lost-registry">0</span>
                     </div>
