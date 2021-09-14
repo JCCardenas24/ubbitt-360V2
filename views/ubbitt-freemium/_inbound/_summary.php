@@ -45,7 +45,7 @@
                 <div class="card bg-c-orange">
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
-                            <p class="m-0">Motivo de<br>venta</p>
+                            <p class="m-0">Llamadas <br>Motivo de<br>venta</p>
                         </div>
                         <div class="col-6 p-0 text-center">
                             <small class="m-0" id="sale-reason-det" style="font-size: 25px;">0</small>
@@ -57,7 +57,7 @@
                 <div class="card">
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
-                            <p class="m-0">Atención a clientes</p>
+                            <p class="m-0">Llamadas <br>Atención a clientes</p>
                         </div>
                         <div class="col-6 p-0 text-center">
                             <small class="m-0" id="cust-serv-calls-det">0</small>
