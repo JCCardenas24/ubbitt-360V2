@@ -31,7 +31,7 @@ use yii\helpers\Url;
                 </ul>
             </div>
             <div class="navbar-custom-menu r-side p-0">
-                <span>Hola, <?= ucwords(Yii::$app->session->get("userIdentity")->username) ?></span>
+                <span>Hola, <?= ucwords(Yii::$app->session->get("userInfo")->name) ?></span>
                 <ul class="nav navbar-nav">
                     <li class="dropdown user user-menu">
                         <a href="#"
