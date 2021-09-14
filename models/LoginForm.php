@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\db\UserInfo;
 use app\models\db\UserProfile;
 use Yii;
 use yii\base\Model;
@@ -50,7 +51,9 @@ class LoginForm extends Model
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Usuario o contraseña incorrecto.');
             } else {
+                $this->_user->password = null;
                 Yii::$app->session->set("userIdentity", $this->_user);
+                Yii::$app->session->set("userInfo", UserInfo::findById($this->_user->user_id));
                 Yii::$app->session->set("userPermissions", $this->getPermissions());
             }
         }

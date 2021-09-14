@@ -7,7 +7,6 @@ use yii\db\ActiveRecord;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
-    public $id;
     public $authKey;
     public $accessToken;
 

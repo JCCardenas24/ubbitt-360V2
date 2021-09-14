@@ -9,6 +9,8 @@ $(function () {
 
 function showAlert(type, message) {
     let toast = $('#toast-alert');
+    toast.removeClass('success');
+    toast.removeClass('warning');
     toast.addClass(getTostClass(type));
     toast.find('.toast-body > p').html(message);
     toast.toast('show');
