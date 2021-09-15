@@ -12,7 +12,8 @@ return [
         "trackers" => "Detalle de tipificaciones",
         "quality-daily" => "De calidad diario",
         "quality-general" => "General de calidad",
-        "calibrations" => "Resultado de calibraciones"
+        "calibrations" => "Resultado de calibraciones",
+        "productivity" => "De productividad"
     ],
     'report_submodule_dict' => [
         "inbound" => "Inbound",

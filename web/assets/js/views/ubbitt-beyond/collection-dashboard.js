@@ -62,7 +62,34 @@ $('#beyond-cobranza-callcenter-bd-tab').on('shown.bs.tab', function (event) {
     );
     callDatabaseCallback(startDate, endDate, null, 1);
 });
-$('#beyond-cobranza-reportes-tab').on('shown.bs.tab', function (event) {});
+$('#beyond-cobranza-reportes-tab, .nav-link-beyond-collection-reports').on('shown.bs.tab', function (event) {
+    var tab_report_type = $('.nav-link-beyond-collection-reports.active').data(
+        'tab-type'
+    );
+    $('#type-file').val(tab_report_type);
+    // Initialize the date picker on the call center kpi's tab
+    $('.range-pick#beyond-collection-report-date-range').daterangepicker(
+        dateRangePickerConfig,
+        reportsListCallback
+    );
+    reportsListCallback(startDate, endDate, null, 1);
+    showHideAddButton(tab_report_type);
+    
+});
+
+function showHideAddButton(reportType) {
+    if (userHasPermission(reportType + '-add')) {
+        $('#upload_report_btn').show();
+    } else {
+        $('#upload_report_btn').hide();
+    }
+}
+
+function userHasPermission(checkedPermission) {
+    let requiredPermission = permissionsMap[checkedPermission];
+    return userPermissions.indexOf(requiredPermission) > -1;
+}
+
 $('#beyond-cobranza-carga-base-datos-tab').on(
     'shown.bs.tab',
     function (event) {}
@@ -882,3 +909,90 @@ function createCallRecordRow(callRecord) {
     `
     );
 }
+
+function reportsListCallback(start, end, label, page = 1) {
+    $('.range-pick#beyond-collection-report-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    var report_type = $('.nav-link-beyond-collection-reports.active').data('tab-type');
+    $.ajax({
+        url: '/report-file/find-reports',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+            'SearchByDateForm[module_origin]': 'beyond',
+            'SearchByDateForm[submodule_origin]': 'collection',
+            'SearchByDateForm[type]': report_type,
+        },
+        success: (response) => {
+            $('#beyond-collection-reports-table tbody').html(null);
+            $.each(response.reportsRecords, (index, reportRecord) => {
+                $('#beyond-collection-reports-table tbody').append(
+                    createReportRecordRow(reportRecord)
+                );
+            });
+            updatePaginator(
+                '#beyond-collection-reports-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    reportsListCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de reportes');
+        },
+    });
+}
+
+function createReportRecordRow(record) {
+    return (
+        `
+        <tr>
+            <td scope="row">
+                ${record.id}
+            </td>
+            <td>
+                ${record.file_path}
+            </td>
+            <td>
+                ${record.user_id}
+            </td>
+            <td>
+                ${record.created_at}
+            </td>
+            <td>
+                <a href="${record.file_path}" download>
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                </a>` +
+        (userHasPermission(
+            $('.nav-link-freemium-reports.active').data('tab-type') + '-delete'
+        )
+            ? `<a href="#" class="btn-delete-report" data-report-id="${record.id}">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>`
+            : '') +
+        `
+            </td>
+        </tr>
+    `
+    );
+}
+
+$('#beyond-collection-reports-table tbody').on(
+    'click',
+    '.btn-delete-report',
+    function (evt) {
+        evt.preventDefault();
+        var report_id = $(this).data('report-id');
+        $('#btn-confirm-delete-report').attr(
+            'href',
+            `/report-file/delete?id=${report_id}`
+        );
+        $('#modal-delete-report').modal('show');
+    }
+);

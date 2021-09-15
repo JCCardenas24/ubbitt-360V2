@@ -71,7 +71,7 @@ class ReportFile extends \yii\db\ActiveRecord
         $query = self::find()
             ->where(['between', 'created_at', $startDate . ' 00:00:00', $endDate . ' 23:59:59'])->andWhere([
                 'module_origin' => $module_origin,
-                'submodule_origin' => $submodule_origin,
+                'submodule_origin' => Yii::$app->params['report_submodule_dict'][$submodule_origin],
                 'type' => Yii::$app->params['report_type_dict'][$type],
             ]);
         $countQuery = clone $query;
