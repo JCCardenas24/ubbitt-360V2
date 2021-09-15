@@ -162,7 +162,7 @@ class ReportFileController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $reports = new ReportFile();
-        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page, $searchParams->type);
+        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page, $searchParams->module_origin, $searchParams->submodule_origin, $searchParams->type);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $reportsArray;
     }

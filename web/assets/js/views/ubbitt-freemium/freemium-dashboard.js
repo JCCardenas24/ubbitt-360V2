@@ -1587,6 +1587,8 @@ function reportsListCallback(start, end, label, page = 1) {
             'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
             'SearchByDateForm[page]': page,
+            'SearchByDateForm[module_origin]': 'freemium',
+            'SearchByDateForm[submodule_origin]': 'inbound',
             'SearchByDateForm[type]': report_type,
         },
         success: (response) => {

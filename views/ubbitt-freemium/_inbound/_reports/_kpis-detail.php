@@ -49,6 +49,8 @@ use yii\helpers\Url;
                         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                         class="custom-file-input" name="file"> -->
                         <?= $formUploadReport->field($reportFileModel, 'file')->fileInput(['id' => 'reportFile', 'class' => 'custom-file-input', 'accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel']) ?>
+                        <?= $formUploadReport->field($reportFileModel, 'module_origin')->hiddenInput(['id' => 'module-origin', 'value' => 'freemium']) ?>
+                        <?= $formUploadReport->field($reportFileModel, 'submodule_origin')->hiddenInput(['id' => 'submodule-origin', 'value' => 'inbound']) ?>
                         <?= $formUploadReport->field($reportFileModel, 'type')->hiddenInput(['id' => 'type-file', 'value' => 'kpis']) ?>
                         <i style="display: none;" id="msjFile1">Formato válido para los archivos: xslx, xsl.</i>
                         <i style="display: none;" id="msjFilePeso1">El peso máximo para el archivo es de: 2M</i>
