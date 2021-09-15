@@ -9,7 +9,7 @@
     </div>
     <div class="tab-pane fade" id="beyond-renovacion-reportes" role="tabpanel"
         aria-labelledby="beyond-renovacion-reportes-tab">
-        <?= $this->render('_content/_reports') ?>
+        <?= $this->render('_content/_reports', ['reportFileModel' => $reportFileModel]) ?>
     </div>
     <div class="tab-pane fade" id="beyond-renovacion-carga-base-datos" role="tabpanel"
         aria-labelledby="beyond-renovacion-carga-base-datos-tab">
