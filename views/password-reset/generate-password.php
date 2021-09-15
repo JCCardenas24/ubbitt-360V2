@@ -5,12 +5,12 @@
 /* @var $model app\models\LoginForm */
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Ubbitt 360';
 $this->registerJsFile('@web/assets/js/views/login/index.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
+$this->registerJsFile('@web/assets/js/views/password-reset/generate.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
 $this->registerJsFile('@web/assets/js/vendors.min.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
 $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
 ?>
@@ -25,20 +25,23 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
                                 <img class="logo_ubbitt d-block m-auto"
                                     src="<?= Yii::getAlias('@web') ?>/assets/images/ubbitt_color.svg" alt="logo"
                                     width="200">
+                                <?php if ($isTokenValid) { ?>
                                 <p class="mb-0 c-header">Ingresa tus datos para continuar.</p>
+                                <?php } ?>
                             </div>
+                            <?php if ($isTokenValid) { ?>
                             <?php $form = ActiveForm::begin([
-                                'id' => 'reset-password-form',
-                                'fieldConfig' => [
-                                    'template' => "{input}{error}",
-                                    'options' => [
-                                        'tag' => false,
+                                    'id' => 'reset-password-form',
+                                    'fieldConfig' => [
+                                        'template' => "{input}{error}",
+                                        'options' => [
+                                            'tag' => false,
+                                        ],
                                     ],
-                                ],
-                                'options' => [
-                                    'class' => 'mt-10',
-                                ]
-                            ]); ?>
+                                    'options' => [
+                                        'class' => 'mt-10',
+                                    ]
+                                ]); ?>
                             <div class="form-group">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -65,6 +68,9 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
                                 <?= Html::submitButton('Continuar', ['id' => 'submit-reset-password-form', 'class' => 'btn_login btn btn-first mt-10 c-white font-weight-800 col-md-7 text-uppercase d-block mx-auto', 'name' => 'reset-password-button']) ?>
                             </div>
                             <?php ActiveForm::end(); ?>
+                            <?php } else { ?>
+                            <span>El token de recuperación de contraseña ha expirado o es inválido</span>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -73,25 +79,25 @@ $this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS
     </div>
 </div>
 <?php $this->beginBlock('resetFormMessage'); ?>
-    <?= $this->render('/_commons/_widgets/_toast') ?>
-    <?php if (Yii::$app->session->hasFlash('success-reset')): ?>
-        <script>
-            showAlert('success', "<?= Yii::$app->session->getFlash('success-reset') ?>");
-        </script>
-    <?php endif; ?>
-    <?php if (Yii::$app->session->hasFlash('reset-form-errors')): ?>
-        <script>
-            var errors = <?= json_encode(Yii::$app->session->getFlash('reset-form-errors'), JSON_UNESCAPED_UNICODE) ?>;
-            var error_txt = "";
-            
-            for (const prop in errors) {
-                error_txt += errors[prop].join("<br>")
-            }
+<?= $this->render('/_commons/_widgets/_toast') ?>
+<?php if (Yii::$app->session->hasFlash('success-reset')) : ?>
+<script>
+showAlert('success', "<?= Yii::$app->session->getFlash('success-reset') ?>");
+</script>
+<?php endif; ?>
+<?php if (Yii::$app->session->hasFlash('reset-form-errors')) : ?>
+<script>
+var errors = <?= json_encode(Yii::$app->session->getFlash('reset-form-errors'), JSON_UNESCAPED_UNICODE) ?>;
+var error_txt = "";
 
-            $('#login_container').toggle();
-            $('#recovery_psw_container').toggle();
+for (const prop in errors) {
+    error_txt += errors[prop].join("<br>")
+}
 
-            showAlert('error', error_txt);
-        </script>
-    <?php endif; ?>
+$('#login_container').toggle();
+$('#recovery_psw_container').toggle();
+
+showAlert('error', error_txt);
+</script>
+<?php endif; ?>
 <?php $this->endBlock(); ?>
