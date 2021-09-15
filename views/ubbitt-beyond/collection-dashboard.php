@@ -17,7 +17,7 @@ $this->registerJsFile('@web/assets/js/views/ubbitt-beyond/collection-dashboard.j
                 <div class="tab-pane fade show active" id="cobranza-home" role="tabpanel"
                     aria-labelledby="cobranza-home-tab">
                     <?= $this->render('collection-dashboard/_submenu') ?>
-                    <?= $this->render('collection-dashboard/_content') ?>
+                    <?= $this->render('collection-dashboard/_content', ['reportFileModel' => $reportFileModel]) ?>
                 </div>
             </div>
         </div>

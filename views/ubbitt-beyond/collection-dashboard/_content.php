@@ -8,7 +8,7 @@
     </div>
     <div class="tab-pane fade" id="beyond-cobranza-reportes" role="tabpanel"
         aria-labelledby="beyond-cobranza-reportes-tab">
-        <?= $this->render('_content/_reports') ?>
+        <?= $this->render('_content/_reports', ['reportFileModel' => $reportFileModel]) ?>
     </div>
     <div class="tab-pane fade" id="beyond-cobranza-carga-base-datos" role="tabpanel"
         aria-labelledby="beyond-cobranza-carga-base-datos-tab">

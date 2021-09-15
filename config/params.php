@@ -14,5 +14,10 @@ return [
         "quality-general" => "General de calidad",
         "calibrations" => "Resultado de calibraciones"
     ],
+    'report_submodule_dict' => [
+        "inbound" => "Inbound",
+        "collection" => "Cobranza",
+        "renewal" => "Renovación",
+    ],
     'reset_password_token_expires' => 60
 ];

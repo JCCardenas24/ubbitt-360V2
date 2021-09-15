@@ -10,6 +10,7 @@ use app\models\db\BeyondRenewalSummaryDetail;
 use app\models\db\BeyondRenewalSummaryGraph;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
+use app\models\ReportFile;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -71,7 +72,10 @@ class UbbittBeyondController extends Controller
      */
     public function actionCollectionDashboard()
     {
-        return $this->render('collection-dashboard');
+        $reportFileModel = new ReportFile();
+        return $this->render('collection-dashboard', [
+            'reportFileModel' => $reportFileModel
+        ]);
     }
 
     public function actionFindCollectionSummaryGraphData()
@@ -122,7 +126,10 @@ class UbbittBeyondController extends Controller
      */
     public function actionRenewalDashboard()
     {
-        return $this->render('renewal-dashboard');
+        $reportFileModel = new ReportFile();
+        return $this->render('renewal-dashboard', [
+            'reportFileModel' => $reportFileModel
+        ]);
     }
 
     public function actionFindRenewalSummaryGraphData()
