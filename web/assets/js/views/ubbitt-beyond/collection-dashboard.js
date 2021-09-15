@@ -970,7 +970,7 @@ function createReportRecordRow(record) {
                     <i class="fa fa-download" aria-hidden="true"></i>
                 </a>` +
         (userHasPermission(
-            $('.nav-link-freemium-reports.active').data('tab-type') + '-delete'
+            $('.nav-link-beyond-collection-reports.active').data('tab-type') + '-delete'
         )
             ? `<a href="#" class="btn-delete-report" data-report-id="${record.id}">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
