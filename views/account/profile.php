@@ -17,11 +17,11 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                     <h4><?= $userInfo->name ?></h4>
                 </div>
                 <hr>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="exampleFormControlInput1">Email</label>
                     <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="<?= $email ?>"
                         readonly>
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Contraseña</label>
                     <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="*******"
@@ -29,11 +29,11 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 </div>
                 <a type="button" class="" data-toggle="modal" data-target="#modal_cambiar_contrasena"><small>Cambiar
                         contraseña</small></a>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="exampleFormControlInput1">Teléfono contacto</label>
                     <input type="text" class="form-control" id="exampleFormControlInput1"
                         placeholder="<?= $userInfo->phoneNumber ?>" readonly>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="col-7">
