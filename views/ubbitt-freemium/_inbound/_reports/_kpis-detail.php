@@ -42,12 +42,8 @@ use yii\helpers\Url;
                             'method' => 'post'
                         ]
                     ]); ?>
-                    <!-- <form> -->
                     <div class="custom-file col-10">
                         <label class="custom-file-label" id="nameFile1" for="f02">Seleccione su archivo</label>
-                        <!-- <input id="f02" type="file"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                        class="custom-file-input" name="file"> -->
                         <?= $formUploadReport->field($reportFileModel, 'file')->fileInput(['id' => 'reportFile', 'class' => 'custom-file-input', 'accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel']) ?>
                         <?= $formUploadReport->field($reportFileModel, 'module_origin')->hiddenInput(['id' => 'module-origin', 'value' => 'freemium']) ?>
                         <?= $formUploadReport->field($reportFileModel, 'submodule_origin')->hiddenInput(['id' => 'submodule-origin', 'value' => 'inbound']) ?>
@@ -56,7 +52,6 @@ use yii\helpers\Url;
                         <i style="display: none;" id="msjFilePeso1">El peso máximo para el archivo es de: 2M</i>
                     </div>
                     <?= Html::submitButton('Subir', ['class' => 'btn btn-first c-white col-md-6 mt-15 mb-5 upload_file_report']) ?>
-                    <!-- </form> -->
                     <?php ActiveForm::end(); ?>
                 </div>
             </div>

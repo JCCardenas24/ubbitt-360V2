@@ -12,6 +12,6 @@
     </div>
     <div class="tab-pane fade" id="beyond-cobranza-carga-base-datos" role="tabpanel"
         aria-labelledby="beyond-cobranza-carga-base-datos-tab">
-        <?= $this->render('../../_commons/_plans/_database-upload') ?>
+        <?= $this->render('_content/_database-upload/_upload', ['databaseUploadModel' => $databaseUploadModel]) ?>
     </div>
 </div>

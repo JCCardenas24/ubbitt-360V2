@@ -20,5 +20,6 @@ return [
         "collection" => "Cobranza",
         "renewal" => "Renovación",
     ],
-    'reset_password_token_expires' => 60
+    'reset_password_token_expires' => 60,
+    'email_address_database_to' => 'juancarlos.cardenas@ubbitt.com'
 ];

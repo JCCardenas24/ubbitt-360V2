@@ -28,7 +28,7 @@ $this->registerJs('var userPermissions = ' . json_encode($userPermissions) . ';
                 <div class="tab-pane fade show active" id="cobranza-home" role="tabpanel"
                     aria-labelledby="cobranza-home-tab">
                     <?= $this->render('collection-dashboard/_submenu') ?>
-                    <?= $this->render('collection-dashboard/_content', ['reportFileModel' => $reportFileModel]) ?>
+                    <?= $this->render('collection-dashboard/_content', ['reportFileModel' => $reportFileModel, 'databaseUploadModel' => $databaseUploadModel]) ?>
                 </div>
             </div>
         </div>
