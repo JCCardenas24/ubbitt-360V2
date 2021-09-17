@@ -33,7 +33,8 @@ class PasswordReset extends \yii\db\ActiveRecord
             ['email', 'email'],
             ['email', 'trim'],
             [['email'], 'string', 'max' => 100],
-            ['email', 'exist',
+            [
+                'email', 'exist',
                 'targetClass' => '\app\models\User',
                 'filter' => ['status' => 1],
                 'message' => 'No existe un usuario con esa dirección de correo electrónico.'
@@ -54,11 +55,12 @@ class PasswordReset extends \yii\db\ActiveRecord
         ];
     }
 
-    public function sendEmail() {
+    public function sendEmail()
+    {
         $user = User::findOne([
             'email' => $this->email,
         ]);
-        
+
         /* if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
             $user->generatePasswordResetToken();
             if (!$user->save()) {
@@ -73,5 +75,12 @@ class PasswordReset extends \yii\db\ActiveRecord
             ->setTo($this->email)
             ->setSubject('Restauración de contraseña en ' . Yii::$app->name)
             ->send();
+    }
+
+    public function findByToken($token)
+    {
+        return self::findOne([
+            'token' => $token,
+        ]);
     }
 }
