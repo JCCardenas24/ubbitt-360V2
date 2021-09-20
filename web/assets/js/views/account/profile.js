@@ -22,6 +22,7 @@ function onChangePassword() {
 }
 
 function changePassword(currentPassword, newPassword) {
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/account/update-password',
         type: 'POST',
@@ -43,6 +44,9 @@ function changePassword(currentPassword, newPassword) {
                     'Ocurrió un problema al cambiar tu contraseña.'
                 );
             }
+        },
+        complete: function () {
+            $('#loading_content').modal('hide');
         },
     });
 }

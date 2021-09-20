@@ -87,20 +87,6 @@ function userHasPermission(checkedPermission) {
     return userPermissions.indexOf(requiredPermission) > -1;
 }
 
-/* $('.nav-link-freemium-reports').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    console.log('reload reports tab');
-    var tab_report_type = $('.nav-link-freemium-reports.active').data('tab-type');
-   $('#type-file').val(tab_report_type);
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#freemium-report-date-range').daterangepicker(
-        dateRangePickerConfig,
-        reportsListCallback
-    );
-    reportsListCallback(startDate, endDate, null, 1, tab_report_type)
-}); */
-
 // Show upload report form
 $('#upload_report_btn').click(function () {
     $('#reports_info_contents').toggle();
@@ -116,6 +102,7 @@ function summaryCallback(start, end) {
     $('.range-pick#freemium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    $('#loading_content').modal('show');
     findSummaryGraphData(start, end);
     findSummaryDetailData(start, end);
 }
@@ -241,6 +228,9 @@ function findSummaryDetailData(start, end) {
                 'error',
                 'Ocurrió un problema al recuperar la información del resumen'
             );
+        },
+        complete: function () {
+            $('#loading_content').modal('hide');
         },
     });
 }
@@ -1465,6 +1455,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
     $('.range-pick#freemium-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/ubbitt-freemium/find-calls',
         type: 'POST',
@@ -1492,6 +1483,9 @@ function callDatabaseCallback(start, end, label, page = 1) {
         },
         error: () => {
             alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            $('#loading_content').modal('hide');
         },
     });
 }
@@ -1537,6 +1531,7 @@ function loadKpis(start, end) {
     $('.range-pick#freemium-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/ubbitt-freemium/find-call-center-kpis',
         type: 'POST',
@@ -1571,6 +1566,9 @@ function loadKpis(start, end) {
         error: () => {
             alert("Ocurrió un problema al consultar los KPI's de telefonía");
         },
+        complete: function () {
+            $('#loading_content').modal('hide');
+        },
     });
 }
 
@@ -1579,6 +1577,7 @@ function reportsListCallback(start, end, label, page = 1) {
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     var report_type = $('.nav-link-freemium-reports.active').data('tab-type');
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/report-file/find-reports',
         type: 'POST',
@@ -1609,6 +1608,9 @@ function reportsListCallback(start, end, label, page = 1) {
         },
         error: () => {
             alert('Ocurrió un problema al consultar el registro de reportes');
+        },
+        complete: function () {
+            $('#loading_content').modal('hide');
         },
     });
 }

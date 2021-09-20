@@ -62,20 +62,22 @@ $('#beyond-cobranza-callcenter-bd-tab').on('shown.bs.tab', function (event) {
     );
     callDatabaseCallback(startDate, endDate, null, 1);
 });
-$('#beyond-cobranza-reportes-tab, .nav-link-beyond-collection-reports').on('shown.bs.tab', function (event) {
-    var tab_report_type = $('.nav-link-beyond-collection-reports.active').data(
-        'tab-type'
-    );
-    $('#type-file').val(tab_report_type);
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#beyond-collection-report-date-range').daterangepicker(
-        dateRangePickerConfig,
-        reportsListCallback
-    );
-    reportsListCallback(startDate, endDate, null, 1);
-    showHideAddButton(tab_report_type);
-    
-});
+$('#beyond-cobranza-reportes-tab, .nav-link-beyond-collection-reports').on(
+    'shown.bs.tab',
+    function (event) {
+        var tab_report_type = $(
+            '.nav-link-beyond-collection-reports.active'
+        ).data('tab-type');
+        $('#type-file').val(tab_report_type);
+        // Initialize the date picker on the call center kpi's tab
+        $('.range-pick#beyond-collection-report-date-range').daterangepicker(
+            dateRangePickerConfig,
+            reportsListCallback
+        );
+        reportsListCallback(startDate, endDate, null, 1);
+        showHideAddButton(tab_report_type);
+    }
+);
 
 function showHideAddButton(reportType) {
     if (userHasPermission(reportType + '-add')) {
@@ -110,6 +112,7 @@ function summaryCallback(start, end) {
     $('.range-pick#beyond-collection-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    $('#loading_content').modal('show');
     findSummaryGraphData(start, end);
     findSummaryDetailData(start, end);
 }
@@ -228,6 +231,9 @@ function findSummaryDetailData(start, end) {
                 'error',
                 'Ocurrió un problema al recuperar la información del resumen'
             );
+        },
+        complete: function () {
+            $('#loading_content').modal('hide');
         },
     });
 }
@@ -439,7 +445,10 @@ function updateManagementSummaryKpis(kpis, moneyFormatter) {
     $('#second-management-effective-registries').html(
         kpis.second_management_effective_registries +
             ' / <span>' +
-            kpis.second_management_percentage.replace('.00', '') +
+            kpis.second_management_effective_registries_percentage.replace(
+                '.00',
+                ''
+            ) +
             '%</span><span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.second_management_effective_registries_amount)
@@ -801,6 +810,7 @@ function loadKpis(start, end) {
     $('.range-pick#beyond-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/ubbitt-beyond/find-collection-call-center-kpis',
         type: 'POST',
@@ -835,6 +845,9 @@ function loadKpis(start, end) {
         error: () => {
             alert("Ocurrió un problema al consultar los KPI's de telefonía");
         },
+        complete: function () {
+            $('#loading_content').modal('hide');
+        },
     });
 }
 
@@ -842,6 +855,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
     $('.range-pick#beyond-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/ubbitt-beyond/find-collection-calls',
         type: 'POST',
@@ -869,6 +883,9 @@ function callDatabaseCallback(start, end, label, page = 1) {
         },
         error: () => {
             alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            $('#loading_content').modal('hide');
         },
     });
 }
@@ -914,7 +931,10 @@ function reportsListCallback(start, end, label, page = 1) {
     $('.range-pick#beyond-collection-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
-    var report_type = $('.nav-link-beyond-collection-reports.active').data('tab-type');
+    var report_type = $('.nav-link-beyond-collection-reports.active').data(
+        'tab-type'
+    );
+    $('#loading_content').modal('show');
     $.ajax({
         url: '/report-file/find-reports',
         type: 'POST',
@@ -946,6 +966,9 @@ function reportsListCallback(start, end, label, page = 1) {
         error: () => {
             alert('Ocurrió un problema al consultar el registro de reportes');
         },
+        complete: function () {
+            $('#loading_content').modal('hide');
+        },
     });
 }
 
@@ -970,7 +993,8 @@ function createReportRecordRow(record) {
                     <i class="fa fa-download" aria-hidden="true"></i>
                 </a>` +
         (userHasPermission(
-            $('.nav-link-beyond-collection-reports.active').data('tab-type') + '-delete'
+            $('.nav-link-beyond-collection-reports.active').data('tab-type') +
+                '-delete'
         )
             ? `<a href="#" class="btn-delete-report" data-report-id="${record.id}">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>

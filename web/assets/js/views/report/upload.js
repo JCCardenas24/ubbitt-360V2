@@ -21,6 +21,7 @@ function uploadReport(e) {
     if (document.getElementById('file-input').files.length > 0) {
         var data = new FormData();
         data.append('file', document.getElementById('file-input').files[0]);
+        $('#loading_content').modal('show');
         $.ajax({
             url: '/report/upload-file',
             type: 'POST',
@@ -48,6 +49,9 @@ function uploadReport(e) {
                     document.getElementById('file-input'),
                     document.getElementById('file-input-label')
                 );
+            },
+            complete: function () {
+                $('#loading_content').modal('hide');
             },
         });
     } else {
