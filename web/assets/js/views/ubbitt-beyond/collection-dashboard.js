@@ -10,7 +10,7 @@ $(function () {
 
     startDate =
         initialDate == null
-            ? moment().subtract(6, 'days')
+            ? moment().subtract(29, 'days')
             : moment(initialDate);
     endDate = finalDate == null ? moment() : moment(finalDate);
 
