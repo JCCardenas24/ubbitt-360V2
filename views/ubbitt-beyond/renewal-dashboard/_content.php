@@ -13,6 +13,6 @@
     </div>
     <div class="tab-pane fade" id="beyond-renovacion-carga-base-datos" role="tabpanel"
         aria-labelledby="beyond-renovacion-carga-base-datos-tab">
-        <?= $this->render('../../_commons/_plans/_database-upload') ?>
+        <?= $this->render('_content/_database-upload/_upload', ['databaseUploadModel' => $databaseUploadModel]) ?>
     </div>
 </div>

@@ -135,8 +135,10 @@ class UbbittBeyondController extends Controller
     public function actionRenewalDashboard()
     {
         $reportFileModel = new ReportFile();
+        $databaseUploadModel = new DatabaseUpload();
         return $this->render('renewal-dashboard', [
-            'reportFileModel' => $reportFileModel
+            'reportFileModel' => $reportFileModel,
+            'databaseUploadModel' => $databaseUploadModel
         ]);
     }
 
