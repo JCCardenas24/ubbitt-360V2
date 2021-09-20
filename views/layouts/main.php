@@ -69,7 +69,7 @@ app\assets\AppAsset::register($this);
 
         <?= $this->render('//layouts/_main_footer') ?>
     </div>
-
+    <?= $this->render('//_commons/_widgets/_preloader') ?>
     <?php $this->endBody() ?>
 </body>
 

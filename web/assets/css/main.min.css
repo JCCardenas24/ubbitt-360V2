@@ -128,6 +128,14 @@ a.logo img {
   background: #E6E4E4;
 }
 
+.sidebar-collapse .sidebar-menu.tree .treeview-menu {
+  background-color: #f8f8f8;
+}
+
+.sidebar-collapse .sidebar-menu.tree .treeview-menu li a {
+  color: #211a19 !important;
+}
+
 .wid-100 {
   width: 100%;
 }
@@ -271,27 +279,52 @@ a.logo img {
   text-decoration: underline;
 }
 
-.preloader-capa {
+.modal_preload .modal-dialog {
+  width: 267px;
+  filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.16));
+}
+
+.modal_preload .modal-content {
   width: 100%;
-  height: 100%;
-  background-color: #f8f8f8;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 215px;
+  background: linear-gradient(#fff 0%, #f5f5f5 100%);
+}
+
+.modal_preload .modal-content .modal-body {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.preloader-capa img {
-  width: 120px;
-  height: auto;
+.modal_preload .modal-content .modal-body img {
+  width: 90px;
+  display: block;
+  margin: auto;
 }
 
-.wrapper_container_preload {
-  position: relative;
+.modal_preload .modal-content .modal-body p {
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #4d4d4d;
+  margin-top: 22px;
+  display: block;
+}
+
+.modal_preload .modal-content .modal-body .loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  animation: ellipsis steps(4, end) 1500ms infinite;
+  content: "\2026";
+  /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 20px;
+  }
 }
 
 audio {
@@ -1268,7 +1301,7 @@ audio {
   margin-bottom: 54px;
 }
 
-.recovery_step_1 button.send_request_email {
+.recovery_step_1 a.send_request_email {
   width: 100%;
   height: 43px;
   background: linear-gradient(#272727 0%, #000 100%);
@@ -1285,7 +1318,7 @@ audio {
   cursor: pointer;
 }
 
-.recovery_step_1 button.send_request_email:hover {
+.recovery_step_1 a.send_request_email:hover {
   color: #fff;
 }
 
