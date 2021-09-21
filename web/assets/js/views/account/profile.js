@@ -22,7 +22,7 @@ function onChangePassword() {
 }
 
 function changePassword(currentPassword, newPassword) {
-    $('#loading_content').modal('show');
+    showPreloader();
     $.ajax({
         url: '/account/update-password',
         type: 'POST',
@@ -46,7 +46,7 @@ function changePassword(currentPassword, newPassword) {
             }
         },
         complete: function () {
-            $('#loading_content').modal('hide');
+            hidePreloader();
         },
     });
 }

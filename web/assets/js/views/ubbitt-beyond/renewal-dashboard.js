@@ -110,7 +110,7 @@ function summaryCallback(start, end) {
     $('.range-pick#beyond-renewal-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
-    $('#loading_content').modal('show');
+    showPreloader();
     findSummaryGraphData(start, end);
     findSummaryDetailData(start, end);
 }
@@ -180,19 +180,16 @@ function updateTransactionChart(data) {
             {
                 name: 'Registros',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.registries),
             },
             {
                 name: 'Llamadas',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.calls),
             },
             {
                 name: 'Renovados',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.renewed),
             },
         ],
@@ -231,7 +228,7 @@ function findSummaryDetailData(start, end) {
             );
         },
         complete: function () {
-            $('#loading_content').modal('hide');
+            hidePreloader();
         },
     });
 }
@@ -806,7 +803,7 @@ function loadKpis(start, end) {
     $('.range-pick#beyond-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
-    $('#loading_content').modal('show');
+    showPreloader();
     $.ajax({
         url: '/ubbitt-beyond/find-renewal-call-center-kpis',
         type: 'POST',
@@ -842,7 +839,7 @@ function loadKpis(start, end) {
             alert("Ocurrió un problema al consultar los KPI's de telefonía");
         },
         complete: function () {
-            $('#loading_content').modal('hide');
+            hidePreloader();
         },
     });
 }
@@ -851,7 +848,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
     $('.range-pick#beyond-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
-    $('#loading_content').modal('show');
+    showPreloader();
     $.ajax({
         url: '/ubbitt-beyond/find-renewal-calls',
         type: 'POST',
@@ -881,7 +878,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
             alert('Ocurrió un problema al consultar el registro de llamadas');
         },
         complete: function () {
-            $('#loading_content').modal('hide');
+            hidePreloader();
         },
     });
 }
@@ -930,7 +927,7 @@ function reportsListCallback(start, end, label, page = 1) {
     var report_type = $('.nav-link-beyond-renewal-reports.active').data(
         'tab-type'
     );
-    $('#loading_content').modal('show');
+    showPreloader();
     $.ajax({
         url: '/report-file/find-reports',
         type: 'POST',
@@ -963,7 +960,7 @@ function reportsListCallback(start, end, label, page = 1) {
             alert('Ocurrió un problema al consultar el registro de reportes');
         },
         complete: function () {
-            $('#loading_content').modal('hide');
+            hidePreloader();
         },
     });
 }
