@@ -9,9 +9,7 @@ $(function () {
     const finalDate = urlParams.get('final_date');
 
     startDate =
-        initialDate == null
-            ? moment().subtract(29, 'days')
-            : moment(initialDate);
+        initialDate == null ? moment().startOf('month') : moment(initialDate);
     endDate = finalDate == null ? moment() : moment(finalDate);
 
     dateRangePickerConfig = {
@@ -20,7 +18,7 @@ $(function () {
         endDate,
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
-            'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
+            'Este mes': [moment().startOf('month'), moment()],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -987,7 +985,7 @@ function createReportRecordRow(record) {
                 ${record.created_at}
             </td>
             <td>
-                <a href="${record.file_path}" download>
+                <a href="/${record.file_path}" download>
                     <i class="fa fa-download" aria-hidden="true"></i>
                 </a>` +
         (userHasPermission(
