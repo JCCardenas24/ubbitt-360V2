@@ -21,7 +21,7 @@ function uploadReport(e) {
     if (document.getElementById('file-input').files.length > 0) {
         var data = new FormData();
         data.append('file', document.getElementById('file-input').files[0]);
-        $('#loading_content').modal('show');
+        showPreloader();
         $.ajax({
             url: '/report/upload-file',
             type: 'POST',
@@ -51,7 +51,7 @@ function uploadReport(e) {
                 );
             },
             complete: function () {
-                $('#loading_content').modal('hide');
+                hidePreloader();
             },
         });
     } else {

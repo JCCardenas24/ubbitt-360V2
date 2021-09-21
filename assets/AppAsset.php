@@ -45,6 +45,7 @@ class AppAsset extends AssetBundle
         'assets/js/general.js',
         'assets/js/common/pagination.js',
         'assets/js/common/file.js',
+        'assets/js/common/preloader.js',
         'https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js',
         'https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js',
     ];
