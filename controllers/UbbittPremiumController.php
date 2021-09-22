@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -52,6 +53,9 @@ class UbbittPremiumController extends Controller
      */
     public function actionDashboard()
     {
-        return $this->render('dashboard');
+        $campaignId = Yii::$app->request->get('id');
+        return $this->render('dashboard', [
+            'campaignId' => $campaignId
+        ]);
     }
 }

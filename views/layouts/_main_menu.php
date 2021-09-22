@@ -1,5 +1,7 @@
 <?php
 
+use app\models\db\Campaign;
+use app\models\db\UserInfo;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -82,12 +84,42 @@ use yii\helpers\Url;
             <li class="treeview <?= Yii::$app->controller->id == 'ubbitt-premium' ? 'menu-open' : '' ?>">
                 <a href="#" class="wrapper_main_ttl_view">
                     <i class="ri-pie-chart-2-fill"><span class="path1"></span><span class="path2"></span></i>
-                    <!-- <i class="icon-Write"></i> -->
                     <span class="main_ttl_view">Ubbitt Premium</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-right pull-right"></i>
                     </span>
                 </a>
+                <ul class="treeview-menu" style="display: block;">
+                    <?php
+                        $userInfo = Yii::$app->session->get("userInfo");
+                        $campaignModel = new Campaign();
+                        $campaigns = $campaignModel->findByCompanyId($userInfo->companyId);
+                        foreach ($campaigns as $campaign) {
+                        ?>
+                    <li><a href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'brief-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_first_level<?= Yii::$app->controller->id == 'ubbitt-premium' && Yii::$app->request->get('id') == $campaign->campaignId ? ' current' : '' ?>"><i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i><?= $campaign->name ?></a></li>
+                    <li><a id="brief-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'brief-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect<?= Yii::$app->controller->id == 'ubbitt-premium' && Yii::$app->request->get('id') == $campaign->campaignId ? ' font-weight-bold' : '' ?>"><i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i>Brief</a></li>
+                    <li><a id="resumen-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'resumen-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Resumen</a></li>
+                    <li><a id="marketing-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'marketing-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Marketing</a></li>
+                    <li><a id="call-center-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'call-center-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Call Center</a></li>
+                    <br>
+                    <?php } ?>
+                </ul>
             </li>
             <?php } ?>
             <!-- Ubbitt Beyond -->

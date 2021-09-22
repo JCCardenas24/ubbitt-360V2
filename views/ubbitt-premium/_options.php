@@ -1,19 +1,23 @@
 <ul class="nav nav-pills level-three campaigns-1-options-tab" id="campaigns-1-options-tab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="brief-campaign-1-tab" data-toggle="pill" href="#brief-campaign-1" role="tab"
-            aria-controls="brief-campaign-1" aria-selected="true">Brief</a>
+        <a class="nav-link active" id="brief-campaign-<?= $campaignId ?>-tab" data-toggle="pill"
+            href="#brief-campaign-<?= $campaignId ?>" role="tab" aria-controls="brief-campaign-<?= $campaignId ?>"
+            aria-selected="true">Brief</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="resumen-campaign-1-tab" data-toggle="pill" href="#resumen-campaign-1" role="tab"
-            aria-controls="resumen-campaign-1" aria-selected="false">Resumen</a>
+        <a class="nav-link" id="resumen-campaign-<?= $campaignId ?>-tab" data-toggle="pill"
+            href="#resumen-campaign-<?= $campaignId ?>" role="tab" aria-controls="resumen-campaign-<?= $campaignId ?>"
+            aria-selected="false">Resumen</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="marketing-campaign-1-tab" data-toggle="pill" href="#marketing-campaign-1" role="tab"
-            aria-controls="marketing-campaign-1" aria-selected="false">Marketing</a>
+        <a class="nav-link" id="marketing-campaign-<?= $campaignId ?>-tab" data-toggle="pill"
+            href="#marketing-campaign-<?= $campaignId ?>" role="tab"
+            aria-controls="marketing-campaign-<?= $campaignId ?>" aria-selected="false">Marketing</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="call-center-campaign-1-tab" data-toggle="pill" href="#call-center-campaign-1" role="tab"
-            aria-controls="call-center-campaign-1" aria-selected="false">Call Center</a>
+        <a class="nav-link" id="call-center-campaign-<?= $campaignId ?>-tab" data-toggle="pill"
+            href="#call-center-campaign-<?= $campaignId ?>" role="tab"
+            aria-controls="call-center-campaign-<?= $campaignId ?>" aria-selected="false">Call Center</a>
     </li>
 
     <li class="nav-item">
