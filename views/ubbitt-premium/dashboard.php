@@ -21,7 +21,9 @@ $this->registerJsFile('@web/assets/js/views/ubbitt-premium/dashboard.js', ['posi
                     <?= $this->render('_options', [
                         'campaignId' => $campaignId
                     ]) ?>
-                    <?= $this->render('_content') ?>
+                    <?= $this->render('_content', [
+                        'campaignId' => $campaignId
+                    ]) ?>
                 </div>
             </div>
         </div>
