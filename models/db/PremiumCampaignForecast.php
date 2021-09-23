@@ -2,6 +2,7 @@
 
 namespace app\models\db;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -14,7 +15,7 @@ use yii\db\ActiveRecord;
  * @property double $collectedForecast
  *
  */
-class CampaignForecast extends ActiveRecord
+class PremiumCampaignForecast extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -92,29 +93,36 @@ class CampaignForecast extends ActiveRecord
     }
 
     /**
+     * Finds a campaign forecast registry by it's date
+     */
+    public function findExisting()
+    {
+        return self::find()
+            ->where(['date' => $this->date])
+            ->andWhere(['campaign_id' => $this->campaignId])
+            ->one();
+    }
+
+    /**
      * Find the campaign forecast by a range date and it's campaign id
      * @param integer $campaignId
      * @param string $startDate
      * @param string $endDate
      * @return \app\models\db\CampaignForecast
      */
-    public function findReport($campaignId, $startDate, $endDate)
+    public function findByDates($campaignId, $startDate, $endDate)
     {
-        $date = new \yii\db\Expression("DATE_FORMAT(date, '%d/%m/%Y') as `date`, ubbitt_investment, sales_forecast, collected_forecast");
-        return self::find()
-            ->select($date)
-            ->where(['between', 'date', $startDate, $endDate])
-            ->andWhere(['campaign_id' => $campaignId])
-            ->all();
-    }
-
-    /**
-     * Finds a campaign forecast registry by it's date
-     */
-    public function findByDate()
-    {
-        return self::find()
-            ->where(['date' => $this->date])
-            ->one();
+        return Yii::$app->db->createCommand('
+            SELECT
+                COALESCE(SUM(ubbitt_investment), 0) AS ubbitt_investment,
+                COALESCE(SUM(sales_forecast), 0) AS sales_forecast,
+                COALESCE(SUM(collected_forecast), 0) AS collected_forecast
+            FROM freemium_campaign_forecast
+            WHERE date BETWEEN :startDate AND :endDate
+                AND campaign_id = :campaignId', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'campaignId' => $campaignId,
+        ])->queryOne();
     }
 }

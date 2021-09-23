@@ -3,7 +3,7 @@
 namespace app\business;
 
 use app\exception\UploadBusinessException;
-use app\models\db\CampaignForecast;
+use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumSummaryGraph;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -37,15 +37,15 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = CampaignForecast::getDb()->beginTransaction();
+        $transaction = PremiumCampaignForecast::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
-            $data = new CampaignForecast();
+            $data = new PremiumCampaignForecast();
             $data->campaignId = $campaignId;
             $date = $sheet->getCell("A$currentRowIndex")->getValue();
             $date = Date::excelToDateTimeObject($date);
             $data->date = $date->format('Y-m-d');
             // Checks if data for date date already exists, and if it does we update it
-            $previousData = $data->findByDate();
+            $previousData = $data->findExisting();
             if ($previousData != null) {
                 $data = $previousData;
             }
