@@ -2,9 +2,9 @@
     <div class="d-flex justify-content-end ">
         <div class=" d-flex justify-content-between">
             <div class="form-group wid-100 d-flex m-0">
-                <div id="reportrange_clientes" class="range-pick mr-5">
+                <div id="premium-summary-date-range" class="range-pick mr-5">
                     <i class="fa fa-calendar"></i>&nbsp;
-                    <span>agosto 28, 2021 - septiembre 1, 2021</span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                    <span class="text-date"></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                 </div>
             </div>
         </div>
@@ -105,17 +105,13 @@
     </div>
     <div class="col-8">
         <div class="radio_button_forecast_actual">
-            <input type="radio" value="false" name="selected_chart" id="pemp_yes" checked>
+            <input type="checkbox" value="false" name="selected_chart" id="pemp_yes" checked>
             <label for="pemp_yes">Actual</label>
-            <input type="radio" value="true" name="selected_chart" id="pemp_no">
+            <input type="checkbox" value="true" name="selected_chart" id="pemp_no">
             <label for="pemp_no">Forecast</label>
         </div>
         <div class="chart_actual">
-            <div id="stacked-line" style="height:400px;"></div>
-        </div>
-        <div class="chart_forecast" style="display: none;">
-            <!-- <p>otra gráfica</p> -->
-            <div id="stacked-line-forecast" style="height:400px;"></div>
+            <div id="summary-graph" style="height:400px;"></div>
         </div>
     </div>
 </div>

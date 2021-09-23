@@ -1,140 +1,218 @@
-// Stacked line chart (cobrado / inversión /ventas)
-let stackedChart = echarts.init(document.getElementById('stacked-line'));
-let option = {
-    grid: {
-        left: '1%',
-        right: '2%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    tooltip: {
-        trigger: 'axis',
-    },
-    // Add legend
-    legend: {
-        data: ['Cobrado', 'Inversión', 'Ventas'],
-    },
+let startDate = null;
+let endDate = null;
+let summaryGraphData = [];
+$(() => {
+    startDate = moment().startOf('month');
+    endDate = moment();
 
-    // Add custom colors
-    color: ['#49e83c', '#ffd800', '#4d4d4d'],
-
-    // Enable drag recalculate
-    calculable: true,
-
-    // Hirozontal axis
-    xAxis: [
-        {
-            type: 'category',
-            boundaryGap: false,
-            data: ['Día 1', 'Día 2', 'Día 3', 'Día 4'],
+    dateRangePickerConfig = {
+        showDropdowns: true,
+        startDate,
+        endDate,
+        ranges: {
+            'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
+            'Este mes': [moment().startOf('month'), moment()],
         },
-    ],
-
-    // Vertical axis
-    yAxis: [
-        {
-            type: 'value',
+        locale: {
+            applyLabel: 'Aplicar',
+            cancelLabel: 'Cancelar',
+            customRangeLabel: 'Personalizado',
         },
-    ],
+    };
+    $('.range-pick#premium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    summaryCallback(startDate, endDate);
+    $('#pemp_yes').on('change', () => {
+        updateSummaryGraphChart(summaryGraphData);
+    });
+    $('#pemp_no').on('change', () => {
+        updateSummaryGraphChart(summaryGraphData);
+    });
+});
 
-    // Add series
-    series: [
-        {
-            name: 'Cobrado',
-            type: 'line',
-            stack: 'Total',
-            data: [125, 254, 125, 105, 75, 235, 215],
+function summaryCallback(start, end) {
+    $('.range-pick#premium-summary-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    findForecastSummaryGraphData(start, end);
+}
+
+function findForecastSummaryGraphData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-summary-graph-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
-        {
-            name: 'Inversión',
-            type: 'line',
-            stack: 'Total',
-            data: [245, 495, 201, 245, 215, 345, 301],
+        success: (response) => {
+            summaryGraphData = response;
+            updateSummaryGraphChart(response);
         },
-        {
-            name: 'Ventas',
-            type: 'line',
-            stack: 'Total',
-            data: [125, 545, 320, 158, 215, 325, 412],
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del gráfico del Forecast'
+            );
         },
-    ],
-    lineStyle: {
-        width: 10,
-    },
-    // Add series
-};
-
-stackedChart.setOption(option);
-
-// Stacked line Forecast chart (cobrado / inversión /ventas)
-let stackedChartForecast = echarts.init(
-    document.getElementById('stacked-line-forecast')
-);
-let option_stacked_forecast = {
-    grid: {
-        left: '1%',
-        right: '2%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    tooltip: {
-        trigger: 'axis',
-    },
-    // Add legend
-    legend: {
-        data: ['Cobrado', 'Inversión', 'Ventas'],
-    },
-
-    // Add custom colors
-    color: ['#49e83c', '#ffd800', '#4d4d4d'],
-
-    // Enable drag recalculate
-    calculable: true,
-
-    // Hirozontal axis
-    xAxis: [
-        {
-            type: 'category',
-            boundaryGap: false,
-            data: ['Día 1', 'Día 2', 'Día 3', 'Día 4'],
+        complete: () => {
+            hidePreloader();
         },
-    ],
+    });
+}
 
-    // Vertical axis
-    yAxis: [
-        {
-            type: 'value',
+function updateSummaryGraphChart(data) {
+    let actual = $('#pemp_yes').prop('checked');
+    let forecast = $('#pemp_no').prop('checked');
+    let legends = [];
+    let series = [];
+    let dates = [];
+    if (actual && forecast) {
+        let actualData = data.filter((data) => data.type == 'actual');
+        dates = actualData.map((record) => record.date);
+        let forecastData = data.filter((data) => data.type == 'forecast');
+        legends = [
+            'Cobrado - Actual',
+            'Inversión - Actual',
+            'Ventas - Actual',
+            'Cobrado - Forecast',
+            'Inversión - Forecast',
+            'Ventas - Forecast',
+        ];
+        series = [
+            {
+                name: 'Cobrado - Actual',
+                type: 'line',
+                data: actualData.map((record) => record.collected),
+            },
+            {
+                name: 'Inversión - Actual',
+                type: 'line',
+                data: actualData.map((record) => record.investment),
+            },
+            {
+                name: 'Ventas - Actual',
+                type: 'line',
+                data: actualData.map((record) => record.sales),
+            },
+            {
+                name: 'Cobrado - Forecast',
+                type: 'line',
+                symbol: 'triangle',
+                symbolSize: 8,
+                lineStyle: {
+                    type: 'dotted',
+                },
+                data: forecastData.map((record) => record.collected),
+            },
+            {
+                name: 'Inversión - Forecast',
+                type: 'line',
+                symbol: 'triangle',
+                symbolSize: 8,
+                lineStyle: {
+                    type: 'dotted',
+                },
+                data: forecastData.map((record) => record.investment),
+            },
+            {
+                name: 'Ventas - Forecast',
+                type: 'line',
+                symbol: 'triangle',
+                symbolSize: 8,
+                lineStyle: {
+                    type: 'dotted',
+                },
+                data: forecastData.map((record) => record.sales),
+            },
+        ];
+    } else {
+        let filter = actual ? 'actual' : forecast ? 'forecast' : '';
+        let graphData = data.filter((data) => data.type == filter);
+        dates = graphData.map((record) => record.date);
+        legends = ['Cobrado', 'Inversión', 'Ventas'];
+        series = [
+            {
+                name: 'Cobrado',
+                type: 'line',
+                data: graphData.map((record) => record.collected),
+            },
+            {
+                name: 'Inversión',
+                type: 'line',
+                data: graphData.map((record) => record.investment),
+            },
+            {
+                name: 'Ventas',
+                type: 'line',
+                data: graphData.map((record) => record.sales),
+            },
+        ];
+    }
+    let stackedChart = echarts.init(document.getElementById('summary-graph'));
+    let option = {
+        grid: {
+            left: '1%',
+            right: '2%',
+            bottom: '3%',
+            containLabel: true,
         },
-    ],
+        tooltip: {
+            trigger: 'axis',
+        },
+        // Add legend
+        legend: {
+            data: legends,
+        },
 
-    // Add series
-    series: [
-        {
-            name: 'Cobrado',
-            type: 'line',
-            stack: 'Total',
-            data: [100, 254, 125, 105, 90, 235, 215],
-        },
-        {
-            name: 'Inversión',
-            type: 'line',
-            stack: 'Total',
-            data: [255, 465, 190, 245, 215, 345, 350],
-        },
-        {
-            name: 'Ventas',
-            type: 'line',
-            stack: 'Total',
-            data: [100, 545, 300, 358, 199, 325, 400],
-        },
-    ],
-    lineStyle: {
-        width: 10,
-    },
-    // Add series
-};
+        // Add custom colors
+        color: [
+            '#49e83c',
+            '#ffd800',
+            '#4d4d4d',
+            '#a1e89b',
+            '#ffe866',
+            '#adadad',
+        ],
 
-stackedChartForecast.setOption(option_stacked_forecast);
+        // Enable drag recalculate
+        calculable: true,
+
+        // Horizontal axis
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: dates,
+            },
+        ],
+
+        // Vertical axis
+        yAxis: [
+            {
+                type: 'value',
+            },
+        ],
+
+        // Add series
+        series: series,
+        lineStyle: {
+            width: 10,
+        },
+        // Add series
+    };
+
+    stackedChart.setOption(option, true);
+
+    $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
+        stackedChart.resize();
+    });
+}
 
 //Stacked line chart (Venta emitida)
 let stackedChart2 = echarts.init(
@@ -337,14 +415,14 @@ let options = {
 
 basicdoughnut_concentrado_ventas.setOption(options);
 
-$('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    stackedChart.resize();
-    stackedChart2.resize();
-    basicdoughnut_concentrado_ventas.resize();
-    funnel_ventas_inversiones_chart.resize();
-});
+// $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
+//     event.target; // newly activated tab
+//     event.relatedTarget; // previous active tab
+//     stackedChart.resize();
+//     stackedChart2.resize();
+//     basicdoughnut_concentrado_ventas.resize();
+//     funnel_ventas_inversiones_chart.resize();
+// });
 
 // ********Charts marketing - segmento view***********
 let horizontal_double_bar = echarts.init(
