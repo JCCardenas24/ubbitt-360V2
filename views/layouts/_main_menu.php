@@ -226,11 +226,25 @@ use yii\helpers\Url;
             ?>
             <li>
                 <a href="<?= Url::toRoute(['report/upload']) ?>"
-                    class="wrapper_main_ttl_view <?= Yii::$app->controller->id == 'report' ? 'font-weight-bold' : '' ?>">
+                    class="wrapper_main_ttl_view <?= Url::current() == '/report/upload' ? 'font-weight-bold' : '' ?>">
                     <i
-                        class="ri-upload-cloud-2-fill <?= Yii::$app->controller->id == 'report' ? 'font-weight-bold' : '' ?>"><span
+                        class="ri-upload-cloud-2-fill <?= Url::current() == '/report/upload' ? 'font-weight-bold' : '' ?>"><span
                             class="path1"></span><span class="path2"></span></i>
                     <span class="main_ttl_view">Carga de reporte</span>
+                </a>
+            </li>
+            <?php } ?>
+            <!-- Report Upload -->
+            <?php
+            if (in_array('menu_upload_premium_report', Yii::$app->session->get("userPermissions"))) {
+            ?>
+            <li>
+                <a href="<?= Url::toRoute(['report/upload-premium']) ?>"
+                    class="wrapper_main_ttl_view <?= Url::current() == '/report/upload-premium' ? 'font-weight-bold' : '' ?>">
+                    <i
+                        class="ri-upload-cloud-2-fill <?= Url::current() == '/report/upload-premium' ? 'font-weight-bold' : '' ?>"><span
+                            class="path1"></span><span class="path2"></span></i>
+                    <span class="main_ttl_view">Carga de reporte Premium</span>
                 </a>
             </li>
             <?php } ?>
