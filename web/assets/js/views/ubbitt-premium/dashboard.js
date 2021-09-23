@@ -37,10 +37,54 @@ function summaryCallback(start, end) {
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     showPreloader();
-    findForecastSummaryGraphData(start, end);
+    findForecastData(start, end);
+    findSummaryGraphData(start, end);
 }
 
-function findForecastSummaryGraphData(start, end) {
+function findForecastData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-forecast-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+            });
+            $('#forecast-investment').text(
+                moneyFormatter
+                    .format(parseInt(data.ubbitt_investment))
+                    .replace('.00', '')
+            );
+            $('#forecast-sales').text(
+                moneyFormatter
+                    .format(parseInt(data.sales_forecast))
+                    .replace('.00', '')
+            );
+            $('#forecast-collected').text(
+                moneyFormatter
+                    .format(parseInt(data.collected_forecast))
+                    .replace('.00', '')
+            );
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del Forecast'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
+
+function findSummaryGraphData(start, end) {
     $.ajax({
         url: '/ubbitt-premium/find-summary-graph-data',
         type: 'POST',
@@ -57,7 +101,7 @@ function findForecastSummaryGraphData(start, end) {
         error: () => {
             showAlert(
                 'error',
-                'Ocurrió un problema al recuperar la información del gráfico del Forecast'
+                'Ocurrió un problema al recuperar la información del gráfico de resumen'
             );
         },
         complete: () => {

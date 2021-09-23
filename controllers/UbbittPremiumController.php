@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumSummaryGraph;
 use app\models\forms\SearchByDateCampaignForm;
 use Yii;
@@ -22,7 +23,7 @@ class UbbittPremiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-summary-graph-data'],
+                        'actions' => ['dashboard', 'find-forecast-data', 'find-summary-graph-data'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -32,6 +33,7 @@ class UbbittPremiumController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'dashboard' => ['get'],
+                    'find-forecast-data' => ['post'],
                     'find-summary-graph-data' => ['post'],
                 ],
             ],
@@ -61,6 +63,16 @@ class UbbittPremiumController extends Controller
         return $this->render('dashboard', [
             'campaignId' => $campaignId
         ]);
+    }
+
+    public function actionFindForecastData()
+    {
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $forecastModel = new PremiumCampaignForecast();
+        $data = $forecastModel->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
     }
 
     public function actionFindSummaryGraphData()

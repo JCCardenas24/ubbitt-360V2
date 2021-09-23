@@ -73,7 +73,7 @@
                     <h2>$200,000</h2>
                 </div>
                 <div class="col-6 lf">
-                    <h3>$500,000</h3>
+                    <h3 id="forecast-investment">$0</h3>
                 </div>
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Inversión</p>
@@ -84,7 +84,7 @@
                     <h2>$120,000</h2>
                 </div>
                 <div class="col-6 lf">
-                    <h3>$200,000</h3>
+                    <h3 id="forecast-sales">$0</h3>
                 </div>
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Ventas</p>
@@ -95,7 +95,7 @@
                     <h2>$20,000</h2>
                 </div>
                 <div class="col-6 lf">
-                    <h3>$100,000</h3>
+                    <h3 id="forecast-collected">$0</h3>
                 </div>
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Cobrado</p>
