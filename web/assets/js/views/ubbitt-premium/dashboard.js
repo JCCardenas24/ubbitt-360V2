@@ -39,6 +39,7 @@ function summaryCallback(start, end) {
     showPreloader();
     findForecastData(start, end);
     findSummaryGraphData(start, end);
+    findLeadsCallsGraphData(start, end);
 }
 
 function findForecastData(start, end) {
@@ -258,80 +259,107 @@ function updateSummaryGraphChart(data) {
     });
 }
 
-//Stacked line chart (Venta emitida)
-let stackedChart2 = echarts.init(
-    document.getElementById('behavior-campaign-stacked-line')
-);
-let option2 = {
-    // Add title
-    title: {
-        text: 'Comportamiento de campaña',
-        orient: 'vertical',
-        x: 'left',
-        top: '0',
-        left: 0,
-    },
-    grid: {
-        left: '1%',
-        right: '3%',
-        bottom: '1%',
-        containLabel: true,
-    },
-    tooltip: {
-        trigger: 'axis',
-    },
-    // Add legend
-    legend: {
-        data: ['Leads', 'Llamadas'],
-        x: 'right',
-        top: '7%',
-        right: '0%',
-    },
-
-    // Add custom colors
-    color: ['#ff6f61', '#4d4d4d'],
-
-    // Enable drag recalculate
-    calculable: true,
-
-    // Hirozontal axis
-    xAxis: [
-        {
-            type: 'category',
-            boundaryGap: false,
-            data: ['Día 1', 'Día 2', 'Día 3', 'Día 4'],
+function findLeadsCallsGraphData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-leads-calls-graph-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
-    ],
-
-    // Vertical axis
-    yAxis: [
-        {
-            type: 'value',
+        success: (data) => {
+            updateLeadsCallsGraph(data);
         },
-    ],
-
-    // Add series
-    series: [
-        {
-            name: 'Leads',
-            type: 'line',
-            stack: 'Total',
-            data: [125, 254, 125, 105, 75, 235, 215],
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del gráfico de leads y llamadas'
+            );
         },
-        {
-            name: 'Llamadas',
-            type: 'line',
-            stack: 'Total',
-            data: [245, 495, 201, 245, 215, 345, 301],
+        complete: () => {
+            hidePreloader();
         },
-    ],
-    lineStyle: {
-        width: 10,
-    },
-    // Add series
-};
+    });
+}
 
-stackedChart2.setOption(option2);
+function updateLeadsCallsGraph(data) {
+    //Stacked line chart (Venta emitida)
+    let stackedChart = echarts.init(
+        document.getElementById('behavior-campaign-stacked-line')
+    );
+    let option = {
+        // Add title
+        title: {
+            text: 'Comportamiento de campaña',
+            orient: 'vertical',
+            x: 'left',
+            top: '0',
+            left: 0,
+        },
+        grid: {
+            left: '1%',
+            right: '3%',
+            bottom: '1%',
+            containLabel: true,
+        },
+        tooltip: {
+            trigger: 'axis',
+        },
+        // Add legend
+        legend: {
+            data: ['Leads', 'Llamadas'],
+            x: 'right',
+            top: '7%',
+            right: '0%',
+        },
+
+        // Add custom colors
+        color: ['#ff6f61', '#4d4d4d'],
+
+        // Enable drag recalculate
+        calculable: true,
+
+        // Horizontal axis
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: data.map((record) => record.date),
+            },
+        ],
+
+        // Vertical axis
+        yAxis: [
+            {
+                type: 'value',
+            },
+        ],
+
+        // Add series
+        series: [
+            {
+                name: 'Leads',
+                type: 'line',
+                data: data.map((record) => record.leads),
+            },
+            {
+                name: 'Llamadas',
+                type: 'line',
+                data: data.map((record) => record.calls),
+            },
+        ],
+        lineStyle: {
+            width: 10,
+        },
+    };
+
+    stackedChart.setOption(option, true);
+    $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
+        stackedChart.resize();
+    });
+}
 
 // Doughnut chart concentrado de ventas
 let basicdoughnut_concentrado_ventas = echarts.init(

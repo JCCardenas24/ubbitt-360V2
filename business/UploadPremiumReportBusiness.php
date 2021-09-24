@@ -4,6 +4,7 @@ namespace app\business;
 
 use app\exception\UploadBusinessException;
 use app\models\db\PremiumCampaignForecast;
+use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumSummaryGraph;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -23,6 +24,7 @@ class UploadPremiumReportBusiness
         $this->saveCampaignForecast($campaignId, $spreadsheet);
         $this->saveGraphData($campaignId, 'forecast', 'Gráfica Premium Forecast', $spreadsheet);
         $this->saveGraphData($campaignId, 'actual', 'Gráfica Premium Actual', $spreadsheet);
+        $this->saveLeadsCallsGraphData($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -102,6 +104,41 @@ class UploadPremiumReportBusiness
                 $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
                 $transaction->rollback();
                 throw new UploadBusinessException($sheetName . ' - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    function saveLeadsCallsGraphData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Gráfica llamadas leads');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Gráfica llamadas leads" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $transaction = PremiumLeadsCallsGraph::getDb()->beginTransaction();
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+            $data = new PremiumLeadsCallsGraph();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCellByColumnAndRow($currentColumnIndex, 2)->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getValue();
+            $uploadDate = Date::excelToDateTimeObject($uploadDate);
+            $data->uploadDate = $uploadDate->format('Y-m-d');
+            $data->leads = $sheet->getCellByColumnAndRow($currentColumnIndex, 3)->getValue();
+            $data->calls = $sheet->getCellByColumnAndRow($currentColumnIndex, 4)->getValue();
+            if (!$data->save()) {
+                $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
+                $transaction->rollback();
+                throw new UploadBusinessException('Gráfica llamadas leads - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
         $transaction->commit();
