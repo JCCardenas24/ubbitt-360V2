@@ -10,9 +10,6 @@ use yii\db\ActiveRecord;
  * @property integer $campaignId
  * @property integer $companyId
  * @property string $name
- * @property double $investment
- * @property double $spending
- * @property double $sales
  *
  */
 class Campaign extends ActiveRecord
@@ -31,10 +28,9 @@ class Campaign extends ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'company_id', 'name', 'investment', 'spending', 'sales',], 'required'],
+            [['campaign_id', 'company_id', 'name'], 'required'],
             [['campaign_id', 'company_id',], 'integer'],
             [['name',], 'string'],
-            [['investment', 'spending', 'sales',], 'double'],
         ];
     }
 
@@ -47,9 +43,6 @@ class Campaign extends ActiveRecord
             'campaign_id' => 'Id Campaña',
             'company_id' => 'Id Compañía',
             'name' => 'Nombre',
-            'investment' => 'Inversión',
-            'spending' => 'Gasto',
-            'sales' => 'Ventas',
         ];
     }
 
