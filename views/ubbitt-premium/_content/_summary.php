@@ -70,7 +70,7 @@
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0">
                 <div class="col-6 lr">
-                    <h2>$0</h2>
+                    <h2 id="actual-investment">$0</h2>
                 </div>
                 <div class="col-6 lf">
                     <h3 id="forecast-investment">$0</h3>
@@ -81,7 +81,7 @@
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0">
                 <div class="col-6 lr">
-                    <h2>$0</h2>
+                    <h2 id="actual-sales">$0</h2>
                 </div>
                 <div class="col-6 lf">
                     <h3 id="forecast-sales">$0</h3>
@@ -92,7 +92,7 @@
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0 border_radius_bottom">
                 <div class="col-6 lr">
-                    <h2>$0</h2>
+                    <h2 id="actual-collected">$0</h2>
                 </div>
                 <div class="col-6 lf">
                     <h3 id="forecast-collected">$0</h3>

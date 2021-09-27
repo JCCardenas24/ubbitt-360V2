@@ -40,9 +40,10 @@ function summaryCallback(start, end) {
     var moneyFormatter = new Intl.NumberFormat('es-MX', {
         style: 'currency',
         currency: 'MXN',
+        maximumFractionDigits: 0,
     });
     findForecastData(start, end, moneyFormatter);
-    findSummaryGraphData(start, end);
+    findSummaryGraphData(start, end, moneyFormatter);
     findLeadsCallsGraphData(start, end);
     findSummaryInputs(start, end, moneyFormatter);
 }
@@ -91,7 +92,7 @@ function findForecastData(start, end, moneyFormatter) {
     });
 }
 
-function findSummaryGraphData(start, end) {
+function findSummaryGraphData(start, end, moneyFormatter) {
     $.ajax({
         url: '/ubbitt-premium/find-summary-graph-data',
         type: 'POST',
@@ -104,6 +105,38 @@ function findSummaryGraphData(start, end) {
         success: (response) => {
             summaryGraphData = response;
             updateSummaryGraphChart(response);
+            $('#actual-investment').text(
+                moneyFormatter.format(
+                    Math.round(
+                        response.reduce(
+                            (total, record) =>
+                                total + parseFloat(record.investment),
+                            0
+                        )
+                    )
+                )
+            );
+            $('#actual-sales').text(
+                moneyFormatter.format(
+                    Math.round(
+                        response.reduce(
+                            (total, record) => total + parseFloat(record.sales),
+                            0
+                        )
+                    )
+                )
+            );
+            $('#actual-collected').text(
+                moneyFormatter.format(
+                    Math.round(
+                        response.reduce(
+                            (total, record) =>
+                                total + parseFloat(record.collected),
+                            0
+                        )
+                    )
+                )
+            );
         },
         error: () => {
             showAlert(
