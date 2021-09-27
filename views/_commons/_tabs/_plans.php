@@ -15,9 +15,8 @@ use yii\helpers\Url;
     if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
     ?>
     <li class="nav-item" role="presentation">
-        <!-- <a class="nav-link" id="premium-tab" data-toggle="pill" href="#premium" role="tab"
-                            aria-controls="premium" aria-selected="false">Ubbitt Premium</a> -->
-        <a class="nav-link <?= Yii::$app->controller->id == 'ubbitt-premium' ? 'active' : '' ?>" id="premium-tab">Ubbitt
+        <a class="nav-link <?= Yii::$app->controller->id == 'ubbitt-premium' ? 'active' : '' ?>" id="premium-tab"
+            href="<?= Url::toRoute(['ubbitt-premium/dashboard']) ?>">Ubbitt
             Premium</a>
     </li>
     <?php } ?>

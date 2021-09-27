@@ -1,5 +1,7 @@
 <?php
 
+use app\models\db\Campaign;
+use app\models\db\UserInfo;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -82,12 +84,42 @@ use yii\helpers\Url;
             <li class="treeview <?= Yii::$app->controller->id == 'ubbitt-premium' ? 'menu-open' : '' ?>">
                 <a href="#" class="wrapper_main_ttl_view">
                     <i class="ri-pie-chart-2-fill"><span class="path1"></span><span class="path2"></span></i>
-                    <!-- <i class="icon-Write"></i> -->
                     <span class="main_ttl_view">Ubbitt Premium</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-right pull-right"></i>
                     </span>
                 </a>
+                <ul class="treeview-menu" style="display: block;">
+                    <?php
+                        $userInfo = Yii::$app->session->get("userInfo");
+                        $campaignModel = new Campaign();
+                        $campaigns = $campaignModel->findByCompanyId($userInfo->companyId);
+                        foreach ($campaigns as $campaign) {
+                        ?>
+                    <li><a href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'brief-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_first_level<?= Yii::$app->controller->id == 'ubbitt-premium' && Yii::$app->request->get('id') == $campaign->campaignId ? ' current' : '' ?>"><i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i><?= $campaign->name ?></a></li>
+                    <li><a id="brief-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'brief-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect<?= Yii::$app->controller->id == 'ubbitt-premium' && Yii::$app->request->get('id') == $campaign->campaignId ? ' font-weight-bold' : '' ?>"><i
+                                class="icon-Commit c-transparent"><span class="path1"></span><span
+                                    class="path2"></span></i>Brief</a></li>
+                    <li><a id="resumen-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'resumen-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Resumen</a></li>
+                    <li><a id="marketing-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'marketing-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Marketing</a></li>
+                    <li><a id="call-center-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'call-center-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Call Center</a></li>
+                    <br>
+                    <?php } ?>
+                </ul>
             </li>
             <?php } ?>
             <!-- Ubbitt Beyond -->
@@ -127,11 +159,15 @@ use yii\helpers\Url;
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Reportes', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'beyond-cobranza-reportes-tab']), ['id' => 'beyond-cobranza-reportes_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php
+                            if (in_array('menu_ubbitt_beyond_collection_database_upload', Yii::$app->session->get("userPermissions"))) {
+                            ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Carga de base de datos', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'beyond-cobranza-carga-base-datos-tab']), ['id' => 'beyond-cobranza-carga-base-datos_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
                     <?php } ?>
                     <?php
                         if (in_array('menu_ubbitt_beyond_renewal', Yii::$app->session->get("userPermissions"))) {
@@ -155,11 +191,15 @@ use yii\helpers\Url;
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Reportes', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-reportes-tab']), ['id' => 'beyond-renovacion-reportes_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php
+                            if (in_array('menu_ubbitt_beyond_renewal_database_upload', Yii::$app->session->get("userPermissions"))) {
+                            ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Carga de base de datos', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-carga-base-datos-tab']), ['id' => 'beyond-renovacion-carga-base-datos_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
                     <?php } ?>
                 </ul>
             </li>
@@ -194,11 +234,25 @@ use yii\helpers\Url;
             ?>
             <li>
                 <a href="<?= Url::toRoute(['report/upload']) ?>"
-                    class="wrapper_main_ttl_view <?= Yii::$app->controller->id == 'report' ? 'font-weight-bold' : '' ?>">
+                    class="wrapper_main_ttl_view <?= Url::current() == '/report/upload' ? 'font-weight-bold' : '' ?>">
                     <i
-                        class="ri-upload-cloud-2-fill <?= Yii::$app->controller->id == 'report' ? 'font-weight-bold' : '' ?>"><span
+                        class="ri-upload-cloud-2-fill <?= Url::current() == '/report/upload' ? 'font-weight-bold' : '' ?>"><span
                             class="path1"></span><span class="path2"></span></i>
                     <span class="main_ttl_view">Carga de reporte</span>
+                </a>
+            </li>
+            <?php } ?>
+            <!-- Report Upload -->
+            <?php
+            if (in_array('menu_upload_premium_report', Yii::$app->session->get("userPermissions"))) {
+            ?>
+            <li>
+                <a href="<?= Url::toRoute(['report/upload-premium']) ?>"
+                    class="wrapper_main_ttl_view <?= Url::current() == '/report/upload-premium' ? 'font-weight-bold' : '' ?>">
+                    <i
+                        class="ri-upload-cloud-2-fill <?= Url::current() == '/report/upload-premium' ? 'font-weight-bold' : '' ?>"><span
+                            class="path1"></span><span class="path2"></span></i>
+                    <span class="main_ttl_view">Carga de reporte Premium</span>
                 </a>
             </li>
             <?php } ?>
