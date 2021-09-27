@@ -5,7 +5,7 @@ namespace app\models\db;
 use yii\db\ActiveRecord;
 
 /**
- * This is the  class for table "freemium_campaign".
+ * This is the  class for table "premium_campaign".
  *
  * @property integer $campaignId
  * @property integer $companyId
@@ -22,7 +22,7 @@ class Campaign extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'freemium_campaign';
+        return 'premium_campaign';
     }
 
     /**

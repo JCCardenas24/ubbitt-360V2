@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the  class for table "freemium_campaign_forecast".
+ * This is the  class for table "premium_campaign_forecast".
  *
  * @property integer $campaignId
  * @property string $date
@@ -22,7 +22,7 @@ class PremiumCampaignForecast extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'freemium_campaign_forecast';
+        return 'premium_campaign_forecast';
     }
 
     /**
@@ -117,7 +117,7 @@ class PremiumCampaignForecast extends ActiveRecord
                 COALESCE(SUM(ubbitt_investment), 0) AS ubbitt_investment,
                 COALESCE(SUM(sales_forecast), 0) AS sales_forecast,
                 COALESCE(SUM(collected_forecast), 0) AS collected_forecast
-            FROM freemium_campaign_forecast
+            FROM premium_campaign_forecast
             WHERE date BETWEEN :startDate AND :endDate
                 AND campaign_id = :campaignId', [
             'startDate' => $startDate,
