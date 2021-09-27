@@ -159,11 +159,15 @@ use yii\helpers\Url;
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Reportes', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'beyond-cobranza-reportes-tab']), ['id' => 'beyond-cobranza-reportes_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php
+                            if (in_array('menu_ubbitt_beyond_collection_database_upload', Yii::$app->session->get("userPermissions"))) {
+                            ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Carga de base de datos', Url::toRoute(['ubbitt-beyond/collection-dashboard', '#' => 'beyond-cobranza-carga-base-datos-tab']), ['id' => 'beyond-cobranza-carga-base-datos_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
                     <?php } ?>
                     <?php
                         if (in_array('menu_ubbitt_beyond_renewal', Yii::$app->session->get("userPermissions"))) {
@@ -187,11 +191,15 @@ use yii\helpers\Url;
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Reportes', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-reportes-tab']), ['id' => 'beyond-renovacion-reportes_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php
+                            if (in_array('menu_ubbitt_beyond_renewal_database_upload', Yii::$app->session->get("userPermissions"))) {
+                            ?>
                     <li>
                         <?= Html::a('<i
                                 class="icon-Commit c-transparent"><span class="path1"></span><span
                                     class="path2"></span></i>Carga de base de datos', Url::toRoute(['ubbitt-beyond/renewal-dashboard', '#' => 'beyond-renovacion-carga-base-datos-tab']), ['id' => 'beyond-renovacion-carga-base-datos_side_menu', 'class' => 'li_second_level side-menu-link-redirect']) ?>
                     </li>
+                    <?php } ?>
                     <?php } ?>
                 </ul>
             </li>

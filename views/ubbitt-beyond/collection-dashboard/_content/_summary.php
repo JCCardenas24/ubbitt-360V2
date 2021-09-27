@@ -33,11 +33,15 @@
                     </div>
                     <div class="info_gestion">
                         <p>Aceptados</p>
-                        <h5 id="delivered-base-accepted">0 / <span>0%</span></h5>
+                        <h5 id="delivered-base-accepted">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Rechazados</p>
-                        <h5 id="delivered-base-rejected">0 / <span>0%</span></h5>
+                        <h5 id="delivered-base-rejected">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -45,20 +49,28 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Primera gestión</p>
-                        <h5 id="first-management">0 / <span>0%</span> </h5>
+                        <h5 id="first-management">0
+                            <!-- / <span>0%</span>  -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros efectivos</p>
-                        <h5 id="first-management-effective-registries">0 / <span>0%</span> <span
-                                class="mini_price">($0)</span></h5>
+                        <h5 id="first-management-effective-registries">0
+                            <!-- / <span>0%</span>  -->
+                            <span class="mini_price">($0)</span>
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros en seguimiento</p>
-                        <h5 id="first-management-on-track-registries">0 / <span>0%</span></h5>
+                        <h5 id="first-management-on-track-registries">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros fuera de gestión</p>
-                        <h5 id="first-management-out-of-management-registries">0 / <span>0%</span></h5>
+                        <h5 id="first-management-out-of-management-registries">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -66,20 +78,28 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Segunda gestión</p>
-                        <h5 id="second-management">0 / <span>0%</span></h5>
+                        <h5 id="second-management">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros efectivos</p>
-                        <h5 id="second-management-effective-registries">0 / <span>0%</span> <span
-                                class="mini_price">($0)</span></h5>
+                        <h5 id="second-management-effective-registries">0
+                            <!-- / <span>0%</span>  -->
+                            <span class="mini_price">($0)</span>
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros en seguimiento</p>
-                        <h5 id="second-management-on-track-registries">0 / <span>0%</span></h5>
+                        <h5 id="second-management-on-track-registries">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros fuera de gestión</p>
-                        <h5 id="second-management-out-of-management-registries">0 / <span>0%</span></h5>
+                        <h5 id="second-management-out-of-management-registries">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -87,20 +107,28 @@
                 <div class="card card-gestion">
                     <div class="header">
                         <p>Tercera gestión</p>
-                        <h5 id="third-management">0 / <span>0%</span></h5>
+                        <h5 id="third-management">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros efectivos</p>
-                        <h5 id="third-management-effective-registries">0 / <span>0%</span> <span
-                                class="mini_price">($0)</span></h5>
+                        <h5 id="third-management-effective-registries">0
+                            <!-- / <span>0%</span>  -->
+                            <span class="mini_price">($0)</span>
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros en seguimiento</p>
-                        <h5 id="third-management-on-track-registries">0 / <span>0%</span></h5>
+                        <h5 id="third-management-on-track-registries">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                     <div class="info_gestion">
                         <p>Registros fuera de gestión</p>
-                        <h5 id="third-management-out-of-management-registries">0 / <span>0%</span></h5>
+                        <h5 id="third-management-out-of-management-registries">0
+                            <!-- / <span>0%</span> -->
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -151,7 +179,9 @@
             <div class="col-4 pl-0">
                 <div class="card atc_cards">
                     <h1>Registros efectivos</h1>
-                    <p id="by-management-effective-registries">0 / <span>0%</span></p>
+                    <p id="by-management-effective-registries">0
+                        <!-- / <span>0%</span> -->
+                    </p>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
                             <h4 class="mb-0">Agenda promesa de pago</h4>
@@ -223,7 +253,9 @@
             <div class="col-4">
                 <div class="card atc_cards">
                     <h1>Registros en seguimiento</h1>
-                    <p id="by-management-on-track-registries">0 / <span>0%</span></p>
+                    <p id="by-management-on-track-registries">0
+                        <!-- / <span>0%</span> -->
+                    </p>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
                             <h4 class="mb-0">Agenda llamada</h4>
@@ -265,7 +297,9 @@
             <div class="col-4 pr-0">
                 <div class="card atc_cards">
                     <h1>Registros fuera de gestión</h1>
-                    <p id="by-management-out-of-management-registries">0 / <span>0%</span></p>
+                    <p id="by-management-out-of-management-registries">0
+                        <!-- / <span>0%</span> -->
+                    </p>
                     <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
                             <h4 class="mb-0">Número equivocado</h4>

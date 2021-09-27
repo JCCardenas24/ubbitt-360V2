@@ -37,12 +37,17 @@ function summaryCallback(start, end) {
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     showPreloader();
-    findForecastData(start, end);
+    var moneyFormatter = new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+    });
+    findForecastData(start, end, moneyFormatter);
     findSummaryGraphData(start, end);
     findLeadsCallsGraphData(start, end);
+    findSummaryInputs(start, end, moneyFormatter);
 }
 
-function findForecastData(start, end) {
+function findForecastData(start, end, moneyFormatter) {
     $.ajax({
         url: '/ubbitt-premium/find-forecast-data',
         type: 'POST',
@@ -53,11 +58,12 @@ function findForecastData(start, end) {
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
         success: (data) => {
-            var moneyFormatter = new Intl.NumberFormat('es-MX', {
-                style: 'currency',
-                currency: 'MXN',
-            });
             $('#forecast-investment').text(
+                moneyFormatter
+                    .format(parseInt(data.ubbitt_investment))
+                    .replace('.00', '')
+            );
+            $('#ubbitt-investment').text(
                 moneyFormatter
                     .format(parseInt(data.ubbitt_investment))
                     .replace('.00', '')
@@ -217,12 +223,12 @@ function updateSummaryGraphChart(data) {
 
         // Add custom colors
         color: [
-            '#49e83c',
-            '#ffd800',
-            '#4d4d4d',
-            '#a1e89b',
-            '#ffe866',
-            '#adadad',
+            '#F39C12',
+            '#16A085',
+            '#2980B9',
+            '#F4D03F',
+            '#1ABC9C',
+            '#3498DB',
         ],
 
         // Enable drag recalculate
@@ -254,7 +260,7 @@ function updateSummaryGraphChart(data) {
 
     stackedChart.setOption(option, true);
 
-    $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
         stackedChart.resize();
     });
 }
@@ -356,136 +362,274 @@ function updateLeadsCallsGraph(data) {
     };
 
     stackedChart.setOption(option, true);
-    $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
         stackedChart.resize();
     });
 }
 
-// Doughnut chart concentrado de ventas
-let basicdoughnut_concentrado_ventas = echarts.init(
-    document.getElementById('premium_resumen_concentrado_ventas_chart')
-);
-let options = {
-    // Add title
-    title: {
-        text: 'Concentrado de ventas',
-        subtext: 'Emisiones / Cobro',
-        x: '',
-    },
-
-    // Add legend
-    legend: {
-        orient: 'vertical',
-        x: 'right',
-        top: '40%',
-        data: ['Emitidas', 'Cobradas'],
-        right: '15%',
-    },
-
-    // Add custom colors
-    color: ['#f36f63', '#555'],
-
-    // Display toolbox
-    toolbox: {
-        show: true,
-        orient: 'vertical',
-        feature: {
-            mark: {
-                show: true,
-                title: {
-                    mark: 'Markline switch',
-                    markUndo: 'Undo markline',
-                    markClear: 'Clear markline',
-                },
-            },
-            dataView: {
-                show: false,
-                readOnly: false,
-                title: 'View data',
-                lang: ['View chart data', 'Close', 'Update'],
-            },
-            magicType: {
-                show: true,
-                title: {
-                    pie: 'Switch to pies',
-                    funnel: 'Switch to funnel',
-                },
-                type: ['pie', 'funnel'],
-                option: {
-                    funnel: {
-                        x: '25%',
-                        y: '20%',
-                        width: '50%',
-                        height: '70%',
-                        funnelAlign: 'left',
-                        max: 1548,
-                    },
-                },
-            },
-            restore: {
-                show: false,
-                title: 'Restore',
-            },
-            saveAsImage: {
-                show: false,
-                title: 'Same as image',
-                lang: ['Save'],
-            },
+function findSummaryInputs(start, end, moneyFormatter) {
+    $.ajax({
+        url: '/ubbitt-premium/find-summary-inputs-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
-    },
+        success: (data) => {
+            $('#spent-budget').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
+            $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
+            $('#roi-percentage').text(
+                data.roi_percentage.replace('.00', '') + '%'
+            );
+            $('#cpl').text(moneyFormatter.format(data.cpl).replace('.00', ''));
+            $('#cpa').text(moneyFormatter.format(data.cpa).replace('.00', ''));
+            $('#cpa-percentage').text(
+                data.cpa_percentage.replace('.00', '') + '%'
+            );
+            $('#leads').text(data.leads);
+            $('#calls-total').text(data.calls_total);
+            $('#sales-total').text(data.sales_total);
+            $('#conversion-percentage').text(
+                data.conversion_percentage.replace('.00', '') + '%'
+            );
+            $('#collected-total').text(data.collected_total);
+            $('#collected-percentage').text(
+                data.collected_percentage.replace('.00', '') + '%'
+            );
+            updateFunnelChart(data, moneyFormatter);
+            $('#spent-investment').text(
+                moneyFormatter.format(data.spent_investment).replace('.00', '')
+            );
+            $('#sales-total-amount').text(
+                moneyFormatter
+                    .format(data.sales_total_amount)
+                    .replace('.00', '')
+            );
+            $('#sales-percentage').text(
+                data.sales_percentage.replace('.00', '') + '%'
+            );
+            $('#collected-total-amount').text(
+                moneyFormatter
+                    .format(data.collected_total_amount)
+                    .replace('.00', '')
+            );
+            $('#collection-percentage').text(
+                data.collection_percentage.replace('.00', '') + '%'
+            );
+            updateSalesConcentrate(data);
+            $('#total-emitted-sales').text(
+                moneyFormatter
+                    .format(data.total_emitted_sales)
+                    .replace('.00', '')
+            );
+            $('#total-paid-sales').text(
+                moneyFormatter.format(data.total_paid_sales).replace('.00', '')
+            );
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información de los datos del resumen'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
 
-    // Enable drag recalculate
-    calculable: true,
+function updateFunnelChart(data, moneyFormatter) {
+    // funnel chart
+    let funnel_ventas_inversiones_chart = echarts.init(
+        document.getElementById('funel_inversiones_ventas_chart')
+    );
+    let options_funnel_data = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/> {b} : {c}%',
+        },
+        toolbox: {},
 
-    // Add series
-    series: [
-        {
-            name: 'Pólizas',
-            type: 'pie',
-            center: ['30%', '50%'],
-            radius: ['35%', '70%'],
-            // center: ['50%', '57.5%'],
-            itemStyle: {
-                normal: {
-                    label: {
-                        show: true,
-                        position: 'inner',
-                        formatter: function (params) {
-                            return params.value + '\n';
-                        },
-                    },
-                    labelLine: {
-                        show: false,
-                    },
+        // Add custom colors
+        color: ['#FFBE2C', '#F68A52', '#FF6F61'],
+        series: [
+            {
+                name: moneyFormatter
+                    .format(data.spent_investment)
+                    .replace('.00', ''),
+                type: 'funnel',
+                top: '0',
+                left: '0%',
+                width: '100%',
+                maxSize: '100%',
+                label: {
+                    position: 'inside',
+                    formatter: '{c}%',
+                    color: '#000',
+                    labelFontWeight: 'bold',
+                    fontWeight: 'bold',
+                },
+                itemStyle: {
+                    opacity: 1,
+                    borderWidth: 2,
                 },
                 emphasis: {
                     label: {
-                        show: true,
-                        formatter: '{b}' + '\n\n' + '{c} ({d}%)',
-                        position: 'center',
-                        textStyle: {
-                            fontSize: '17',
-                            fontWeight: '500',
+                        position: 'inside',
+                        formatter: '{b}: {c}%',
+                    },
+                },
+                data: [
+                    { value: 100, name: 'Inversion total' },
+                    { value: data.sales_percentage, name: 'Total ventas' },
+                    { value: data.collection_percentage, name: 'Total cobros' },
+                ],
+                // Ensure outer shape will not be over inner shape when hover.
+                z: 100,
+            },
+        ],
+    };
+
+    funnel_ventas_inversiones_chart.setOption(options_funnel_data);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        funnel_ventas_inversiones_chart.resize();
+    });
+}
+
+function updateSalesConcentrate(data) {
+    // Doughnut chart concentrado de ventas
+    let basicdoughnut_concentrado_ventas = echarts.init(
+        document.getElementById('premium_resumen_concentrado_ventas_chart')
+    );
+    let options = {
+        // Add title
+        title: {
+            text: 'Concentrado de ventas',
+            subtext: 'Emisiones / Cobro',
+            x: '',
+        },
+
+        // Add legend
+        legend: {
+            orient: 'vertical',
+            x: 'right',
+            top: '40%',
+            data: ['Emitidas', 'Cobradas'],
+            right: '15%',
+        },
+
+        // Add custom colors
+        color: ['#f36f63', '#555'],
+
+        // Display toolbox
+        toolbox: {
+            show: true,
+            orient: 'vertical',
+            feature: {
+                mark: {
+                    show: true,
+                    title: {
+                        mark: 'Markline switch',
+                        markUndo: 'Undo markline',
+                        markClear: 'Clear markline',
+                    },
+                },
+                dataView: {
+                    show: false,
+                    readOnly: false,
+                    title: 'View data',
+                    lang: ['View chart data', 'Close', 'Update'],
+                },
+                magicType: {
+                    show: true,
+                    title: {
+                        pie: 'Switch to pies',
+                        funnel: 'Switch to funnel',
+                    },
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            y: '20%',
+                            width: '50%',
+                            height: '70%',
+                            funnelAlign: 'left',
+                            max: 1548,
                         },
                     },
                 },
+                restore: {
+                    show: false,
+                    title: 'Restore',
+                },
+                saveAsImage: {
+                    show: false,
+                    title: 'Save as image',
+                    lang: ['Save'],
+                },
             },
-
-            data: [
-                {
-                    value: 435,
-                    name: 'Emitidas',
-                },
-                {
-                    value: 310,
-                    name: 'Cobradas',
-                },
-            ],
         },
-    ],
-};
 
-basicdoughnut_concentrado_ventas.setOption(options);
+        // Enable drag recalculate
+        calculable: true,
+
+        // Add series
+        series: [
+            {
+                name: 'Pólizas',
+                type: 'pie',
+                center: ['30%', '50%'],
+                radius: ['35%', '70%'],
+                // center: ['50%', '57.5%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            position: 'inner',
+                            formatter: function (params) {
+                                return params.value + '\n';
+                            },
+                        },
+                        labelLine: {
+                            show: false,
+                        },
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            formatter: '{b}' + '\n\n' + '{c} ({d}%)',
+                            position: 'center',
+                            textStyle: {
+                                fontSize: '17',
+                                fontWeight: '500',
+                            },
+                        },
+                    },
+                },
+
+                data: [
+                    {
+                        value: data.sales_total,
+                        name: 'Emitidas',
+                    },
+                    {
+                        value: data.collected_total,
+                        name: 'Cobradas',
+                    },
+                ],
+            },
+        ],
+    };
+
+    basicdoughnut_concentrado_ventas.setOption(options);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        basicdoughnut_concentrado_ventas.resize();
+    });
+}
 
 // $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
 //     event.target; // newly activated tab
@@ -848,57 +992,6 @@ $('#marketing-campaign-1-tab').on('shown.bs.tab', function (event) {
     event.relatedTarget; // previous active tab
     rendimiento_mixed_chart.resize();
 });
-
-// funnel chart
-let funnel_ventas_inversiones_chart = echarts.init(
-    document.getElementById('funel_inversiones_ventas_chart')
-);
-let options_funnel_data = {
-    tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/> {b} : {c}%',
-    },
-    toolbox: {},
-
-    // Add custom colors
-    color: ['#FFBE2C', '#F68A52', '#FF6F61'],
-    series: [
-        {
-            name: '$340,000',
-            type: 'funnel',
-            top: '0',
-            left: '0%',
-            width: '100%',
-            maxSize: '100%',
-            label: {
-                position: 'inside',
-                formatter: '{c}%',
-                color: '#000',
-                labelFontWeight: 'bold',
-                fontWeight: 'bold',
-            },
-            itemStyle: {
-                opacity: 1,
-                borderWidth: 2,
-            },
-            emphasis: {
-                label: {
-                    position: 'inside',
-                    formatter: '{b}: {c}%',
-                },
-            },
-            data: [
-                { value: 100, name: 'Inversion total' },
-                { value: 20.73, name: 'Total ventas' },
-                { value: 16.66, name: 'Total cobros' },
-            ],
-            // Ensure outer shape will not be over inner shape when hover.
-            z: 100,
-        },
-    ],
-};
-
-funnel_ventas_inversiones_chart.setOption(options_funnel_data);
 
 // ****Resize fuction***
 window.addEventListener('resize', function () {

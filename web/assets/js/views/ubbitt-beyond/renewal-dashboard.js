@@ -386,121 +386,124 @@ function addAllManagement(kpis) {
 function updateManagementSummaryKpis(kpis, moneyFormatter) {
     $('#delivered-base').text(kpis.delivered_base);
     $('#delivered-base-accepted').html(
-        kpis.delivered_base_accepted +
-            ' / <span>' +
-            kpis.delivered_base_accepted_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.delivered_base_accepted //+
+        // ' / <span>' +
+        // kpis.delivered_base_accepted_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#delivered-base-rejected').html(
-        kpis.delivered_base_rejected +
-            ' / <span>' +
-            kpis.delivered_base_rejected_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.delivered_base_rejected //+
+        // ' / <span>' +
+        // kpis.delivered_base_rejected_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#first-management').html(
-        kpis.first_management +
-            ' / <span>' +
-            kpis.first_management_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.first_management //+
+        // ' / <span>' +
+        // kpis.first_management_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#first-management-effective-registries').html(
         kpis.first_management_effective_registries +
-            ' / <span>' +
-            kpis.first_management_percentage.replace('.00', '') +
-            '%</span><span class="mini_price"> (' +
+            // ' / <span>' +
+            // kpis.first_management_percentage.replace('.00', '') +
+            // '%</span>' +
+            '<span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.first_management_effective_registries_amount)
                 .replace('.00', '') +
             ')</span>'
     );
     $('#first-management-on-track-registries').html(
-        kpis.first_management_on_track_registries +
-            ' / <span>' +
-            kpis.first_management_on_track_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.first_management_on_track_registries //+
+        // ' / <span>' +
+        // kpis.first_management_on_track_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#first-management-out-of-management-registries').html(
-        kpis.first_management_out_of_management_registries +
-            ' / <span>' +
-            kpis.first_management_out_of_management_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.first_management_out_of_management_registries //+
+        // ' / <span>' +
+        // kpis.first_management_out_of_management_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#second-management').html(
-        kpis.second_management +
-            ' / <span>' +
-            kpis.second_management_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.second_management //+
+        // ' / <span>' +
+        // kpis.second_management_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#second-management-effective-registries').html(
         kpis.second_management_effective_registries +
-            ' / <span>' +
-            kpis.second_management_effective_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span><span class="mini_price"> (' +
+            // ' / <span>' +
+            // kpis.second_management_effective_registries_percentage.replace(
+            //     '.00',
+            //     ''
+            // ) +
+            // '%</span>' +
+            '<span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.second_management_effective_registries_amount)
                 .replace('.00', '') +
             ')</span>'
     );
     $('#second-management-on-track-registries').html(
-        kpis.second_management_on_track_registries +
-            ' / <span>' +
-            kpis.second_management_on_track_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.second_management_on_track_registries //+
+        // ' / <span>' +
+        // kpis.second_management_on_track_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#second-management-out-of-management-registries').html(
-        kpis.second_management_out_of_management_registries +
-            ' / <span>' +
-            kpis.second_management_out_of_management_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.second_management_out_of_management_registries //+
+        // ' / <span>' +
+        // kpis.second_management_out_of_management_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#third-management').html(
-        kpis.third_management +
-            ' / <span>' +
-            kpis.third_management_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.third_management //+
+        // ' / <span>' +
+        // kpis.third_management_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#third-management-effective-registries').html(
         kpis.third_management_effective_registries +
-            ' / <span>' +
-            kpis.third_management_percentage.replace('.00', '') +
-            '%</span><span class="mini_price"> (' +
+            // ' / <span>' +
+            // kpis.third_management_percentage.replace('.00', '') +
+            // '%</span>' +
+            '<span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.third_management_effective_registries_amount)
                 .replace('.00', '') +
             ')</span>'
     );
     $('#third-management-on-track-registries').html(
-        kpis.third_management_on_track_registries +
-            ' / <span>' +
-            kpis.third_management_on_track_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.third_management_on_track_registries //+
+        // ' / <span>' +
+        // kpis.third_management_on_track_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#third-management-out-of-management-registries').html(
-        kpis.third_management_out_of_management_registries +
-            ' / <span>' +
-            kpis.third_management_out_of_management_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.third_management_out_of_management_registries //+
+        // ' / <span>' +
+        // kpis.third_management_out_of_management_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
 }
 
@@ -521,13 +524,13 @@ function updateTotalKpis(kpis, moneyFormatter) {
 function updateKpisByManagement() {
     let kpisPrefix = $('#management-selector').val();
     $('#by-management-effective-registries').html(
-        savedKpis[kpisPrefix + 'effective_registries'] +
-            ' / <span>' +
-            savedKpis[kpisPrefix + 'effective_registries_percentage'].replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        savedKpis[kpisPrefix + 'effective_registries'] //+
+        // ' / <span>' +
+        // savedKpis[kpisPrefix + 'effective_registries_percentage'].replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#by-management-effective-registries-payment-promise-scheduled').text(
         savedKpis[kpisPrefix + 'effective_registries_payment_promise_scheduled']
@@ -588,13 +591,13 @@ function updateKpisByManagement() {
     );
     /** ON TRACK **/
     $('#by-management-on-track-registries').html(
-        savedKpis[kpisPrefix + 'on_track_registries'] +
-            ' / <span>' +
-            savedKpis[kpisPrefix + 'on_track_registries_percentage'].replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        savedKpis[kpisPrefix + 'on_track_registries'] //+
+        // ' / <span>' +
+        // savedKpis[kpisPrefix + 'on_track_registries_percentage'].replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#by-management-on-track-registries-call-scheduled').text(
         savedKpis[kpisPrefix + 'on_track_registries_call_scheduled']
@@ -628,12 +631,12 @@ function updateKpisByManagement() {
     );
     /** OUT OF MANAGEMENT **/
     $('#by-management-out-of-management-registries').html(
-        savedKpis[kpisPrefix + 'out_of_management_registries'] +
-            ' / <span>' +
-            savedKpis[
-                kpisPrefix + 'out_of_management_registries_percentage'
-            ].replace('.00', '') +
-            '%</span>'
+        savedKpis[kpisPrefix + 'out_of_management_registries'] //+
+        // ' / <span>' +
+        // savedKpis[
+        //     kpisPrefix + 'out_of_management_registries_percentage'
+        // ].replace('.00', '') +
+        // '%</span>'
     );
     $('#by-management-out-of-management-registries-wrong-number').text(
         savedKpis[kpisPrefix + 'out_of_management_registries_wrong_number']

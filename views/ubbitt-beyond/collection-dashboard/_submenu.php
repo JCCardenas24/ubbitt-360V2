@@ -11,9 +11,13 @@
         <a class="nav-link" id="beyond-cobranza-reportes-tab" data-toggle="pill" href="#beyond-cobranza-reportes"
             role="tab" aria-controls="beyond-cobranza-reportes" aria-selected="false">Reportes</a>
     </li>
+    <?php
+    if (in_array('menu_ubbitt_beyond_collection_database_upload', Yii::$app->session->get("userPermissions"))) {
+    ?>
     <li class="nav-item" role="presentation">
         <a class="nav-link" id="beyond-cobranza-carga-base-datos-tab" data-toggle="pill"
             href="#beyond-cobranza-carga-base-datos" role="tab" aria-controls="beyond-cobranza-carga-base-datos"
             aria-selected="false">Carga de base de datos</a>
     </li>
+    <?php } ?>
 </ul>

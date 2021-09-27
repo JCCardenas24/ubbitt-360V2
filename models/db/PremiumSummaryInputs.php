@@ -2,6 +2,7 @@
 
 namespace app\models\db;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -90,9 +91,33 @@ class PremiumSummaryInputs extends ActiveRecord
 
     public function findByDates($campaignId, $startDate, $endDate)
     {
-        return self::find()
-            ->where(['between', 'date', $startDate, $endDate])
-            ->andWhere(['campaign_id' => $campaignId])
-            ->all();
+        return Yii::$app->db->createCommand('
+                SELECT
+                    COALESCE(SUM(spent_budget), 0) AS spent_budget,
+                    COALESCE(SUM(roi), 0) AS roi,
+                    COALESCE(CAST(AVG(roi_percentage) AS DECIMAL(5,2)), 0) AS roi_percentage,
+                    COALESCE(SUM(cpl), 0) AS cpl,
+                    COALESCE(SUM(cpa), 0) AS cpa,
+                    COALESCE(CAST(AVG(cpa_percentage) AS DECIMAL(5,2)), 0) AS cpa_percentage,
+                    COALESCE(SUM(leads), 0) AS leads,
+                    COALESCE(SUM(calls_total), 0) AS calls_total,
+                    COALESCE(SUM(sales_total), 0) AS sales_total,
+                    COALESCE(CAST(AVG(conversion_percentage) AS DECIMAL(5,2)), 0) AS conversion_percentage,
+                    COALESCE(SUM(collected_total), 0) AS collected_total,
+                    COALESCE(CAST(AVG(collected_percentage) AS DECIMAL(5,2)), 0) AS collected_percentage,
+                    COALESCE(SUM(spent_investment), 0) AS spent_investment,
+                    COALESCE(SUM(sales_total_amount), 0) AS sales_total_amount,
+                    COALESCE(CAST(AVG(sales_percentage) AS DECIMAL(5,2)), 0) AS sales_percentage,
+                    COALESCE(SUM(collected_total_amount), 0) AS collected_total_amount,
+                    COALESCE(CAST(AVG(collection_percentage) AS DECIMAL(5,2)), 0) AS collection_percentage,
+                    COALESCE(SUM(total_emitted_sales), 0) AS total_emitted_sales,
+                    COALESCE(SUM(total_paid_sales), 0) AS total_paid_sales
+                FROM premium_summary_inputs
+                WHERE date BETWEEN :startDate AND :endDate
+                    AND campaign_id = :campaignId', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'campaignId' => $campaignId
+        ])->queryOne();
     }
 }
