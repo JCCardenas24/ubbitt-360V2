@@ -26,7 +26,7 @@ class AppAsset extends AssetBundle
         'assets/icons/font-awesome/css/font-awesome.css',
         'assets/css/crm-styles.css',
         'assets/libs/datatables/datatables.min.css',
-        'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css',
+        'assets/css/daterangepicker/daterangepicker.css',
         'https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css',
         'assets/css/main.min.css',
     ];
@@ -39,15 +39,15 @@ class AppAsset extends AssetBundle
         'assets/js/template.js',
         'assets/js/demo.js',
         'assets/js/pages/dashboard.js',
-        'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
-        'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js',
+        'assets/js/moment/moment.min.js',
+        'assets/js/daterangepicker/daterangepicker.min.js',
         'assets/js/tables.js',
         'assets/js/general.js',
         'assets/js/common/pagination.js',
         'assets/js/common/file.js',
         'assets/js/common/preloader.js',
-        'https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js',
-        'https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js',
+        'assets/js/datatables/jquery.dataTables-v1.10.11.min.js',
+        'assets/js/datatables/dataTables.fixedColumns-v3.2.1.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
