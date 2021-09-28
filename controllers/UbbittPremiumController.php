@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\db\PremiumCampaignForecast;
+use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumMediaData;
@@ -27,7 +28,11 @@ class UbbittPremiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data', 'find-summary-inputs-data', 'find-marketing-general-data', 'find-marketing-media-data'],
+                        'actions' => [
+                            'dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
+                            'find-summary-inputs-data', 'find-marketing-general-data',
+                            'find-marketing-media-data', 'find-marketing-daily-performance-data'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -42,7 +47,7 @@ class UbbittPremiumController extends Controller
                     'find-leads-calls-graph-data' => ['post'],
                     'find-summary-inputs-data' => ['post'],
                     'find-marketing-general-data' => ['post'],
-                    'find-marketing-media-data' => ['post'],
+                    'find-marketing-daily-performance-data' => ['post'],
                 ],
             ],
         ];
@@ -128,6 +133,16 @@ class UbbittPremiumController extends Controller
         $searchParams = new SearchByDateCampaignForm();
         $searchParams->load(Yii::$app->request->post());
         $model = new PremiumMediaData();
+        $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
+    }
+
+    public function actionFindMarketingDailyPerformanceData()
+    {
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new PremiumDailyPerformance();
         $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;

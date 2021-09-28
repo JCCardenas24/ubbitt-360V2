@@ -687,7 +687,8 @@ function marketingGeneralCallback(start, end) {
         maximumFractionDigits: 0,
     });
     findMarketingGeneralData(start, end, moneyFormatter);
-    findMarketingMediaData(start, end, moneyFormatter);
+    findMarketingMediaData(start, end);
+    findMarketingDailyPerformanceData(start, end);
 }
 
 function findMarketingGeneralData(start, end, moneyFormatter) {
@@ -812,7 +813,7 @@ function updateProgressBar(id, value) {
     $('#' + id).prop('aria-valuenow', value.replace('.00', ''));
 }
 
-function findMarketingMediaData(start, end, moneyFormatter) {
+function findMarketingMediaData(start, end) {
     $.ajax({
         url: '/ubbitt-premium/find-marketing-media-data',
         type: 'POST',
@@ -887,6 +888,130 @@ function getClassName(mediaName) {
             break;
     }
     return className;
+}
+
+function findMarketingDailyPerformanceData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-daily-performance-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            updateDailyPerformanceDataGraph(data);
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del rendimiento diario de Marketing'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
+
+function updateDailyPerformanceDataGraph(data) {
+    // Rendimiento chart
+    let rendimiento_mixed_chart = echarts.init(
+        document.getElementById('redimiento_diario_chart_wrapper')
+    );
+    let options_redimiento_data = {
+        title: {
+            text: 'Rendimiento diario',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                crossStyle: {
+                    color: '#999',
+                },
+            },
+        },
+        toolbox: {},
+        legend: {
+            data: ['Inversión campaña', 'Leads', 'Ventas'],
+            x: 'right',
+            top: '0%',
+            right: '0%',
+        },
+        // Add custom colors
+        color: ['#ffd800', '#ff6f61', '#32d926'],
+        xAxis: [
+            {
+                type: 'category',
+                data: data.map((row) => row.date),
+                axisPointer: {
+                    type: 'shadow',
+                },
+            },
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: 'Rendimiento',
+                min: 0,
+                max:
+                    Math.max.apply(
+                        Math,
+                        data.map(function (row) {
+                            return row.investment;
+                        })
+                    ) + 100,
+                interval: 100,
+                // axisLabel: {
+                //     formatter: '{value} ml'
+                // }
+            },
+            {
+                type: 'value',
+                name: 'Ventas',
+                min: 0,
+                max:
+                    Math.max.apply(
+                        Math,
+                        data.map(function (row) {
+                            return row.sales;
+                        })
+                    ) + 50,
+                interval: 100,
+                // axisLabel: {
+                //     formatter: '{value} °C'
+                // }
+            },
+        ],
+        series: [
+            {
+                name: 'Inversión campaña',
+                type: 'bar',
+                data: data.map((row) => row.investment),
+            },
+            {
+                name: 'Leads',
+                type: 'line',
+                data: data.map((row) => row.leads),
+            },
+            {
+                name: 'Ventas',
+                type: 'line',
+                yAxisIndex: 1,
+                data: data.map((row) => row.sales),
+            },
+        ],
+    };
+
+    rendimiento_mixed_chart.setOption(options_redimiento_data);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        rendimiento_mixed_chart.resize();
+    });
+    window.addEventListener('resize', function () {
+        rendimiento_mixed_chart.resize();
+    });
 }
 
 // $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
@@ -1144,124 +1269,3 @@ let options_horarios = {
 };
 
 horarios_double_bar.setOption(options_horarios);
-
-$('#premium-marketing-campaign-1-segmento-tab').on(
-    'shown.bs.tab',
-    function (event) {
-        event.target; // newly activated tab
-        event.relatedTarget; // previous active tab
-        horizontal_double_bar.resize();
-        horizontal_region_bar.resize();
-        horizontal_top_7_leads.resize();
-        horizontal_top_5_leads.resize();
-        horarios_double_bar.resize();
-    }
-);
-
-// Rendimiento chart
-let rendimiento_mixed_chart = echarts.init(
-    document.getElementById('redimiento_diario_chart_wrapper')
-);
-let options_redimiento_data = {
-    title: {
-        text: 'Rendimiento diario',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            crossStyle: {
-                color: '#999',
-            },
-        },
-    },
-    toolbox: {},
-    legend: {
-        data: ['Inversión campaña', 'Leads', 'Ventas'],
-        x: 'right',
-        top: '0%',
-        right: '0%',
-    },
-    // Add custom colors
-    color: ['#ffd800', '#ff6f61', '#32d926'],
-    xAxis: [
-        {
-            type: 'category',
-            data: [
-                'Día 1',
-                'Día 2',
-                'Día 3',
-                'Día 4',
-                'Día 5',
-                'Día 6',
-                'Día 7',
-            ],
-            axisPointer: {
-                type: 'shadow',
-            },
-        },
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: 'Rendimiento',
-            min: 0,
-            max: 250,
-            interval: 50,
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // }
-        },
-        {
-            type: 'value',
-            name: 'Ventas',
-            min: 0,
-            max: 25,
-            interval: 5,
-            // axisLabel: {
-            //     formatter: '{value} °C'
-            // }
-        },
-    ],
-    series: [
-        {
-            name: 'Inversión campaña',
-            type: 'bar',
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
-        },
-        {
-            name: 'Leads',
-            type: 'line',
-            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6],
-        },
-        {
-            name: 'Ventas',
-            type: 'line',
-            yAxisIndex: 1,
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3],
-        },
-    ],
-};
-
-rendimiento_mixed_chart.setOption(options_redimiento_data);
-
-$('#marketing-campaign-1-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    rendimiento_mixed_chart.resize();
-});
-
-// ****Resize fuction***
-window.addEventListener('resize', function () {
-    stackedChart.resize();
-    stackedChart2.resize();
-    basicdoughnut_concentrado_ventas.resize();
-    horizontal_double_bar.resize();
-    horizontal_region_bar.resize();
-    horizontal_top_7_leads.resize();
-    horizontal_top_5_leads.resize();
-    horarios_double_bar.resize();
-    rendimiento_mixed_chart.resize();
-    funnel_ventas_inversiones_chart.resize();
-    stackedChartForecast.resize();
-});
