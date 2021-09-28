@@ -956,13 +956,13 @@ function updateDailyPerformanceDataGraph(data) {
                 type: 'value',
                 name: 'Rendimiento',
                 min: 0,
-                max:
-                    Math.max.apply(
-                        Math,
-                        data.map(function (row) {
-                            return row.investment;
-                        })
-                    ) + 100,
+                // max:
+                //     Math.max.apply(
+                //         Math,
+                //         data.map(function (row) {
+                //             return row.investment;
+                //         })
+                //     ) + 100,
                 interval: 100,
                 // axisLabel: {
                 //     formatter: '{value} ml'
@@ -972,13 +972,13 @@ function updateDailyPerformanceDataGraph(data) {
                 type: 'value',
                 name: 'Ventas',
                 min: 0,
-                max:
-                    Math.max.apply(
-                        Math,
-                        data.map(function (row) {
-                            return row.sales;
-                        })
-                    ) + 50,
+                // max:
+                //     Math.max.apply(
+                //         Math,
+                //         data.map(function (row) {
+                //             return row.sales;
+                //         })
+                //     ) + 50,
                 interval: 100,
                 // axisLabel: {
                 //     formatter: '{value} °C'
