@@ -26,7 +26,7 @@ use yii\helpers\Url;
                         </a>
                     </li>
                     <li>
-                        <span id="encabezado" class="encabezado_ttl"><b>Mapfre</b> | Área</span>
+                        <span id="encabezado" class="encabezado_ttl"><b>Mapfre</b><!-- | Área --></span>
                     </li>
                 </ul>
             </div>
