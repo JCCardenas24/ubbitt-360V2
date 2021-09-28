@@ -6,6 +6,7 @@ use app\exception\UploadBusinessException;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumMarketingInputs;
+use app\models\db\PremiumMediaData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
 use Exception;
@@ -29,6 +30,7 @@ class UploadPremiumReportBusiness
         $this->saveLeadsCallsGraphData($campaignId, $spreadsheet);
         $this->saveSummaryInputs($campaignId, $spreadsheet);
         $this->saveMarketingInputs($campaignId, $spreadsheet);
+        $this->saveMarketingMediaData($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -246,6 +248,42 @@ class UploadPremiumReportBusiness
             if (!$data->save()) {
                 $transaction->rollback();
                 throw new UploadBusinessException('Marketing inputs - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveMarketingMediaData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Tabla medios');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Tabla medios" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumMediaData::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $data = new PremiumMediaData();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $data->media = $sheet->getCell("B$currentRowIndex")->getValue();
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $data->impressions = $sheet->getCell("C$currentRowIndex")->getValue();
+            $data->clicks = $sheet->getCell("D$currentRowIndex")->getValue();
+            $data->visits = $sheet->getCell("E$currentRowIndex")->getValue();
+            $data->leads = $sheet->getCell("F$currentRowIndex")->getValue();
+            $data->contacted = $sheet->getCell("G$currentRowIndex")->getValue();
+            $data->sales = $sheet->getCell("H$currentRowIndex")->getValue();
+            if (!$data->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Tabla medios - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
         $transaction->commit();
