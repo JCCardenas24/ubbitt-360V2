@@ -4,6 +4,7 @@ namespace app\business;
 
 use app\exception\UploadBusinessException;
 use app\models\db\PremiumCampaignForecast;
+use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumMediaData;
@@ -31,6 +32,7 @@ class UploadPremiumReportBusiness
         $this->saveSummaryInputs($campaignId, $spreadsheet);
         $this->saveMarketingInputs($campaignId, $spreadsheet);
         $this->saveMarketingMediaData($campaignId, $spreadsheet);
+        $this->saveMarketingDailyPerformance($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -284,6 +286,43 @@ class UploadPremiumReportBusiness
             if (!$data->save()) {
                 $transaction->rollback();
                 throw new UploadBusinessException('Tabla medios - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveMarketingDailyPerformance($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Gráfica Marketing');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Gráfica Marketing" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $transaction = PremiumDailyPerformance::getDb()->beginTransaction();
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+            $data = new PremiumDailyPerformance();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCellByColumnAndRow($currentColumnIndex, 2)->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $uploadDate = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getValue();
+            $uploadDate = Date::excelToDateTimeObject($uploadDate);
+            $data->uploadDate = $uploadDate->format('Y-m-d');
+            $data->investment = $sheet->getCellByColumnAndRow($currentColumnIndex, 3)->getValue();
+            $data->leads = $sheet->getCellByColumnAndRow($currentColumnIndex, 4)->getValue();
+            $data->sales = $sheet->getCellByColumnAndRow($currentColumnIndex, 5)->getValue();
+
+            if (!$data->save()) {
+                $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
+                $transaction->rollback();
+                throw new UploadBusinessException('Gráfica Marketing - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
         $transaction->commit();
