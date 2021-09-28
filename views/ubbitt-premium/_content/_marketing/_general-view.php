@@ -2,13 +2,13 @@
     <div class="d-flex justify-content-end ">
         <div class=" d-flex justify-content-between">
             <div class="form-group wid-100 d-flex m-0">
-                <div id="reportrange_clientes" class="range-pick mr-5">
+                <div id="premium-marketing-general-date-range" class="range-pick mr-5">
                     <i class="fa fa-calendar"></i>&nbsp;
-                    <span>agosto 29, 2021 - septiembre 2, 2021</span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                    <span class="text-date"></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                 </div>
             </div>
         </div>
-        <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a>
+        <!-- <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a> -->
     </div>
 </div>
 
@@ -16,34 +16,34 @@
     <div class="col p-0 d-fjcc br">
         <div class="card_info ">
             <p>Presupuesto</p>
-            <h5>$50,000</h5>
+            <h5 id="marketing-budget">$0</h5>
         </div>
     </div>
     <div class="col p-0 d-fjcc br">
         <div class="card_info ">
             <p>Presupuesto gastado</p>
-            <h5>$821.67</h5>
+            <h5 id="marketing-spent-budget">$0</h5>
         </div>
     </div>
     <div class="col p-0 d-fjcc br">
         <div class="card_info pink_bg">
 
             <p>% presupuesto gastado</p>
-            <h5>1.64%</h5>
+            <h5 id="marketing-spent-budget-percentage">0%</h5>
 
         </div>
     </div>
     <div class="col p-0 d-fjcc br">
         <div class="card_info">
             <p>Presupuesto disponible</p>
-            <h5>$49,179</h5>
+            <h5 id="marketing-available-budget">$0</h5>
         </div>
     </div>
     <div class="col p-0 d-fjcc">
         <div class="card_info pink_bg">
 
             <p>% Presupuesto disponible</p>
-            <h5>92%</h5>
+            <h5 id="marketing-available-budget-percentage">0%</h5>
 
         </div>
     </div>
@@ -56,7 +56,7 @@
                 <div>
                     <p>CTR
                     <p>
-                    <h1>30.2%</h1>
+                    <h1 id="marketing-ctr">0%</h1>
                 </div>
             </div>
             <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
@@ -66,7 +66,7 @@
                 <div>
                     <p>Rebote
                     <p>
-                    <h1>30.2%</h1>
+                    <h1 id="marketing-rebound">0%</h1>
                 </div>
             </div>
             <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
@@ -76,7 +76,7 @@
                 <div>
                     <p>Conversión
                     <p>
-                    <h1>30.2%</h1>
+                    <h1 id="marketing-visits-conversion">0%</h1>
                 </div>
             </div>
             <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
@@ -86,7 +86,7 @@
                 <div>
                     <p>Conversión
                     <p>
-                    <h1>30.2%</h1>
+                    <h1 id="marketing-leads-conversion">0%</h1>
                 </div>
             </div>
             <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
@@ -96,7 +96,7 @@
                 <div>
                     <p>Conversión
                     <p>
-                    <h1>30.2%</h1>
+                    <h1 id="marketing-contacting-conversion">0%</h1>
                 </div>
             </div>
             <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
@@ -108,7 +108,7 @@
             <div class="card_yellow">
                 <div>
                     <p>Impresiones</p>
-                    <h1>30000</h1>
+                    <h1 id="marketing-impressions">0</h1>
                 </div>
             </div>
             <span class="mini_triangle_yellow"></span>
@@ -117,7 +117,7 @@
             <div class="card_gray">
                 <div>
                     <p>Clics</p>
-                    <h1>3000</h1>
+                    <h1 id="marketing-clicks">0</h1>
                 </div>
             </div>
             <span class="mini_triangle_gray"></span>
@@ -126,7 +126,7 @@
             <div class="card_gray">
                 <div>
                     <p>Visitas</p>
-                    <h1>3000</h1>
+                    <h1 id="marketing-visits">0</h1>
                 </div>
             </div>
             <span class="mini_triangle_gray"></span>
@@ -135,7 +135,7 @@
             <div class="card_gray">
                 <div>
                     <p>Leads</p>
-                    <h1>90.71%</h1>
+                    <h1 id="marketing-leads">0</h1>
                 </div>
             </div>
             <span class="mini_triangle_gray"></span>
@@ -144,7 +144,7 @@
             <div class="card_gray">
                 <div>
                     <p>Contactación</p>
-                    <h1>640</h1>
+                    <h1 id="marketing-contacting">0</h1>
                 </div>
             </div>
             <span class="mini_triangle_gray"></span>
@@ -153,7 +153,7 @@
             <div class="card_orange">
                 <div>
                     <p>Ventas</p>
-                    <h1>50</h1>
+                    <h1 id="marketing-sales">0</h1>
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
             <div class="card_bottom bottom_card_yellow">
                 <div>
                     <p>CPM</p>
-                    <h1>$10</h1>
+                    <h1 id="marketing-cpm">$0</h1>
                 </div>
             </div>
         </div>
@@ -172,7 +172,7 @@
             <div class="card_bottom bottom_card_gray">
                 <div>
                     <p>CPC</p>
-                    <h1>$12</h1>
+                    <h1 id="marketing-cpc">$0</h1>
                 </div>
             </div>
         </div>
@@ -180,7 +180,7 @@
             <div class="card_bottom bottom_card_gray">
                 <div>
                     <p>CP Vista</p>
-                    <h1>$16</h1>
+                    <h1 id="marketing-cp-visit">$0</h1>
                 </div>
             </div>
         </div>
@@ -188,7 +188,7 @@
             <div class="card_bottom bottom_card_gray">
                 <div>
                     <p>CPL</p>
-                    <h1>$120</h1>
+                    <h1 id="marketing-cpl">$0</h1>
                 </div>
             </div>
         </div>
@@ -196,7 +196,7 @@
             <div class="card_bottom bottom_card_gray">
                 <div>
                     <p>CPL Contactados</p>
-                    <h1>$130</h1>
+                    <h1 id="marketing-cpl-contacted">$0</h1>
                 </div>
             </div>
         </div>
@@ -204,7 +204,7 @@
             <div class="card_bottom bottom_card_orange">
                 <div>
                     <p>Costo por venta</p>
-                    <h1>$1,000</h1>
+                    <h1 id="marketing-sale-cost">$0</h1>
                 </div>
             </div>
         </div>
@@ -291,22 +291,22 @@
     </div>
     <div class="col-5 pr-0">
         <div class="card_roa">
-            <h1>ROA | 200%</h1>
+            <h1>ROA | <span id="marketing-roa">0%</span></h1>
             <div class="wrapper_bars">
-                <p>Ventas | <span>$600</span></p>
+                <p>Ventas | <span id="marketing-sales-amount">$0</span></p>
                 <div class="progress">
-                    <div class="progress-bar bg_green" role="progressbar" style="width: 35%" aria-valuenow="35"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="marketing-sales-bar" class="progress-bar bg_green" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <p>Gasto | <span>$300</span></p>
+                <p>Gasto | <span id="marketing-expenses">$0</span></p>
                 <div class="progress">
-                    <div class="progress-bar bg_orange" role="progressbar" style="width: 50%" aria-valuenow="50"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="marketing-expenses-bar" class="progress-bar bg_orange" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <p>Inversión | <span>$300</span></p>
+                <p>Inversión | <span id="marketing-investment">$0</span></p>
                 <div class="progress">
-                    <div class="progress-bar bg_yellow" role="progressbar" style="width: 75%" aria-valuenow="75"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="marketing-investment-bar" class="progress-bar bg_yellow" role="progressbar"
+                        style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
         </div>

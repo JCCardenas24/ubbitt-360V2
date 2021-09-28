@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumLeadsCallsGraph;
+use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
 use app\models\forms\SearchByDateCampaignForm;
@@ -25,7 +26,7 @@ class UbbittPremiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data', 'find-summary-inputs-data'],
+                        'actions' => ['dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data', 'find-summary-inputs-data', 'find-marketing-general-data'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -39,6 +40,7 @@ class UbbittPremiumController extends Controller
                     'find-summary-graph-data' => ['post'],
                     'find-leads-calls-graph-data' => ['post'],
                     'find-summary-inputs-data' => ['post'],
+                    'find-marketing-general-data' => ['post'],
                 ],
             ],
         ];
@@ -93,8 +95,8 @@ class UbbittPremiumController extends Controller
     {
         $searchParams = new SearchByDateCampaignForm();
         $searchParams->load(Yii::$app->request->post());
-        $summaryGraphModel = new PremiumLeadsCallsGraph();
-        $data = $summaryGraphModel->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $model = new PremiumLeadsCallsGraph();
+        $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
     }
@@ -103,8 +105,18 @@ class UbbittPremiumController extends Controller
     {
         $searchParams = new SearchByDateCampaignForm();
         $searchParams->load(Yii::$app->request->post());
-        $summaryGraphModel = new PremiumSummaryInputs();
-        $data = $summaryGraphModel->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $model = new PremiumSummaryInputs();
+        $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
+    }
+
+    public function actionFindMarketingGeneralData()
+    {
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new PremiumMarketingInputs();
+        $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
     }

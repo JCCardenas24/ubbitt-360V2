@@ -1,6 +1,7 @@
 let startDate = null;
 let endDate = null;
 let summaryGraphData = [];
+const urlSearchParams = new URLSearchParams(window.location.search);
 $(() => {
     startDate = moment().startOf('month');
     endDate = moment();
@@ -24,12 +25,23 @@ $(() => {
         summaryCallback
     );
     summaryCallback(startDate, endDate);
+    if ($('[id^=premium-marketing-campaign][id$=tab]').is(':visible')) {
+        marketingGeneralCallback(startDate, endDate);
+    }
     $('#pemp_yes').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
     $('#pemp_no').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
+});
+
+$('[id^=marketing-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    $('.range-pick#premium-marketing-general-date-range').daterangepicker(
+        dateRangePickerConfig,
+        marketingGeneralCallback
+    );
+    marketingGeneralCallback(startDate, endDate);
 });
 
 function summaryCallback(start, end) {
@@ -54,7 +66,7 @@ function findForecastData(start, end, moneyFormatter) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
@@ -98,7 +110,7 @@ function findSummaryGraphData(start, end, moneyFormatter) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
@@ -256,10 +268,10 @@ function updateSummaryGraphChart(data) {
 
         // Add custom colors
         color: [
-            '#F39C12',
+            '#ff6f61',
             '#16A085',
             '#2980B9',
-            '#F4D03F',
+            '#F39C12',
             '#1ABC9C',
             '#3498DB',
         ],
@@ -304,7 +316,7 @@ function findLeadsCallsGraphData(start, end) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
@@ -406,7 +418,7 @@ function findSummaryInputs(start, end, moneyFormatter) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
@@ -662,6 +674,135 @@ function updateSalesConcentrate(data) {
     $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
         basicdoughnut_concentrado_ventas.resize();
     });
+}
+
+function marketingGeneralCallback(start, end) {
+    $('.range-pick#premium-marketing-general-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    var moneyFormatter = new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+        maximumFractionDigits: 0,
+    });
+    findMarketingGeneralData(start, end, moneyFormatter);
+}
+
+function findMarketingGeneralData(start, end, moneyFormatter) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-general-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            $('#marketing-budget').text(
+                moneyFormatter.format(data.budget).replace('.00', '')
+            );
+            $('#marketing-spent-budget').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
+            $('#marketing-spent-budget-percentage').text(
+                data.spent_budget_percentage.replace('.00', '') + '%'
+            );
+            $('#marketing-available-budget').text(
+                moneyFormatter.format(data.available_budget).replace('.00', '')
+            );
+            $('#marketing-available-budget-percentage').text(
+                data.available_budget_percentage.replace('.00', '') + '%'
+            );
+            $('#marketing-impressions').text(data.impressions);
+            $('#marketing-ctr').text(data.ctr.replace('.00', '') + '%');
+            $('#marketing-clicks').text(data.clicks);
+            $('#marketing-rebound').text(data.rebound.replace('.00', '') + '%');
+            $('#marketing-visits').text(data.visits);
+            $('#marketing-visits-conversion').text(
+                data.visits_conversion.replace('.00', '') + '%'
+            );
+            $('#marketing-leads').text(data.leads);
+            $('#marketing-leads-conversion').text(
+                data.leads_conversion.replace('.00', '') + '%'
+            );
+            $('#marketing-contacting').text(data.contacting);
+            $('#marketing-contacting-conversion').text(
+                data.contacting_conversion.replace('.00', '') + '%'
+            );
+            $('#marketing-sales').text(data.sales);
+            $('#marketing-cpm').text(
+                moneyFormatter.format(data.cpm).replace('.00', '')
+            );
+            $('#marketing-cpc').text(
+                moneyFormatter.format(data.cpc).replace('.00', '')
+            );
+            $('#marketing-cp-visit').text(
+                moneyFormatter.format(data.cp_visit).replace('.00', '')
+            );
+            $('#marketing-cpl').text(
+                moneyFormatter.format(data.cpl).replace('.00', '')
+            );
+            $('#marketing-cpl-contacted').text(
+                moneyFormatter.format(data.cpl_contacted).replace('.00', '')
+            );
+            $('#marketing-sale-cost').text(
+                moneyFormatter.format(data.sale_cost).replace('.00', '')
+            );
+            $('#marketing-roa').text(data.roa.replace('.00', '') + '%');
+            $('#marketing-sales-amount').text(
+                moneyFormatter.format(data.sales_amount).replace('.00', '')
+            );
+            updateProgressBar(
+                'marketing-sales-bar',
+                (
+                    (parseFloat(data.sales_amount) * 100) /
+                    (parseFloat(data.sales_amount) +
+                        parseFloat(data.expenses) +
+                        parseFloat(data.investment))
+                ).toString()
+            );
+            $('#marketing-expenses').text(
+                moneyFormatter.format(data.expenses).replace('.00', '')
+            );
+            updateProgressBar(
+                'marketing-expenses-bar',
+                (
+                    (parseFloat(data.expenses) * 100) /
+                    (parseFloat(data.sales_amount) +
+                        parseFloat(data.expenses) +
+                        parseFloat(data.investment))
+                ).toString()
+            );
+            $('#marketing-investment').text(
+                moneyFormatter.format(data.investment).replace('.00', '')
+            );
+            updateProgressBar(
+                'marketing-investment-bar',
+                (
+                    (parseFloat(data.investment) * 100) /
+                    (parseFloat(data.sales_amount) +
+                        parseFloat(data.expenses) +
+                        parseFloat(data.investment))
+                ).toString()
+            );
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información general de Marketing'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
+
+function updateProgressBar(id, value) {
+    $('#' + id).prop('style', 'width: ' + value.replace('.00', '') + '%');
+    $('#' + id).prop('aria-valuenow', value.replace('.00', ''));
 }
 
 // $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {

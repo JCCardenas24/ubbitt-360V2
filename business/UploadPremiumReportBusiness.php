@@ -5,6 +5,7 @@ namespace app\business;
 use app\exception\UploadBusinessException;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumLeadsCallsGraph;
+use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
 use Exception;
@@ -27,6 +28,7 @@ class UploadPremiumReportBusiness
         $this->saveGraphData($campaignId, 'actual', 'Gráfica Premium Actual', $spreadsheet);
         $this->saveLeadsCallsGraphData($campaignId, $spreadsheet);
         $this->saveSummaryInputs($campaignId, $spreadsheet);
+        $this->saveMarketingInputs($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -189,6 +191,61 @@ class UploadPremiumReportBusiness
             if (!$data->save()) {
                 $transaction->rollback();
                 throw new UploadBusinessException('Resumen inputs - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveMarketingInputs($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Marketing inputs');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Marketing inputs" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumMarketingInputs::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $data = new PremiumMarketingInputs();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $data->budget = $sheet->getCell("B$currentRowIndex")->getValue();
+            $data->spent_budget = $sheet->getCell("C$currentRowIndex")->getValue();
+            $data->spent_budget_percentage = $sheet->getCell("D$currentRowIndex")->getValue() * 100;
+            $data->available_budget = $sheet->getCell("E$currentRowIndex")->getValue();
+            $data->available_budget_percentage = $sheet->getCell("F$currentRowIndex")->getValue() * 100;
+            $data->impressions = $sheet->getCell("G$currentRowIndex")->getValue();
+            $data->ctr = $sheet->getCell("H$currentRowIndex")->getValue() * 100;
+            $data->clicks = $sheet->getCell("I$currentRowIndex")->getValue();
+            $data->rebound = $sheet->getCell("J$currentRowIndex")->getValue() * 100;
+            $data->visits = $sheet->getCell("K$currentRowIndex")->getValue();
+            $data->visits_conversion = $sheet->getCell("L$currentRowIndex")->getValue() * 100;
+            $data->leads = $sheet->getCell("M$currentRowIndex")->getValue();
+            $data->leads_conversion = $sheet->getCell("N$currentRowIndex")->getValue() * 100;
+            $data->contacting = $sheet->getCell("O$currentRowIndex")->getValue();
+            $data->contacting_conversion = $sheet->getCell("P$currentRowIndex")->getValue() * 100;
+            $data->sales = $sheet->getCell("Q$currentRowIndex")->getValue();
+            $data->cpm = $sheet->getCell("R$currentRowIndex")->getValue();
+            $data->cpc = $sheet->getCell("S$currentRowIndex")->getValue();
+            $data->cp_visit = $sheet->getCell("T$currentRowIndex")->getValue();
+            $data->cpl = $sheet->getCell("U$currentRowIndex")->getValue();
+            $data->cpl_contacted = $sheet->getCell("V$currentRowIndex")->getValue();
+            $data->sale_cost = $sheet->getCell("W$currentRowIndex")->getValue();
+            $data->roa = $sheet->getCell("X$currentRowIndex")->getValue() * 100;
+            $data->sales_amount = $sheet->getCell("Y$currentRowIndex")->getValue();
+            $data->expenses = $sheet->getCell("Z$currentRowIndex")->getValue();
+            $data->investment = $sheet->getCell("AA$currentRowIndex")->getValue();
+            if (!$data->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Marketing inputs - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
         $transaction->commit();
