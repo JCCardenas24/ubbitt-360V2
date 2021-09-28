@@ -229,62 +229,7 @@
                         <th scope="col">Ventas</th>
                     </tr>
                 </thead>
-                <tbody class="table_wrapper scroller">
-                    <tr>
-                        <th scope="row"> <span class="fb">Facebook</span> </th>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>250</td>
-                        <td>200</td>
-                        <td>50</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><span class="google">Google</span></th>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>250</td>
-                        <td>200</td>
-                        <td>50</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><span class="progra">Programmatic</span></th>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>250</td>
-                        <td>200</td>
-                        <td>50</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><span class="bold">Ezmob</span></th>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>250</td>
-                        <td>200</td>
-                        <td>50</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><span class="bold">Otro</span></th>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>250</td>
-                        <td>200</td>
-                        <td>50</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><span class="bold">Otro</span></th>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>250</td>
-                        <td>200</td>
-                        <td>50</td>
-                        <td>20</td>
-                    </tr>
-
+                <tbody class="table_wrapper scroller" id="media-data">
                 </tbody>
             </table>
         </div>

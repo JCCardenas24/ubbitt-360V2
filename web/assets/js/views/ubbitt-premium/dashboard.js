@@ -687,6 +687,7 @@ function marketingGeneralCallback(start, end) {
         maximumFractionDigits: 0,
     });
     findMarketingGeneralData(start, end, moneyFormatter);
+    findMarketingMediaData(start, end, moneyFormatter);
 }
 
 function findMarketingGeneralData(start, end, moneyFormatter) {
@@ -761,7 +762,9 @@ function findMarketingGeneralData(start, end, moneyFormatter) {
                     (parseFloat(data.sales_amount) +
                         parseFloat(data.expenses) +
                         parseFloat(data.investment))
-                ).toString()
+                )
+                    .toFixed(2)
+                    .toString()
             );
             $('#marketing-expenses').text(
                 moneyFormatter.format(data.expenses).replace('.00', '')
@@ -773,7 +776,9 @@ function findMarketingGeneralData(start, end, moneyFormatter) {
                     (parseFloat(data.sales_amount) +
                         parseFloat(data.expenses) +
                         parseFloat(data.investment))
-                ).toString()
+                )
+                    .toFixed(2)
+                    .toString()
             );
             $('#marketing-investment').text(
                 moneyFormatter.format(data.investment).replace('.00', '')
@@ -785,7 +790,9 @@ function findMarketingGeneralData(start, end, moneyFormatter) {
                     (parseFloat(data.sales_amount) +
                         parseFloat(data.expenses) +
                         parseFloat(data.investment))
-                ).toString()
+                )
+                    .toFixed(2)
+                    .toString()
             );
         },
         error: () => {
@@ -803,6 +810,83 @@ function findMarketingGeneralData(start, end, moneyFormatter) {
 function updateProgressBar(id, value) {
     $('#' + id).prop('style', 'width: ' + value.replace('.00', '') + '%');
     $('#' + id).prop('aria-valuenow', value.replace('.00', ''));
+}
+
+function findMarketingMediaData(start, end, moneyFormatter) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-media-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            $('#media-data').html(null);
+            $.each(data, (index, row) => {
+                $('#media-data').append(createMediaDataRow(row));
+            });
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información de la tabla de medios de Marketing'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
+
+function createMediaDataRow(data) {
+    return (
+        `<tr>
+        <th scope="row"> <span class="` +
+        getClassName(data.media) +
+        `">` +
+        data.media +
+        `</span> </th>
+        <td>` +
+        data.impressions +
+        `</td>
+        <td>` +
+        data.clicks +
+        `</td>
+        <td>` +
+        data.visits +
+        `</td>
+        <td>` +
+        data.leads +
+        `</td>
+        <td>` +
+        data.contacted +
+        `</td>
+        <td>` +
+        data.sales +
+        `</td>
+    </tr>`
+    );
+}
+
+function getClassName(mediaName) {
+    let className = '';
+    switch (mediaName.toLowerCase()) {
+        case 'facebook':
+            className = 'fb';
+            break;
+        case 'google':
+            className = 'google';
+            break;
+        case 'programmatic':
+            className = 'progra';
+            break;
+        default:
+            className = 'bold';
+            break;
+    }
+    return className;
 }
 
 // $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {

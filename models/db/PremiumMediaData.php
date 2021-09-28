@@ -94,6 +94,6 @@ class PremiumMediaData extends ActiveRecord
             'startDate' => $startDate,
             'endDate' => $endDate,
             'campaignId' => $campaignId
-        ])->queryOne();
+        ])->queryAll();
     }
 }
