@@ -10,6 +10,7 @@ use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumMediaData;
 use app\models\db\PremiumRegionData;
+use app\models\db\PremiumScheduleData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
 use Exception;
@@ -37,6 +38,7 @@ class UploadPremiumReportBusiness
         $this->saveMarketingDailyPerformance($campaignId, $spreadsheet);
         $this->saveMarketingAgeData($campaignId, $spreadsheet);
         $this->saveMarketingRegionData($campaignId, $spreadsheet);
+        $this->saveMarketingScheduleData($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -427,6 +429,47 @@ class UploadPremiumReportBusiness
             if (!$data->save()) {
                 $transaction->rollback();
                 throw new UploadBusinessException('Grafica de Región - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveMarketingScheduleData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Gráfica de horarios');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Gráfica de horarios" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumScheduleData::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $data = new PremiumScheduleData();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $data->schedule_06_10_clicks = $sheet->getCell("B$currentRowIndex")->getValue();
+            $data->schedule_06_10_impressions = $sheet->getCell("C$currentRowIndex")->getValue();
+            $data->schedule_11_13_clicks = $sheet->getCell("D$currentRowIndex")->getValue();
+            $data->schedule_11_13_impressions = $sheet->getCell("E$currentRowIndex")->getValue();
+            $data->schedule_14_16_clicks = $sheet->getCell("F$currentRowIndex")->getValue();
+            $data->schedule_14_16_impressions = $sheet->getCell("G$currentRowIndex")->getValue();
+            $data->schedule_17_20_clicks = $sheet->getCell("H$currentRowIndex")->getValue();
+            $data->schedule_17_20_impressions = $sheet->getCell("I$currentRowIndex")->getValue();
+            $data->schedule_21_23_clicks = $sheet->getCell("J$currentRowIndex")->getValue();
+            $data->schedule_21_23_impressions = $sheet->getCell("K$currentRowIndex")->getValue();
+            $data->schedule_00_02_clicks = $sheet->getCell("L$currentRowIndex")->getValue();
+            $data->schedule_00_02_impressions = $sheet->getCell("M$currentRowIndex")->getValue();
+            if (!$data->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Gráfica de horarios - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
         $transaction->commit();

@@ -1051,6 +1051,7 @@ function findMarketingSegmentData(start, end) {
         success: (response) => {
             updateAgeDataGraph(response.ageData);
             updateRegionDataGraph(response.regionData);
+            updateScheduleDataGraph(response.scheduleData);
         },
         error: () => {
             showAlert(
@@ -1251,6 +1252,88 @@ function updateRegionDataGraph(regionData) {
     horizontal_region_bar.setOption(options_region);
 }
 
+function updateScheduleDataGraph(scheduleData) {
+    // Horarios chart
+    let horarios_double_bar = echarts.init(
+        document.getElementById('horarios_chart')
+    );
+    let options_horarios = {
+        title: {
+            text: 'Horarios',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        legend: {
+            data: ['Impresiones', 'Clics'],
+            x: 'right',
+            top: '7%',
+            right: '0%',
+        },
+        // Add custom colors
+        color: ['#4d4d4d', '#feba5e'],
+
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: [
+                '6:00-1:00',
+                '11:00-13:00',
+                '14:00-16:00',
+                '17:00-20:00',
+                '21:00-23:00',
+                '00:00-02:00',
+            ],
+        },
+        series: [
+            {
+                name: 'Impresiones',
+                type: 'bar',
+                data: [
+                    scheduleData.schedule_06_10_impressions,
+                    scheduleData.schedule_11_13_impressions,
+                    scheduleData.schedule_14_16_impressions,
+                    scheduleData.schedule_17_20_impressions,
+                    scheduleData.schedule_21_23_impressions,
+                    scheduleData.schedule_00_02_impressions,
+                ],
+            },
+            {
+                name: 'Clics',
+                type: 'bar',
+                data: [
+                    scheduleData.schedule_06_10_clicks,
+                    scheduleData.schedule_11_13_clicks,
+                    scheduleData.schedule_14_16_clicks,
+                    scheduleData.schedule_17_20_clicks,
+                    scheduleData.schedule_21_23_clicks,
+                    scheduleData.schedule_00_02_clicks,
+                ],
+            },
+        ],
+    };
+
+    horarios_double_bar.setOption(options_horarios);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horarios_double_bar.resize();
+    });
+    window.addEventListener('resize', function () {
+        horarios_double_bar.resize();
+    });
+}
+
 // charts leads 1
 
 let horizontal_top_7_leads = echarts.init(
@@ -1339,62 +1422,3 @@ let options_top_5_leads = {
 };
 
 horizontal_top_5_leads.setOption(options_top_5_leads);
-
-// Horarios chart
-let horarios_double_bar = echarts.init(
-    document.getElementById('horarios_chart')
-);
-let options_horarios = {
-    title: {
-        text: 'Horarios',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
-        },
-    },
-    legend: {
-        data: ['Impresiones', 'Clics'],
-        x: 'right',
-        top: '7%',
-        right: '0%',
-    },
-    // Add custom colors
-    color: ['#4d4d4d', '#feba5e'],
-
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: [
-            '6:00-9:00',
-            '10:00-13:00',
-            '14:00-16:00',
-            '15:00-20:00',
-            '21:00-00.00',
-        ],
-    },
-    series: [
-        {
-            name: 'Impresiones',
-            type: 'bar',
-            data: [20, 30, 40, 50, 60],
-        },
-        {
-            name: 'Clics',
-            type: 'bar',
-            data: [80, 90, 10, 20, 30],
-        },
-    ],
-};
-
-horarios_double_bar.setOption(options_horarios);
