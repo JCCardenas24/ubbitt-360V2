@@ -12,7 +12,9 @@ use app\models\db\PremiumRegionData;
 use app\models\db\PremiumScheduleData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
+use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateCampaignForm;
+use app\models\forms\SearchByDateForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -34,7 +36,8 @@ class UbbittPremiumController extends Controller
                         'actions' => [
                             'dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
-                            'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data'
+                            'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
+                            'find-calls'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -52,6 +55,7 @@ class UbbittPremiumController extends Controller
                     'find-marketing-general-data' => ['post'],
                     'find-marketing-daily-performance-data' => ['post'],
                     'find-marketing-segment-data' => ['post'],
+                    'find-calls' => ['post'],
                 ],
             ],
         ];
@@ -165,5 +169,16 @@ class UbbittPremiumController extends Controller
         $model = new PremiumScheduleData();
         $response['scheduleData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         return $response;
+    }
+
+    public function actionFindCalls()
+    {
+        $searchParams = new SearchByDateForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $calls = new WebHookCalls();
+        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $callsArray;
     }
 }

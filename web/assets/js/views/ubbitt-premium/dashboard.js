@@ -55,6 +55,17 @@ $('[id^=premium-marketing-campaign][id$=segmento-tab]').on(
     }
 );
 
+$('[id^=premium-call-center-bd-llamadas-campaign][id$=content-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        $('.range-pick#premium-calls-database-date-range').daterangepicker(
+            dateRangePickerConfig,
+            callDatabaseCallback
+        );
+        callDatabaseCallback(startDate, endDate);
+    }
+);
+
 function summaryCallback(start, end) {
     $('.range-pick#premium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
@@ -1422,3 +1433,79 @@ let options_top_5_leads = {
 };
 
 horizontal_top_5_leads.setOption(options_top_5_leads);
+
+function callDatabaseCallback(start, end, label, page = 1) {
+    $('.range-pick#premium-calls-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/find-calls',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+        },
+        success: (response) => {
+            $('#premium-calls-table tbody').html(null);
+            $.each(response.callsRecords, (index, callRecord) => {
+                $('#premium-calls-table tbody').append(
+                    createCallRecordRow(callRecord)
+                );
+            });
+            updatePaginator(
+                '#premium-calls-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createCallRecordRow(callRecord) {
+    return (
+        `
+        <tr>
+            <th scope="row">` +
+        callRecord.call_id +
+        `</th>
+            <td>` +
+        callRecord.answered_by +
+        `</td>
+            <td>` +
+        callRecord.callpicker_number +
+        `</td>
+            <td>Mapfre</td>
+            <td>` +
+        callRecord.date +
+        `</td>
+            <td>
+            ` +
+        callRecord.records.map(
+            (record) =>
+                `
+            <audio controls>
+                <source src="/assets/audio/` +
+                record +
+                `.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            `
+        ) +
+        `
+            </td>
+        </tr>
+    `
+    );
+}
