@@ -1050,6 +1050,7 @@ function findMarketingSegmentData(start, end) {
         },
         success: (response) => {
             updateAgeDataGraph(response.ageData);
+            updateRegionDataGraph(response.regionData);
         },
         error: () => {
             showAlert(
@@ -1125,56 +1126,130 @@ function updateAgeDataGraph(ageData) {
     };
 
     horizontal_double_bar.setOption(options_edad);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horizontal_double_bar.resize();
+    });
+    window.addEventListener('resize', function () {
+        horizontal_double_bar.resize();
+    });
 }
 
-let horizontal_region_bar = echarts.init(
-    document.getElementById('region_segmento_chart')
-);
-let options_region = {
-    title: {
-        text: 'Región',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+function updateRegionDataGraph(regionData) {
+    let horizontal_region_bar = echarts.init(
+        document.getElementById('region_segmento_chart')
+    );
+    let options_region = {
+        title: {
+            text: 'Región',
         },
-    },
-    // legend: {
-    //     data: ['Hombres', 'Mujeres']
-    // },
-    // Add custom colors
-    color: ['#FFBE2C'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        // legend: {
+        //     data: ['Hombres', 'Mujeres']
+        // },
+        // Add custom colors
+        color: ['#FFBE2C'],
 
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: [
-            'Nuevo León',
-            'Chihuahua',
-            'Jalisco',
-            'Ciudad de México',
-            'Estado de México',
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: [
+                'Aguascalientes',
+                'Baja California',
+                'Baja California Sur',
+                'Campeche',
+                'Chiapas',
+                'Chihuahua',
+                'Coahuila de Zaragoza',
+                'Colima',
+                'CDMX',
+                'Durango',
+                'Guanajuato',
+                'Guerrero',
+                'Hidalgo',
+                'Jalisco',
+                'Michoacan de Ocampo',
+                'Morelos',
+                'Nayarit',
+                'Nuevo Leon',
+                'Oaxaca',
+                'Puebla',
+                'Queretaro Arteaga',
+                'Quintana Roo',
+                'San Luis Potosi',
+                'Sinaloa',
+                'Sonora',
+                'Estado de México',
+                'Tabasco',
+                'Tamaulipas',
+                'Tlaxcala',
+                'Veracruz',
+                'Yucatan',
+                'Zacatecas',
+            ].reverse(),
+            axisLabel: {
+                fontSize: 8,
+                interval: 0,
+            },
+            min: 'Zacatecas',
+            max: 'Aguascalientes',
+        },
+        series: [
+            {
+                type: 'bar',
+                data: [
+                    regionData.aguascalientes,
+                    regionData.baja_california,
+                    regionData.baja_california_sur,
+                    regionData.campeche,
+                    regionData.chiapas,
+                    regionData.chihuahua,
+                    regionData.coahuila_de_zaragoza,
+                    regionData.colima,
+                    regionData.cdmx,
+                    regionData.durango,
+                    regionData.guanajuato,
+                    regionData.guerrero,
+                    regionData.hidalgo,
+                    regionData.jalisco,
+                    regionData.michoacan_de_ocampo,
+                    regionData.morelos,
+                    regionData.nayarit,
+                    regionData.nuevo_leon,
+                    regionData.oaxaca,
+                    regionData.puebla,
+                    regionData.queretaro_arteaga,
+                    regionData.quintana_roo,
+                    regionData.san_luis_potosi,
+                    regionData.sinaloa,
+                    regionData.sonora,
+                    regionData.estado_de_mexico,
+                    regionData.tabasco,
+                    regionData.tamaulipas,
+                    regionData.tlaxcala,
+                    regionData.veracruz,
+                    regionData.yucatan,
+                    regionData.zacatecas,
+                ].reverse(),
+            },
         ],
-    },
-    series: [
-        {
-            type: 'bar',
-            data: [20, 21, 43, 46, 56],
-        },
-    ],
-};
+    };
 
-horizontal_region_bar.setOption(options_region);
+    horizontal_region_bar.setOption(options_region);
+}
 
 // charts leads 1
 

@@ -8,6 +8,7 @@ use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumMediaData;
+use app\models\db\PremiumRegionData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
 use app\models\forms\SearchByDateCampaignForm;
@@ -158,6 +159,8 @@ class UbbittPremiumController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $model = new PremiumAgeData();
         $response['ageData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $model = new PremiumRegionData();
+        $response['regionData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         return $response;
     }
 }
