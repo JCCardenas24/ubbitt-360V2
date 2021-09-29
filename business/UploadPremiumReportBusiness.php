@@ -3,11 +3,13 @@
 namespace app\business;
 
 use app\exception\UploadBusinessException;
+use app\models\db\PremiumAgeData;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
 use app\models\db\PremiumMarketingInputs;
 use app\models\db\PremiumMediaData;
+use app\models\db\PremiumRegionData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
 use Exception;
@@ -33,6 +35,8 @@ class UploadPremiumReportBusiness
         $this->saveMarketingInputs($campaignId, $spreadsheet);
         $this->saveMarketingMediaData($campaignId, $spreadsheet);
         $this->saveMarketingDailyPerformance($campaignId, $spreadsheet);
+        $this->saveMarketingAgeData($campaignId, $spreadsheet);
+        $this->saveMarketingRegionData($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -323,6 +327,106 @@ class UploadPremiumReportBusiness
                 $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
                 $transaction->rollback();
                 throw new UploadBusinessException('Gráfica Marketing - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveMarketingAgeData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Grafica de edad');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Grafica de edad" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumAgeData::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $data = new PremiumAgeData();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $data->men_segment_25_34 = $sheet->getCell("B$currentRowIndex")->getValue();
+            $data->men_segment_35_44 = $sheet->getCell("C$currentRowIndex")->getValue();
+            $data->men_segment_45_54 = $sheet->getCell("D$currentRowIndex")->getValue();
+            $data->men_segment_55_64 = $sheet->getCell("E$currentRowIndex")->getValue();
+            $data->men_segment_65_plus = $sheet->getCell("F$currentRowIndex")->getValue();
+            $data->women_segment_25_34 = $sheet->getCell("G$currentRowIndex")->getValue();
+            $data->women_segment_35_44 = $sheet->getCell("H$currentRowIndex")->getValue();
+            $data->women_segment_45_54 = $sheet->getCell("I$currentRowIndex")->getValue();
+            $data->women_segment_55_64 = $sheet->getCell("J$currentRowIndex")->getValue();
+            $data->women_segment_65_plus = $sheet->getCell("K$currentRowIndex")->getValue();
+            if (!$data->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Grafica de edad - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveMarketingRegionData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Grafica de Región');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Grafica de Región" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumRegionData::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $data = new PremiumRegionData();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findExisting();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $data->aguascalientes = $sheet->getCell("B$currentRowIndex")->getValue();
+            $data->baja_california = $sheet->getCell("C$currentRowIndex")->getValue();
+            $data->baja_california_sur = $sheet->getCell("D$currentRowIndex")->getValue();
+            $data->campeche = $sheet->getCell("E$currentRowIndex")->getValue();
+            $data->chiapas = $sheet->getCell("F$currentRowIndex")->getValue();
+            $data->chihuahua = $sheet->getCell("G$currentRowIndex")->getValue();
+            $data->coahuila_de_zaragoza = $sheet->getCell("H$currentRowIndex")->getValue();
+            $data->colima = $sheet->getCell("I$currentRowIndex")->getValue();
+            $data->cdmx = $sheet->getCell("J$currentRowIndex")->getValue();
+            $data->durango = $sheet->getCell("K$currentRowIndex")->getValue();
+            $data->guanajuato = $sheet->getCell("L$currentRowIndex")->getValue();
+            $data->guerrero = $sheet->getCell("M$currentRowIndex")->getValue();
+            $data->hidalgo = $sheet->getCell("N$currentRowIndex")->getValue();
+            $data->jalisco = $sheet->getCell("O$currentRowIndex")->getValue();
+            $data->michoacan_de_ocampo = $sheet->getCell("P$currentRowIndex")->getValue();
+            $data->morelos = $sheet->getCell("Q$currentRowIndex")->getValue();
+            $data->nayarit = $sheet->getCell("R$currentRowIndex")->getValue();
+            $data->nuevo_leon = $sheet->getCell("S$currentRowIndex")->getValue();
+            $data->oaxaca = $sheet->getCell("T$currentRowIndex")->getValue();
+            $data->puebla = $sheet->getCell("U$currentRowIndex")->getValue();
+            $data->queretaro_arteaga = $sheet->getCell("V$currentRowIndex")->getValue();
+            $data->quintana_roo = $sheet->getCell("W$currentRowIndex")->getValue();
+            $data->san_luis_potosi = $sheet->getCell("X$currentRowIndex")->getValue();
+            $data->sinaloa = $sheet->getCell("Y$currentRowIndex")->getValue();
+            $data->sonora = $sheet->getCell("Z$currentRowIndex")->getValue();
+            $data->estado_de_mexico = $sheet->getCell("AA$currentRowIndex")->getValue();
+            $data->tabasco = $sheet->getCell("AB$currentRowIndex")->getValue();
+            $data->tamaulipas = $sheet->getCell("AC$currentRowIndex")->getValue();
+            $data->tlaxcala = $sheet->getCell("AD$currentRowIndex")->getValue();
+            $data->veracruz = $sheet->getCell("AE$currentRowIndex")->getValue();
+            $data->yucatan = $sheet->getCell("AF$currentRowIndex")->getValue();
+            $data->zacatecas = $sheet->getCell("AG$currentRowIndex")->getValue();
+            if (!$data->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Grafica de Región - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
         $transaction->commit();

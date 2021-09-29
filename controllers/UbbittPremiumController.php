@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\db\PremiumAgeData;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
@@ -31,7 +32,7 @@ class UbbittPremiumController extends Controller
                         'actions' => [
                             'dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
-                            'find-marketing-media-data', 'find-marketing-daily-performance-data'
+                            'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -48,6 +49,7 @@ class UbbittPremiumController extends Controller
                     'find-summary-inputs-data' => ['post'],
                     'find-marketing-general-data' => ['post'],
                     'find-marketing-daily-performance-data' => ['post'],
+                    'find-marketing-segment-data' => ['post'],
                 ],
             ],
         ];
@@ -146,5 +148,16 @@ class UbbittPremiumController extends Controller
         $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
+    }
+
+    public function actionFindMarketingSegmentData()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $response = [];
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new PremiumAgeData();
+        $response['ageData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        return $response;
     }
 }

@@ -44,6 +44,17 @@ $('[id^=marketing-campaign][id$=tab]').on('shown.bs.tab', function (event) {
     marketingGeneralCallback(startDate, endDate);
 });
 
+$('[id^=premium-marketing-campaign][id$=segmento-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        $('.range-pick#premium-marketing-segment-date-range').daterangepicker(
+            dateRangePickerConfig,
+            marketingSegmentCallback
+        );
+        marketingSegmentCallback(startDate, endDate);
+    }
+);
+
 function summaryCallback(start, end) {
     $('.range-pick#premium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
@@ -1014,64 +1025,107 @@ function updateDailyPerformanceDataGraph(data) {
     });
 }
 
-// $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
-//     event.target; // newly activated tab
-//     event.relatedTarget; // previous active tab
-//     stackedChart.resize();
-//     stackedChart2.resize();
-//     basicdoughnut_concentrado_ventas.resize();
-//     funnel_ventas_inversiones_chart.resize();
-// });
+function marketingSegmentCallback(start, end) {
+    $('.range-pick#premium-marketing-segment-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    // var moneyFormatter = new Intl.NumberFormat('es-MX', {
+    //     style: 'currency',
+    //     currency: 'MXN',
+    //     maximumFractionDigits: 0,
+    // });
+    findMarketingSegmentData(start, end);
+}
 
-// ********Charts marketing - segmento view***********
-let horizontal_double_bar = echarts.init(
-    document.getElementById('edad_segmento_chart')
-);
-let options_edad = {
-    title: {
-        text: 'Edad',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+function findMarketingSegmentData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-segment-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
-    },
-    legend: {
-        data: ['Hombres', 'Mujeres'],
-    },
-    // Add custom colors
-    color: ['#FFBE45', '#FD8377'],
+        success: (response) => {
+            updateAgeDataGraph(response.ageData);
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información de segmento'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
 
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: ['0 a 14', '15 a 24', '25 a 44', '45 a 64', '65 a 79', '80+'],
-    },
-    series: [
-        {
-            name: 'Hombres',
-            type: 'bar',
-            data: [289, 345, 496, 675, 755, 990],
+function updateAgeDataGraph(ageData) {
+    // ********Charts marketing - segmento view***********
+    let horizontal_double_bar = echarts.init(
+        document.getElementById('edad_segmento_chart')
+    );
+    let options_edad = {
+        title: {
+            text: 'Edad',
         },
-        {
-            name: 'Mujeres',
-            type: 'bar',
-            data: [220, 325, 400, 600, 775, 880],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
         },
-    ],
-};
+        legend: {
+            data: ['Hombres', 'Mujeres'],
+        },
+        // Add custom colors
+        color: ['#FFBE45', '#FD8377'],
 
-horizontal_double_bar.setOption(options_edad);
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: ['25 a 34', '35 a 44', '45 a 54', '55 a 64', '65+'],
+        },
+        series: [
+            {
+                name: 'Hombres',
+                type: 'bar',
+                data: [
+                    ageData.men_segment_25_34,
+                    ageData.men_segment_35_44,
+                    ageData.men_segment_45_54,
+                    ageData.men_segment_55_64,
+                    ageData.men_segment_65_plus,
+                ],
+            },
+            {
+                name: 'Mujeres',
+                type: 'bar',
+                data: [
+                    ageData.women_segment_25_34,
+                    ageData.women_segment_35_44,
+                    ageData.women_segment_45_54,
+                    ageData.women_segment_55_64,
+                    ageData.women_segment_65_plus,
+                ],
+            },
+        ],
+    };
+
+    horizontal_double_bar.setOption(options_edad);
+}
 
 let horizontal_region_bar = echarts.init(
     document.getElementById('region_segmento_chart')
