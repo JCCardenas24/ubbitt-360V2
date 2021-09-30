@@ -75,7 +75,7 @@ class PremiumVehicleYear extends ActiveRecord
     {
         return Yii::$app->db->createCommand('
                 SELECT
-                year,
+                    year,
                     SUM(amount) AS amount
                 FROM premium_vehicle_year
                 WHERE date BETWEEN :startDate AND :endDate

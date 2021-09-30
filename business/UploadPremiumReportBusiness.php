@@ -387,54 +387,28 @@ class UploadPremiumReportBusiness
             throw new UploadBusinessException('La hoja "Grafica de Región" no se encontró en el archivo.');
         }
         $sheet = $spreadsheet->getActiveSheet();
+        $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
         $maxRow = $sheet->getHighestRow();
         $transaction = PremiumRegionData::getDb()->beginTransaction();
-        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
-            $data = new PremiumRegionData();
-            $data->campaignId = $campaignId;
-            $date = $sheet->getCell("A$currentRowIndex")->getValue();
-            $date = Date::excelToDateTimeObject($date);
-            $data->date = $date->format('Y-m-d');
-            // Checks if data for date date already exists, and if it does we update it
-            $previousData = $data->findExisting();
-            if ($previousData != null) {
-                $data = $previousData;
-            }
-            $data->aguascalientes = $sheet->getCell("B$currentRowIndex")->getValue();
-            $data->baja_california = $sheet->getCell("C$currentRowIndex")->getValue();
-            $data->baja_california_sur = $sheet->getCell("D$currentRowIndex")->getValue();
-            $data->campeche = $sheet->getCell("E$currentRowIndex")->getValue();
-            $data->chiapas = $sheet->getCell("F$currentRowIndex")->getValue();
-            $data->chihuahua = $sheet->getCell("G$currentRowIndex")->getValue();
-            $data->coahuila_de_zaragoza = $sheet->getCell("H$currentRowIndex")->getValue();
-            $data->colima = $sheet->getCell("I$currentRowIndex")->getValue();
-            $data->cdmx = $sheet->getCell("J$currentRowIndex")->getValue();
-            $data->durango = $sheet->getCell("K$currentRowIndex")->getValue();
-            $data->guanajuato = $sheet->getCell("L$currentRowIndex")->getValue();
-            $data->guerrero = $sheet->getCell("M$currentRowIndex")->getValue();
-            $data->hidalgo = $sheet->getCell("N$currentRowIndex")->getValue();
-            $data->jalisco = $sheet->getCell("O$currentRowIndex")->getValue();
-            $data->michoacan_de_ocampo = $sheet->getCell("P$currentRowIndex")->getValue();
-            $data->morelos = $sheet->getCell("Q$currentRowIndex")->getValue();
-            $data->nayarit = $sheet->getCell("R$currentRowIndex")->getValue();
-            $data->nuevo_leon = $sheet->getCell("S$currentRowIndex")->getValue();
-            $data->oaxaca = $sheet->getCell("T$currentRowIndex")->getValue();
-            $data->puebla = $sheet->getCell("U$currentRowIndex")->getValue();
-            $data->queretaro_arteaga = $sheet->getCell("V$currentRowIndex")->getValue();
-            $data->quintana_roo = $sheet->getCell("W$currentRowIndex")->getValue();
-            $data->san_luis_potosi = $sheet->getCell("X$currentRowIndex")->getValue();
-            $data->sinaloa = $sheet->getCell("Y$currentRowIndex")->getValue();
-            $data->sonora = $sheet->getCell("Z$currentRowIndex")->getValue();
-            $data->estado_de_mexico = $sheet->getCell("AA$currentRowIndex")->getValue();
-            $data->tabasco = $sheet->getCell("AB$currentRowIndex")->getValue();
-            $data->tamaulipas = $sheet->getCell("AC$currentRowIndex")->getValue();
-            $data->tlaxcala = $sheet->getCell("AD$currentRowIndex")->getValue();
-            $data->veracruz = $sheet->getCell("AE$currentRowIndex")->getValue();
-            $data->yucatan = $sheet->getCell("AF$currentRowIndex")->getValue();
-            $data->zacatecas = $sheet->getCell("AG$currentRowIndex")->getValue();
-            if (!$data->save()) {
-                $transaction->rollback();
-                throw new UploadBusinessException('Grafica de Región - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+            for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+                $data = new PremiumRegionData();
+                $data->campaignId = $campaignId;
+                $data->place = strval($sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getValue());
+                $date = $sheet->getCell("A$currentRowIndex")->getValue();
+                $date = Date::excelToDateTimeObject($date);
+                $data->date = $date->format('Y-m-d');
+                // Checks if data for date date already exists, and if it does we update it
+                $previousData = $data->findExisting();
+                if ($previousData != null) {
+                    $data = $previousData;
+                }
+                $data->amount = $sheet->getCellByColumnAndRow($currentColumnIndex, $currentRowIndex)->getValue();
+                if (!$data->save()) {
+                    $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
+                    $transaction->rollback();
+                    throw new UploadBusinessException('Grafica de Región - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
+                }
             }
         }
         $transaction->commit();
