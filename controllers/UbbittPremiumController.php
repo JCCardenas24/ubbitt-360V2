@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\db\PremiumAgeData;
+use app\models\db\PremiumCallCenterKpi;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
@@ -12,6 +13,8 @@ use app\models\db\PremiumRegionData;
 use app\models\db\PremiumScheduleData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
+use app\models\db\PremiumVehicleModel;
+use app\models\db\PremiumVehicleYear;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateCampaignForm;
 use app\models\forms\SearchByDateForm;
@@ -37,7 +40,7 @@ class UbbittPremiumController extends Controller
                             'dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
-                            'find-calls'
+                            'find-calls', 'find-marketing-kpis-data'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -56,6 +59,7 @@ class UbbittPremiumController extends Controller
                     'find-marketing-daily-performance-data' => ['post'],
                     'find-marketing-segment-data' => ['post'],
                     'find-calls' => ['post'],
+                    'find-marketing-kpis-data' => ['post'],
                 ],
             ],
         ];
@@ -168,6 +172,10 @@ class UbbittPremiumController extends Controller
         $response['regionData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         $model = new PremiumScheduleData();
         $response['scheduleData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $model = new PremiumVehicleModel();
+        $response['topModelsData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $model = new PremiumVehicleYear();
+        $response['topYearsData'] = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         return $response;
     }
 
@@ -180,5 +188,15 @@ class UbbittPremiumController extends Controller
         $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionFindMarketingKpisData()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new PremiumCallCenterKpi();
+        $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        return $data;
     }
 }

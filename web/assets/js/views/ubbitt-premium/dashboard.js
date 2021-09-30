@@ -20,10 +20,6 @@ $(() => {
             customRangeLabel: 'Personalizado',
         },
     };
-    $('.range-pick#premium-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
     summaryCallback(startDate, endDate);
     if ($('[id^=premium-marketing-campaign][id$=tab]').is(':visible')) {
         marketingGeneralCallback(startDate, endDate);
@@ -34,6 +30,14 @@ $(() => {
     $('#pemp_no').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
+});
+
+$('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    $('.range-pick#premium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    summaryCallback(startDate, endDate);
 });
 
 $('[id^=marketing-campaign][id$=tab]').on('shown.bs.tab', function (event) {
@@ -54,6 +58,14 @@ $('[id^=premium-marketing-campaign][id$=segmento-tab]').on(
         marketingSegmentCallback(startDate, endDate);
     }
 );
+
+$('[id^=call-center-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    $('.range-pick#premium-call-center-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callCenterKpisCallback
+    );
+    callCenterKpisCallback(startDate, endDate);
+});
 
 $('[id^=premium-call-center-bd-llamadas-campaign][id$=content-tab]').on(
     'shown.bs.tab',
@@ -94,6 +106,11 @@ function findForecastData(start, end, moneyFormatter) {
         },
         success: (data) => {
             $('#forecast-investment').text(
+                moneyFormatter
+                    .format(parseInt(data.ubbitt_investment))
+                    .replace('.00', '')
+            );
+            $('#header-forecast-investment').text(
                 moneyFormatter
                     .format(parseInt(data.ubbitt_investment))
                     .replace('.00', '')
@@ -151,6 +168,16 @@ function findSummaryGraphData(start, end, moneyFormatter) {
                 )
             );
             $('#actual-sales').text(
+                moneyFormatter.format(
+                    Math.round(
+                        response.reduce(
+                            (total, record) => total + parseFloat(record.sales),
+                            0
+                        )
+                    )
+                )
+            );
+            $('#header-actual-sales').text(
                 moneyFormatter.format(
                     Math.round(
                         response.reduce(
@@ -446,6 +473,9 @@ function findSummaryInputs(start, end, moneyFormatter) {
         },
         success: (data) => {
             $('#spent-budget').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
+            $('#header-spent-budget').text(
                 moneyFormatter.format(data.spent_budget).replace('.00', '')
             );
             $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
@@ -1041,11 +1071,6 @@ function marketingSegmentCallback(start, end) {
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     showPreloader();
-    // var moneyFormatter = new Intl.NumberFormat('es-MX', {
-    //     style: 'currency',
-    //     currency: 'MXN',
-    //     maximumFractionDigits: 0,
-    // });
     findMarketingSegmentData(start, end);
 }
 
@@ -1063,6 +1088,8 @@ function findMarketingSegmentData(start, end) {
             updateAgeDataGraph(response.ageData);
             updateRegionDataGraph(response.regionData);
             updateScheduleDataGraph(response.scheduleData);
+            updateTopModelsDataGraph(response.topModelsData);
+            updateTopYearsDataGraph(response.topYearsData);
         },
         error: () => {
             showAlert(
@@ -1345,94 +1372,160 @@ function updateScheduleDataGraph(scheduleData) {
     });
 }
 
-// charts leads 1
+function updateTopModelsDataGraph(topModelsData) {
+    // charts leads 1
 
-let horizontal_top_7_leads = echarts.init(
-    document.getElementById('leads_totales_top_7')
-);
-let options_top_7_leads = {
-    title: {
-        text: 'Leads totales (Modelo top 7)',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+    let horizontal_top_7_leads = echarts.init(
+        document.getElementById('leads_totales_top_7')
+    );
+    let options_top_7_leads = {
+        title: {
+            text: 'Leads totales (Modelo top 7)',
         },
-    },
-    // legend: {
-    //     data: ['Hombres', 'Mujeres']
-    // },
-    // Add custom colors
-    color: ['#FF6F61'],
-
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: ['Versa', 'Ibiza', 'Sentra', 'Vento', 'Aveo', 'Sonic', 'Jetta'],
-    },
-    series: [
-        {
-            type: 'bar',
-            data: [5, 5, 5, 7, 8, 8, 15],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
         },
-    ],
-};
+        // legend: {
+        //     data: ['Hombres', 'Mujeres']
+        // },
+        // Add custom colors
+        color: ['#FF6F61'],
 
-horizontal_top_7_leads.setOption(options_top_7_leads);
-
-// charts leads 2
-let horizontal_top_5_leads = echarts.init(
-    document.getElementById('leads_totales_top_5')
-);
-let options_top_5_leads = {
-    title: {
-        text: 'Leads totales (Modelo top 5)',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
         },
-    },
-    // legend: {
-    //     data: ['Hombres', 'Mujeres']
-    // },
-    // Add custom colors
-    color: ['#4D4D4D'],
-
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: ['2017', '2012', '2015', '2016', '2019'],
-    },
-    series: [
-        {
-            type: 'bar',
-            data: [17, 18, 18, 19, 24],
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
         },
-    ],
-};
+        yAxis: {
+            type: 'category',
+            data: topModelsData.map((row) => row.model).reverse(),
+        },
+        series: [
+            {
+                type: 'bar',
+                data: topModelsData.map((row) => row.amount).reverse(),
+            },
+        ],
+    };
 
-horizontal_top_5_leads.setOption(options_top_5_leads);
+    horizontal_top_7_leads.setOption(options_top_7_leads);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horizontal_top_7_leads.resize();
+    });
+    window.addEventListener('resize', function () {
+        horizontal_top_7_leads.resize();
+    });
+}
+
+function updateTopYearsDataGraph(topYearsData) {
+    // charts leads 2
+    let horizontal_top_5_leads = echarts.init(
+        document.getElementById('leads_totales_top_5')
+    );
+    let options_top_5_leads = {
+        title: {
+            text: 'Leads totales (Modelo top 5)',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        // legend: {
+        //     data: ['Hombres', 'Mujeres']
+        // },
+        // Add custom colors
+        color: ['#4D4D4D'],
+
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: ['2017', '2012', '2015', '2016', '2019'],
+        },
+        series: [
+            {
+                type: 'bar',
+                data: [17, 18, 18, 19, 24],
+            },
+        ],
+    };
+
+    horizontal_top_5_leads.setOption(options_top_5_leads);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horizontal_top_5_leads.resize();
+    });
+    window.addEventListener('resize', function () {
+        horizontal_top_5_leads.resize();
+    });
+}
+
+function callCenterKpisCallback(start, end) {
+    $('.range-pick#premium-call-center-kpis-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    findCenterKpisData(start, end);
+}
+
+function findCenterKpisData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-kpis-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            $('#kpi-inbound-calls').text(data.inbound_calls);
+            $('#kpi-answered-calls').text(data.answered_calls);
+            $('#kpi-outbound-calls').text(data.outbound_calls);
+            $('#kpi-lost-calls').text(data.lost_calls);
+            $('#kpi-calls-answered-within-25-seconds').text(
+                data.calls_answered_within_25_seconds
+            );
+            $('#kpi-nsl-percentage').text(
+                data.nsl_percentage.replace('.00', '') + '%'
+            );
+            $('#kpi-abandoned-before-5-seconds').text(
+                data.abandoned_before_5_seconds
+            );
+            $('#kpi-abandonment').text(
+                data.abandonment.replace('.00', '') + '%'
+            );
+            $('#kpi-ath').text(data.ath.replace('.00', '') + ' min');
+            $('#kpi-average-time-in-answering-call').text(
+                data.average_time_in_answering_call + ' seg'
+            );
+            $('#kpi-speaking-time').text(data.speaking_time + ' hrs');
+        },
+        error: () => {
+            alert("Ocurrió un problema al consultar los KPI's");
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
 
 function callDatabaseCallback(start, end, label, page = 1) {
     $('.range-pick#premium-calls-database-date-range > .text-date').html(

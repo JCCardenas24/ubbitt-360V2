@@ -4,6 +4,7 @@ namespace app\business;
 
 use app\exception\UploadBusinessException;
 use app\models\db\PremiumAgeData;
+use app\models\db\PremiumCallCenterKpi;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumDailyPerformance;
 use app\models\db\PremiumLeadsCallsGraph;
@@ -13,6 +14,8 @@ use app\models\db\PremiumRegionData;
 use app\models\db\PremiumScheduleData;
 use app\models\db\PremiumSummaryGraph;
 use app\models\db\PremiumSummaryInputs;
+use app\models\db\PremiumVehicleModel;
+use app\models\db\PremiumVehicleYear;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use \PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -39,6 +42,9 @@ class UploadPremiumReportBusiness
         $this->saveMarketingAgeData($campaignId, $spreadsheet);
         $this->saveMarketingRegionData($campaignId, $spreadsheet);
         $this->saveMarketingScheduleData($campaignId, $spreadsheet);
+        $this->saveCallCenterKpis($campaignId, $spreadsheet);
+        $this->saveVehicleModelsData($campaignId, $spreadsheet);
+        $this->saveVehicleYearsData($campaignId, $spreadsheet);
         // Unload worksheet
         $spreadsheet->disconnectWorksheets();
         unset($spreadsheet);
@@ -470,6 +476,116 @@ class UploadPremiumReportBusiness
             if (!$data->save()) {
                 $transaction->rollback();
                 throw new UploadBusinessException('Gráfica de horarios - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveCallCenterKpis($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Call center');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Call center" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumCallCenterKpi::getDb()->beginTransaction();
+        for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+            $data = new PremiumCallCenterKpi();
+            $data->campaignId = $campaignId;
+            $date = $sheet->getCell("A$currentRowIndex")->getValue();
+            $date = Date::excelToDateTimeObject($date);
+            $data->date = $date->format('Y-m-d');
+            // Checks if data for date date already exists, and if it does we update it
+            $previousData = $data->findByDate();
+            if ($previousData != null) {
+                $data = $previousData;
+            }
+            $data->inboundCalls = $sheet->getCell("B$currentRowIndex")->getValue();
+            $data->answeredCalls = $sheet->getCell("C$currentRowIndex")->getValue();
+            $data->outboundCalls = $sheet->getCell("D$currentRowIndex")->getValue();
+            $data->lostCalls = $sheet->getCell("E$currentRowIndex")->getValue();
+            $data->callsAnsweredWithin25Seconds = intval($sheet->getCell("F$currentRowIndex")->getValue());
+            $data->nslPercentage = $sheet->getCell("G$currentRowIndex")->getValue() * 100;
+            $data->abandonedBefore5Seconds = $sheet->getCell("H$currentRowIndex")->getValue();
+            $data->abandonment = $sheet->getCell("I$currentRowIndex")->getValue() * 100;
+            $data->ath = $sheet->getCell("J$currentRowIndex")->getValue();
+            $data->averageTimeInAnsweringCall = $sheet->getCell("K$currentRowIndex")->getValue();
+            $data->speakingTime = $sheet->getCell("L$currentRowIndex")->getValue();
+            if (!$data->save()) {
+                $transaction->rollback();
+                throw new UploadBusinessException('Call center - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveVehicleModelsData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Gráfica Modelo top');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Gráfica Modelo top" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumVehicleModel::getDb()->beginTransaction();
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+            for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+                $data = new PremiumVehicleModel();
+                $data->campaignId = $campaignId;
+                $data->model = $sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getValue();
+                $date = $sheet->getCell("A$currentRowIndex")->getValue();
+                $date = Date::excelToDateTimeObject($date);
+                $data->date = $date->format('Y-m-d');
+                // Checks if data for date date already exists, and if it does we update it
+                $previousData = $data->findExisting();
+                if ($previousData != null) {
+                    $data = $previousData;
+                }
+                $data->amount = $sheet->getCellByColumnAndRow($currentColumnIndex, $currentRowIndex)->getValue();
+                if (!$data->save()) {
+                    $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
+                    $transaction->rollback();
+                    throw new UploadBusinessException('Gráfica Modelo top - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
+                }
+            }
+        }
+        $transaction->commit();
+    }
+
+    private function saveVehicleYearsData($campaignId, Spreadsheet $spreadsheet)
+    {
+        try {
+            $spreadsheet->setActiveSheetIndexByName('Gráfica de año top');
+        } catch (Exception $exception) {
+            throw new UploadBusinessException('La hoja "Gráfica de año top" no se encontró en el archivo.');
+        }
+        $sheet = $spreadsheet->getActiveSheet();
+        $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $maxRow = $sheet->getHighestRow();
+        $transaction = PremiumVehicleYear::getDb()->beginTransaction();
+        for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
+            for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
+                $data = new PremiumVehicleYear();
+                $data->campaignId = $campaignId;
+                $data->year = strval($sheet->getCellByColumnAndRow($currentColumnIndex, 1)->getValue());
+                $date = $sheet->getCell("A$currentRowIndex")->getValue();
+                $date = Date::excelToDateTimeObject($date);
+                $data->date = $date->format('Y-m-d');
+                // Checks if data for date date already exists, and if it does we update it
+                $previousData = $data->findExisting();
+                if ($previousData != null) {
+                    $data = $previousData;
+                }
+                $data->amount = $sheet->getCellByColumnAndRow($currentColumnIndex, $currentRowIndex)->getValue();
+                if (!$data->save()) {
+                    $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
+                    $transaction->rollback();
+                    throw new UploadBusinessException('Gráfica de año top - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
+                }
             }
         }
         $transaction->commit();
