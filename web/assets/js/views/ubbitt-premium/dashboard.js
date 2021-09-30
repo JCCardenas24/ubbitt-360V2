@@ -1006,7 +1006,7 @@ function updateDailyPerformanceDataGraph(data) {
         yAxis: [
             {
                 type: 'value',
-                name: 'Rendimiento',
+                name: 'Leads',
                 min: 0,
                 // max:
                 //     Math.max.apply(
@@ -1015,14 +1015,14 @@ function updateDailyPerformanceDataGraph(data) {
                 //             return row.investment;
                 //         })
                 //     ) + 100,
-                interval: 100,
+                interval: 5,
                 // axisLabel: {
                 //     formatter: '{value} ml'
                 // }
             },
             {
                 type: 'value',
-                name: 'Ventas',
+                name: 'Rendimiento / Ventas',
                 min: 0,
                 // max:
                 //     Math.max.apply(
@@ -1041,11 +1041,13 @@ function updateDailyPerformanceDataGraph(data) {
             {
                 name: 'Inversión campaña',
                 type: 'bar',
+                yAxisIndex: 1,
                 data: data.map((row) => row.investment),
             },
             {
                 name: 'Leads',
                 type: 'line',
+                yAxisIndex: 0,
                 data: data.map((row) => row.leads),
             },
             {
