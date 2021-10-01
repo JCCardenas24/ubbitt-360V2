@@ -3,8 +3,8 @@ let endDate = null;
 let summaryGraphData = [];
 const urlSearchParams = new URLSearchParams(window.location.search);
 $(() => {
-    startDate = moment().startOf('month');
-    endDate = moment();
+    startDate = moment().subtract(1, 'months').startOf('month');
+    endDate = moment().subtract(1, 'months').endOf('month');
 
     dateRangePickerConfig = {
         showDropdowns: true,
@@ -13,6 +13,10 @@ $(() => {
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
             'Este mes': [moment().startOf('month'), moment()],
+            'Mes anterior': [
+                moment().subtract(1, 'months').startOf('month'),
+                moment().subtract(1, 'months').endOf('month'),
+            ],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -40,52 +44,118 @@ $('[id^=brief-campaign][id$=tab]').on('shown.bs.tab', function (event) {
 });
 
 $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-    $('.range-pick#premium-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
+    resetDatePickers();
     summaryCallback(startDate, endDate);
 });
 
 $('[id^=marketing-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-    $('.range-pick#premium-marketing-general-date-range').daterangepicker(
-        dateRangePickerConfig,
-        marketingGeneralCallback
-    );
+    resetDatePickers();
     marketingGeneralCallback(startDate, endDate);
 });
 
 $('[id^=premium-marketing-campaign][id$=segmento-tab]').on(
     'shown.bs.tab',
     function (event) {
-        $('.range-pick#premium-marketing-segment-date-range').daterangepicker(
-            dateRangePickerConfig,
-            marketingSegmentCallback
-        );
+        resetDatePickers();
         marketingSegmentCallback(startDate, endDate);
     }
 );
 
 $('[id^=call-center-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-    $('.range-pick#premium-call-center-kpis-date-range').daterangepicker(
-        dateRangePickerConfig,
-        callCenterKpisCallback
-    );
+    resetDatePickers();
     callCenterKpisCallback(startDate, endDate);
 });
 
 $('[id^=premium-call-center-bd-llamadas-campaign][id$=content-tab]').on(
     'shown.bs.tab',
     function (event) {
-        $('.range-pick#premium-calls-database-date-range').daterangepicker(
-            dateRangePickerConfig,
-            callDatabaseCallback
-        );
+        resetDatePickers();
         callDatabaseCallback(startDate, endDate);
     }
 );
 
+$('[id^=premium-marketing-campaign][id$=vista-general-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        marketingGeneralCallback(startDate, endDate);
+    }
+);
+
+$('[id^=premium-call-center-kpis-campaign][id$=content-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        callCenterKpisCallback(startDate, endDate);
+    }
+);
+
+function resetDatePickers() {
+    dateRangePickerConfig.startDate = startDate;
+    dateRangePickerConfig.endDate = endDate;
+    $('.range-pick#premium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    $('.range-pick#premium-marketing-general-date-range').daterangepicker(
+        dateRangePickerConfig,
+        marketingGeneralCallback
+    );
+    $('.range-pick#premium-marketing-segment-date-range').daterangepicker(
+        dateRangePickerConfig,
+        marketingSegmentCallback
+    );
+    $('.range-pick#premium-call-center-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callCenterKpisCallback
+    );
+    $('.range-pick#premium-calls-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseCallback
+    );
+}
+
+function findHeaderData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-header-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                maximumFractionDigits: 0,
+            });
+            $('#header-forecast-investment').text(
+                moneyFormatter.format(data.investment).replace('.00', '')
+            );
+            $('#header-spent-budget').text(
+                moneyFormatter.format(data.spentBudget).replace('.00', '')
+            );
+            $('#header-actual-sales').text(
+                moneyFormatter.format(data.sales).replace('.00', '')
+            );
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del header'
+            );
+        },
+        // complete: () => {
+        //     hidePreloader();
+        // },
+    });
+}
+
 function summaryCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#premium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -95,6 +165,7 @@ function summaryCallback(start, end) {
         currency: 'MXN',
         maximumFractionDigits: 0,
     });
+    findHeaderData(start, end);
     findForecastData(start, end, moneyFormatter);
     findSummaryGraphData(start, end, moneyFormatter);
     findLeadsCallsGraphData(start, end);
@@ -113,11 +184,6 @@ function findForecastData(start, end, moneyFormatter) {
         },
         success: (data) => {
             $('#forecast-investment').text(
-                moneyFormatter
-                    .format(parseInt(data.ubbitt_investment))
-                    .replace('.00', '')
-            );
-            $('#header-forecast-investment').text(
                 moneyFormatter
                     .format(parseInt(data.ubbitt_investment))
                     .replace('.00', '')
@@ -175,16 +241,6 @@ function findSummaryGraphData(start, end, moneyFormatter) {
                 )
             );
             $('#actual-sales').text(
-                moneyFormatter.format(
-                    Math.round(
-                        response.reduce(
-                            (total, record) => total + parseFloat(record.sales),
-                            0
-                        )
-                    )
-                )
-            );
-            $('#header-actual-sales').text(
                 moneyFormatter.format(
                     Math.round(
                         response.reduce(
@@ -482,9 +538,6 @@ function findSummaryInputs(start, end, moneyFormatter) {
             $('#spent-budget').text(
                 moneyFormatter.format(data.spent_budget).replace('.00', '')
             );
-            $('#header-spent-budget').text(
-                moneyFormatter.format(data.spent_budget).replace('.00', '')
-            );
             $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
             $('#roi-percentage').text(
                 data.roi_percentage.replace('.00', '') + '%'
@@ -736,6 +789,8 @@ function updateSalesConcentrate(data) {
 }
 
 function marketingGeneralCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#premium-marketing-general-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -745,6 +800,7 @@ function marketingGeneralCallback(start, end) {
         currency: 'MXN',
         maximumFractionDigits: 0,
     });
+    findHeaderData(start, end);
     findMarketingGeneralData(start, end, moneyFormatter);
     findMarketingMediaData(start, end);
     findMarketingDailyPerformanceData(start, end);
@@ -1064,6 +1120,8 @@ function updateDailyPerformanceDataGraph(data) {
 }
 
 function marketingSegmentCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#premium-marketing-segment-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -1409,10 +1467,13 @@ function updateTopYearsDataGraph(topYearsData) {
 }
 
 function callCenterKpisCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#premium-call-center-kpis-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     showPreloader();
+    findHeaderData(start, end);
     findCenterKpisData(start, end);
 }
 
@@ -1459,10 +1520,13 @@ function findCenterKpisData(start, end) {
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#premium-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     showPreloader();
+    findHeaderData(start, end);
     $.ajax({
         url: '/ubbitt-premium/find-calls',
         type: 'POST',

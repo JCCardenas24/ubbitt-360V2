@@ -97,6 +97,8 @@ $('#cancel_upload_report').click(function () {
 });
 
 function summaryCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -1446,6 +1448,8 @@ function updateCollectionQuestionsChart(kpis) {
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -1522,6 +1526,8 @@ function createCallRecordRow(callRecord) {
 }
 
 function loadKpis(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -1567,6 +1573,8 @@ function loadKpis(start, end) {
 }
 
 function reportsListCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );

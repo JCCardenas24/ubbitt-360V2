@@ -19,6 +19,7 @@ use app\models\db\PremiumVehicleModel;
 use app\models\db\PremiumVehicleYear;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\PremiumBriefForm;
+use app\models\response\PremiumHeader;
 use app\models\forms\SearchByDateCampaignForm;
 use app\models\forms\SearchByDateForm;
 use Yii;
@@ -41,7 +42,7 @@ class UbbittPremiumController extends Controller
                 'rules' => [
                     [
                         'actions' => [
-                            'dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
+                            'dashboard', 'find-header-data', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
                             'find-calls', 'find-marketing-kpis-data',
@@ -57,6 +58,7 @@ class UbbittPremiumController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'dashboard' => ['get'],
+                    'find-header-data' => ['post'],
                     'find-forecast-data' => ['post'],
                     'find-summary-graph-data' => ['post'],
                     'find-leads-calls-graph-data' => ['post'],
@@ -96,6 +98,27 @@ class UbbittPremiumController extends Controller
         return $this->render('dashboard', [
             'campaignId' => $campaignId
         ]);
+    }
+
+    public function actionFindHeaderData()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new PremiumSummaryInputs();
+        $summaryInputsData = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $forecastModel = new PremiumCampaignForecast();
+        $forecastData = $forecastModel->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $summaryGraphModel = new PremiumSummaryGraph();
+        $summaryGraphData = $summaryGraphModel->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
+        $headerData = new PremiumHeader();
+        $headerData->investment = $forecastData['ubbitt_investment'];
+        $headerData->sales = array_reduce($summaryGraphData, function ($carry, $item) {
+            $carry += $item->sales;
+            return $carry;
+        }, 0);
+        $headerData->spentBudget = $summaryInputsData['spent_budget'];
+        return $headerData;
     }
 
     public function actionFindForecastData()

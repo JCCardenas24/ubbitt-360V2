@@ -107,6 +107,8 @@ $('#cancel_upload_report').click(function () {
 });
 
 function summaryCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-renewal-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -803,6 +805,8 @@ function updateConcentrateOnTrackGraph(kpis) {
 }
 
 function loadKpis(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -848,6 +852,8 @@ function loadKpis(start, end) {
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -924,6 +930,8 @@ function createCallRecordRow(callRecord) {
 }
 
 function reportsListCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-renewal-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );

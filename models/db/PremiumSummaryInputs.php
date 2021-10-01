@@ -89,6 +89,10 @@ class PremiumSummaryInputs extends ActiveRecord
             ->one();
     }
 
+    /**
+     *
+     * @return \app\models\db\PremiumSummaryInputs
+     */
     public function findByDates($campaignId, $startDate, $endDate)
     {
         return Yii::$app->db->createCommand('
