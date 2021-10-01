@@ -1,6 +1,7 @@
 let startDate = null;
 let endDate = null;
 let summaryGraphData = [];
+const urlSearchParams = new URLSearchParams(window.location.search);
 $(() => {
     startDate = moment().startOf('month');
     endDate = moment();
@@ -19,11 +20,13 @@ $(() => {
             customRangeLabel: 'Personalizado',
         },
     };
-    $('.range-pick#premium-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
     summaryCallback(startDate, endDate);
+    if ($('[id^=premium-marketing-campaign][id$=tab]').is(':visible')) {
+        marketingGeneralCallback(startDate, endDate);
+    }
+    if ($('div[id^="brief-campaign"]').is(':visible')) {
+        findBriefData();
+    }
     $('#pemp_yes').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
@@ -31,6 +34,56 @@ $(() => {
         updateSummaryGraphChart(summaryGraphData);
     });
 });
+
+$('[id^=brief-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    findBriefData();
+});
+
+$('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    $('.range-pick#premium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    summaryCallback(startDate, endDate);
+});
+
+$('[id^=marketing-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    $('.range-pick#premium-marketing-general-date-range').daterangepicker(
+        dateRangePickerConfig,
+        marketingGeneralCallback
+    );
+    marketingGeneralCallback(startDate, endDate);
+});
+
+$('[id^=premium-marketing-campaign][id$=segmento-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        $('.range-pick#premium-marketing-segment-date-range').daterangepicker(
+            dateRangePickerConfig,
+            marketingSegmentCallback
+        );
+        marketingSegmentCallback(startDate, endDate);
+    }
+);
+
+$('[id^=call-center-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    $('.range-pick#premium-call-center-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callCenterKpisCallback
+    );
+    callCenterKpisCallback(startDate, endDate);
+});
+
+$('[id^=premium-call-center-bd-llamadas-campaign][id$=content-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        $('.range-pick#premium-calls-database-date-range').daterangepicker(
+            dateRangePickerConfig,
+            callDatabaseCallback
+        );
+        callDatabaseCallback(startDate, endDate);
+    }
+);
 
 function summaryCallback(start, end) {
     $('.range-pick#premium-summary-date-range  > .text-date').html(
@@ -54,12 +107,17 @@ function findForecastData(start, end, moneyFormatter) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
         success: (data) => {
             $('#forecast-investment').text(
+                moneyFormatter
+                    .format(parseInt(data.ubbitt_investment))
+                    .replace('.00', '')
+            );
+            $('#header-forecast-investment').text(
                 moneyFormatter
                     .format(parseInt(data.ubbitt_investment))
                     .replace('.00', '')
@@ -98,7 +156,7 @@ function findSummaryGraphData(start, end, moneyFormatter) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
@@ -117,6 +175,16 @@ function findSummaryGraphData(start, end, moneyFormatter) {
                 )
             );
             $('#actual-sales').text(
+                moneyFormatter.format(
+                    Math.round(
+                        response.reduce(
+                            (total, record) => total + parseFloat(record.sales),
+                            0
+                        )
+                    )
+                )
+            );
+            $('#header-actual-sales').text(
                 moneyFormatter.format(
                     Math.round(
                         response.reduce(
@@ -256,10 +324,10 @@ function updateSummaryGraphChart(data) {
 
         // Add custom colors
         color: [
-            '#F39C12',
+            '#ff6f61',
             '#16A085',
             '#2980B9',
-            '#F4D03F',
+            '#F39C12',
             '#1ABC9C',
             '#3498DB',
         ],
@@ -304,7 +372,7 @@ function findLeadsCallsGraphData(start, end) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
@@ -406,12 +474,15 @@ function findSummaryInputs(start, end, moneyFormatter) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateCampaignForm[campaignId]': 1,
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
             'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
         success: (data) => {
             $('#spent-budget').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
+            $('#header-spent-budget').text(
                 moneyFormatter.format(data.spent_budget).replace('.00', '')
             );
             $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
@@ -664,379 +735,1004 @@ function updateSalesConcentrate(data) {
     });
 }
 
-// $('#resumen-campaign-1-tab').on('shown.bs.tab', function (event) {
-//     event.target; // newly activated tab
-//     event.relatedTarget; // previous active tab
-//     stackedChart.resize();
-//     stackedChart2.resize();
-//     basicdoughnut_concentrado_ventas.resize();
-//     funnel_ventas_inversiones_chart.resize();
-// });
+function marketingGeneralCallback(start, end) {
+    $('.range-pick#premium-marketing-general-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    var moneyFormatter = new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+        maximumFractionDigits: 0,
+    });
+    findMarketingGeneralData(start, end, moneyFormatter);
+    findMarketingMediaData(start, end);
+    findMarketingDailyPerformanceData(start, end);
+}
 
-// ********Charts marketing - segmento view***********
-let horizontal_double_bar = echarts.init(
-    document.getElementById('edad_segmento_chart')
-);
-let options_edad = {
-    title: {
-        text: 'Edad',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+function findMarketingGeneralData(start, end, moneyFormatter) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-general-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
-    },
-    legend: {
-        data: ['Hombres', 'Mujeres'],
-    },
-    // Add custom colors
-    color: ['#FFBE45', '#FD8377'],
-
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: ['0 a 14', '15 a 24', '25 a 44', '45 a 64', '65 a 79', '80+'],
-    },
-    series: [
-        {
-            name: 'Hombres',
-            type: 'bar',
-            data: [289, 345, 496, 675, 755, 990],
+        success: (data) => {
+            $('#marketing-budget').text(
+                moneyFormatter.format(data.budget).replace('.00', '')
+            );
+            $('#marketing-spent-budget').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
+            $('#marketing-spent-budget-percentage').text(
+                data.spent_budget_percentage.replace('.00', '') + '%'
+            );
+            $('#marketing-available-budget').text(
+                moneyFormatter.format(data.available_budget).replace('.00', '')
+            );
+            $('#marketing-available-budget-percentage').text(
+                data.available_budget_percentage.replace('.00', '') + '%'
+            );
+            $('#marketing-impressions').text(data.impressions);
+            $('#marketing-ctr').text(data.ctr.replace('.00', '') + '%');
+            $('#marketing-clicks').text(data.clicks);
+            $('#marketing-rebound').text(data.rebound.replace('.00', '') + '%');
+            $('#marketing-visits').text(data.visits);
+            $('#marketing-visits-conversion').text(
+                data.visits_conversion.replace('.00', '') + '%'
+            );
+            $('#marketing-leads').text(data.leads);
+            $('#marketing-leads-conversion').text(
+                data.leads_conversion.replace('.00', '') + '%'
+            );
+            $('#marketing-contacting').text(data.contacting);
+            $('#marketing-contacting-conversion').text(
+                data.contacting_conversion.replace('.00', '') + '%'
+            );
+            $('#marketing-sales').text(data.sales);
+            $('#marketing-cpm').text(
+                moneyFormatter.format(data.cpm).replace('.00', '')
+            );
+            $('#marketing-cpc').text(
+                moneyFormatter.format(data.cpc).replace('.00', '')
+            );
+            $('#marketing-cp-visit').text(
+                moneyFormatter.format(data.cp_visit).replace('.00', '')
+            );
+            $('#marketing-cpl').text(
+                moneyFormatter.format(data.cpl).replace('.00', '')
+            );
+            $('#marketing-cpl-contacted').text(
+                moneyFormatter.format(data.cpl_contacted).replace('.00', '')
+            );
+            $('#marketing-sale-cost').text(
+                moneyFormatter.format(data.sale_cost).replace('.00', '')
+            );
+            $('#marketing-roa').text(data.roa.replace('.00', '') + '%');
+            $('#marketing-sales-amount').text(
+                moneyFormatter.format(data.sales_amount).replace('.00', '')
+            );
+            updateProgressBar(
+                'marketing-sales-bar',
+                (
+                    (parseFloat(data.sales_amount) * 100) /
+                    (parseFloat(data.sales_amount) +
+                        parseFloat(data.expenses) +
+                        parseFloat(data.investment))
+                )
+                    .toFixed(2)
+                    .toString()
+            );
+            $('#marketing-expenses').text(
+                moneyFormatter.format(data.expenses).replace('.00', '')
+            );
+            updateProgressBar(
+                'marketing-expenses-bar',
+                (
+                    (parseFloat(data.expenses) * 100) /
+                    (parseFloat(data.sales_amount) +
+                        parseFloat(data.expenses) +
+                        parseFloat(data.investment))
+                )
+                    .toFixed(2)
+                    .toString()
+            );
+            $('#marketing-investment').text(
+                moneyFormatter.format(data.investment).replace('.00', '')
+            );
+            updateProgressBar(
+                'marketing-investment-bar',
+                (
+                    (parseFloat(data.investment) * 100) /
+                    (parseFloat(data.sales_amount) +
+                        parseFloat(data.expenses) +
+                        parseFloat(data.investment))
+                )
+                    .toFixed(2)
+                    .toString()
+            );
         },
-        {
-            name: 'Mujeres',
-            type: 'bar',
-            data: [220, 325, 400, 600, 775, 880],
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información general de Marketing'
+            );
         },
-    ],
-};
-
-horizontal_double_bar.setOption(options_edad);
-
-let horizontal_region_bar = echarts.init(
-    document.getElementById('region_segmento_chart')
-);
-let options_region = {
-    title: {
-        text: 'Región',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+        complete: () => {
+            hidePreloader();
         },
-    },
-    // legend: {
-    //     data: ['Hombres', 'Mujeres']
-    // },
-    // Add custom colors
-    color: ['#FFBE2C'],
+    });
+}
 
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: [
-            'Nuevo León',
-            'Chihuahua',
-            'Jalisco',
-            'Ciudad de México',
-            'Estado de México',
-        ],
-    },
-    series: [
-        {
-            type: 'bar',
-            data: [20, 21, 43, 46, 56],
+function updateProgressBar(id, value) {
+    $('#' + id).prop('style', 'width: ' + value.replace('.00', '') + '%');
+    $('#' + id).prop('aria-valuenow', value.replace('.00', ''));
+}
+
+function findMarketingMediaData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-media-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
         },
-    ],
-};
-
-horizontal_region_bar.setOption(options_region);
-
-// charts leads 1
-
-let horizontal_top_7_leads = echarts.init(
-    document.getElementById('leads_totales_top_7')
-);
-let options_top_7_leads = {
-    title: {
-        text: 'Leads totales (Modelo top 7)',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+        success: (data) => {
+            $('#media-data').html(null);
+            $.each(data, (index, row) => {
+                $('#media-data').append(createMediaDataRow(row));
+            });
         },
-    },
-    // legend: {
-    //     data: ['Hombres', 'Mujeres']
-    // },
-    // Add custom colors
-    color: ['#FF6F61'],
-
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: ['Versa', 'Ibiza', 'Sentra', 'Vento', 'Aveo', 'Sonic', 'Jetta'],
-    },
-    series: [
-        {
-            type: 'bar',
-            data: [5, 5, 5, 7, 8, 8, 15],
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información de la tabla de medios de Marketing'
+            );
         },
-    ],
-};
-
-horizontal_top_7_leads.setOption(options_top_7_leads);
-
-// charts leads 2
-let horizontal_top_5_leads = echarts.init(
-    document.getElementById('leads_totales_top_5')
-);
-let options_top_5_leads = {
-    title: {
-        text: 'Leads totales (Modelo top 5)',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
+        complete: () => {
+            hidePreloader();
         },
-    },
-    // legend: {
-    //     data: ['Hombres', 'Mujeres']
-    // },
-    // Add custom colors
-    color: ['#4D4D4D'],
+    });
+}
 
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: ['2017', '2012', '2015', '2016', '2019'],
-    },
-    series: [
-        {
-            type: 'bar',
-            data: [17, 18, 18, 19, 24],
-        },
-    ],
-};
+function createMediaDataRow(data) {
+    return (
+        `<tr>
+        <th scope="row"> <span class="` +
+        getClassName(data.media) +
+        `">` +
+        data.media +
+        `</span> </th>
+        <td>` +
+        data.impressions +
+        `</td>
+        <td>` +
+        data.clicks +
+        `</td>
+        <td>` +
+        data.visits +
+        `</td>
+        <td>` +
+        data.leads +
+        `</td>
+        <td>` +
+        data.contacted +
+        `</td>
+        <td>` +
+        data.sales +
+        `</td>
+    </tr>`
+    );
+}
 
-horizontal_top_5_leads.setOption(options_top_5_leads);
-
-// Horarios chart
-let horarios_double_bar = echarts.init(
-    document.getElementById('horarios_chart')
-);
-let options_horarios = {
-    title: {
-        text: 'Horarios',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
-        },
-    },
-    legend: {
-        data: ['Impresiones', 'Clics'],
-        x: 'right',
-        top: '7%',
-        right: '0%',
-    },
-    // Add custom colors
-    color: ['#4d4d4d', '#feba5e'],
-
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-    },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-    },
-    yAxis: {
-        type: 'category',
-        data: [
-            '6:00-9:00',
-            '10:00-13:00',
-            '14:00-16:00',
-            '15:00-20:00',
-            '21:00-00.00',
-        ],
-    },
-    series: [
-        {
-            name: 'Impresiones',
-            type: 'bar',
-            data: [20, 30, 40, 50, 60],
-        },
-        {
-            name: 'Clics',
-            type: 'bar',
-            data: [80, 90, 10, 20, 30],
-        },
-    ],
-};
-
-horarios_double_bar.setOption(options_horarios);
-
-$('#premium-marketing-campaign-1-segmento-tab').on(
-    'shown.bs.tab',
-    function (event) {
-        event.target; // newly activated tab
-        event.relatedTarget; // previous active tab
-        horizontal_double_bar.resize();
-        horizontal_region_bar.resize();
-        horizontal_top_7_leads.resize();
-        horizontal_top_5_leads.resize();
-        horarios_double_bar.resize();
+function getClassName(mediaName) {
+    let className = '';
+    switch (mediaName.toLowerCase()) {
+        case 'facebook':
+            className = 'fb';
+            break;
+        case 'google':
+            className = 'google';
+            break;
+        case 'programmatic':
+            className = 'progra';
+            break;
+        default:
+            className = 'bold';
+            break;
     }
-);
+    return className;
+}
 
-// Rendimiento chart
-let rendimiento_mixed_chart = echarts.init(
-    document.getElementById('redimiento_diario_chart_wrapper')
-);
-let options_redimiento_data = {
-    title: {
-        text: 'Rendimiento diario',
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            crossStyle: {
-                color: '#999',
+function findMarketingDailyPerformanceData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-daily-performance-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            updateDailyPerformanceDataGraph(data);
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del rendimiento diario de Marketing'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
+
+function updateDailyPerformanceDataGraph(data) {
+    // Rendimiento chart
+    let rendimiento_mixed_chart = echarts.init(
+        document.getElementById('redimiento_diario_chart_wrapper')
+    );
+    let options_redimiento_data = {
+        title: {
+            text: 'Rendimiento diario',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                crossStyle: {
+                    color: '#999',
+                },
             },
         },
-    },
-    toolbox: {},
-    legend: {
-        data: ['Inversión campaña', 'Leads', 'Ventas'],
-        x: 'right',
-        top: '0%',
-        right: '0%',
-    },
-    // Add custom colors
-    color: ['#ffd800', '#ff6f61', '#32d926'],
-    xAxis: [
-        {
-            type: 'category',
-            data: [
-                'Día 1',
-                'Día 2',
-                'Día 3',
-                'Día 4',
-                'Día 5',
-                'Día 6',
-                'Día 7',
-            ],
+        toolbox: {},
+        legend: {
+            data: ['Leads', 'Inversión campaña', 'Ventas'],
+            x: 'right',
+            top: '0%',
+            right: '0%',
+        },
+        // Add custom colors
+        color: ['#ff6f61', '#ffd800', '#32d926'],
+        xAxis: [
+            {
+                type: 'category',
+                data: data.map((row) => row.date),
+                axisPointer: {
+                    type: 'shadow',
+                },
+            },
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: 'Leads',
+                min: 0,
+                max: 100,
+                interval: 5,
+            },
+            {
+                type: 'value',
+                name: 'Rendimiento / Ventas',
+                min: 0,
+                // max:
+                //     Math.max.apply(
+                //         Math,
+                //         data.map(function (row) {
+                //             return row.sales;
+                //         })
+                //     ) + 50,
+                interval: 100,
+            },
+        ],
+        series: [
+            {
+                name: 'Leads',
+                type: 'line',
+                yAxisIndex: 0,
+                data: data.map((row) => row.leads),
+            },
+            {
+                name: 'Inversión campaña',
+                type: 'bar',
+                yAxisIndex: 1,
+                data: data.map((row) => row.investment),
+            },
+            {
+                name: 'Ventas',
+                type: 'bar',
+                yAxisIndex: 1,
+                data: data.map((row) => row.sales),
+            },
+        ],
+    };
+
+    rendimiento_mixed_chart.setOption(options_redimiento_data, true);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        rendimiento_mixed_chart.resize();
+    });
+    window.addEventListener('resize', function () {
+        rendimiento_mixed_chart.resize();
+    });
+}
+
+function marketingSegmentCallback(start, end) {
+    $('.range-pick#premium-marketing-segment-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    findMarketingSegmentData(start, end);
+}
+
+function findMarketingSegmentData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-segment-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (response) => {
+            updateAgeDataGraph(response.ageData);
+            updateRegionDataGraph(response.regionData);
+            updateScheduleDataGraph(response.scheduleData);
+            updateTopModelsDataGraph(response.topModelsData);
+            updateTopYearsDataGraph(response.topYearsData);
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información de segmento'
+            );
+        },
+        complete: () => {
+            hidePreloader();
+        },
+    });
+}
+
+function updateAgeDataGraph(ageData) {
+    // ********Charts marketing - segmento view***********
+    let horizontal_double_bar = echarts.init(
+        document.getElementById('edad_segmento_chart')
+    );
+    let options_edad = {
+        title: {
+            text: 'Edad',
+        },
+        tooltip: {
+            trigger: 'axis',
             axisPointer: {
                 type: 'shadow',
             },
         },
-    ],
-    yAxis: [
-        {
+        legend: {
+            data: ['Hombres', 'Mujeres'],
+        },
+        // Add custom colors
+        color: ['#FFBE45', '#FD8377'],
+
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
             type: 'value',
-            name: 'Rendimiento',
-            min: 0,
-            max: 250,
-            interval: 50,
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // }
+            boundaryGap: [0, 0.01],
         },
-        {
+        yAxis: {
+            type: 'category',
+            data: ['25 a 34', '35 a 44', '45 a 54', '55 a 64', '65+'],
+        },
+        series: [
+            {
+                name: 'Hombres',
+                type: 'bar',
+                data: [
+                    ageData.men_segment_25_34,
+                    ageData.men_segment_35_44,
+                    ageData.men_segment_45_54,
+                    ageData.men_segment_55_64,
+                    ageData.men_segment_65_plus,
+                ],
+            },
+            {
+                name: 'Mujeres',
+                type: 'bar',
+                data: [
+                    ageData.women_segment_25_34,
+                    ageData.women_segment_35_44,
+                    ageData.women_segment_45_54,
+                    ageData.women_segment_55_64,
+                    ageData.women_segment_65_plus,
+                ],
+            },
+        ],
+    };
+
+    horizontal_double_bar.setOption(options_edad);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horizontal_double_bar.resize();
+    });
+    window.addEventListener('resize', function () {
+        horizontal_double_bar.resize();
+    });
+}
+
+function updateRegionDataGraph(regionData) {
+    let horizontal_region_bar = echarts.init(
+        document.getElementById('region_segmento_chart')
+    );
+    let options_region = {
+        title: {
+            text: 'Región',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        // legend: {
+        //     data: ['Hombres', 'Mujeres']
+        // },
+        // Add custom colors
+        color: ['#FFBE2C'],
+
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
             type: 'value',
-            name: 'Ventas',
-            min: 0,
-            max: 25,
-            interval: 5,
-            // axisLabel: {
-            //     formatter: '{value} °C'
-            // }
+            boundaryGap: [0, 0.01],
         },
-    ],
-    series: [
-        {
-            name: 'Inversión campaña',
-            type: 'bar',
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+        yAxis: {
+            type: 'category',
+            data: regionData.map((row) => row.place).reverse(),
+            axisLabel: {
+                fontSize: 8,
+                interval: 0,
+            },
+            min: 'Zacatecas',
+            max: 'Aguascalientes',
         },
-        {
-            name: 'Leads',
-            type: 'line',
-            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6],
-        },
-        {
-            name: 'Ventas',
-            type: 'line',
-            yAxisIndex: 1,
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3],
-        },
-    ],
-};
+        series: [
+            {
+                type: 'bar',
+                data: regionData.map((row) => row.amount).reverse(),
+            },
+        ],
+    };
 
-rendimiento_mixed_chart.setOption(options_redimiento_data);
+    horizontal_region_bar.setOption(options_region);
+}
 
-$('#marketing-campaign-1-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    rendimiento_mixed_chart.resize();
-});
+function updateScheduleDataGraph(scheduleData) {
+    // Horarios chart
+    let horarios_double_bar = echarts.init(
+        document.getElementById('horarios_chart')
+    );
+    let options_horarios = {
+        title: {
+            text: 'Horarios',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        legend: {
+            data: ['Impresiones', 'Clics'],
+            x: 'right',
+            top: '7%',
+            right: '0%',
+        },
+        // Add custom colors
+        color: ['#4d4d4d', '#feba5e'],
 
-// ****Resize fuction***
-window.addEventListener('resize', function () {
-    stackedChart.resize();
-    stackedChart2.resize();
-    basicdoughnut_concentrado_ventas.resize();
-    horizontal_double_bar.resize();
-    horizontal_region_bar.resize();
-    horizontal_top_7_leads.resize();
-    horizontal_top_5_leads.resize();
-    horarios_double_bar.resize();
-    rendimiento_mixed_chart.resize();
-    funnel_ventas_inversiones_chart.resize();
-    stackedChartForecast.resize();
-});
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: [
+                '6:00-1:00',
+                '11:00-13:00',
+                '14:00-16:00',
+                '17:00-20:00',
+                '21:00-23:00',
+                '00:00-02:00',
+            ],
+        },
+        series: [
+            {
+                name: 'Impresiones',
+                type: 'bar',
+                data: [
+                    scheduleData.schedule_06_10_impressions,
+                    scheduleData.schedule_11_13_impressions,
+                    scheduleData.schedule_14_16_impressions,
+                    scheduleData.schedule_17_20_impressions,
+                    scheduleData.schedule_21_23_impressions,
+                    scheduleData.schedule_00_02_impressions,
+                ],
+            },
+            {
+                name: 'Clics',
+                type: 'bar',
+                data: [
+                    scheduleData.schedule_06_10_clicks,
+                    scheduleData.schedule_11_13_clicks,
+                    scheduleData.schedule_14_16_clicks,
+                    scheduleData.schedule_17_20_clicks,
+                    scheduleData.schedule_21_23_clicks,
+                    scheduleData.schedule_00_02_clicks,
+                ],
+            },
+        ],
+    };
+
+    horarios_double_bar.setOption(options_horarios);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horarios_double_bar.resize();
+    });
+    window.addEventListener('resize', function () {
+        horarios_double_bar.resize();
+    });
+}
+
+function updateTopModelsDataGraph(topModelsData) {
+    // charts leads 1
+
+    let horizontal_top_7_leads = echarts.init(
+        document.getElementById('leads_totales_top_7')
+    );
+    let options_top_7_leads = {
+        title: {
+            text: 'Leads totales (Modelo top 7)',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        // legend: {
+        //     data: ['Hombres', 'Mujeres']
+        // },
+        // Add custom colors
+        color: ['#FF6F61'],
+
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: topModelsData.map((row) => row.model).reverse(),
+        },
+        series: [
+            {
+                type: 'bar',
+                data: topModelsData.map((row) => row.amount).reverse(),
+            },
+        ],
+    };
+
+    horizontal_top_7_leads.setOption(options_top_7_leads);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horizontal_top_7_leads.resize();
+    });
+    window.addEventListener('resize', function () {
+        horizontal_top_7_leads.resize();
+    });
+}
+
+function updateTopYearsDataGraph(topYearsData) {
+    // charts leads 2
+    let horizontal_top_5_leads = echarts.init(
+        document.getElementById('leads_totales_top_5')
+    );
+    let options_top_5_leads = {
+        title: {
+            text: 'Leads totales (Modelo top 5)',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        // legend: {
+        //     data: ['Hombres', 'Mujeres']
+        // },
+        // Add custom colors
+        color: ['#4D4D4D'],
+
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+            type: 'category',
+            data: topYearsData.map((row) => row.year).reverse(),
+        },
+        series: [
+            {
+                type: 'bar',
+                data: topYearsData.map((row) => row.amount).reverse(),
+            },
+        ],
+    };
+
+    horizontal_top_5_leads.setOption(options_top_5_leads);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        horizontal_top_5_leads.resize();
+    });
+    window.addEventListener('resize', function () {
+        horizontal_top_5_leads.resize();
+    });
+}
+
+function callCenterKpisCallback(start, end) {
+    $('.range-pick#premium-call-center-kpis-date-range  > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    findCenterKpisData(start, end);
+}
+
+function findCenterKpisData(start, end) {
+    $.ajax({
+        url: '/ubbitt-premium/find-marketing-kpis-data',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+            'SearchByDateCampaignForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateCampaignForm[endDate]': end.format('YYYY-MM-DD'),
+        },
+        success: (data) => {
+            $('#kpi-inbound-calls').text(data.inbound_calls);
+            $('#kpi-answered-calls').text(data.answered_calls);
+            $('#kpi-outbound-calls').text(data.outbound_calls);
+            $('#kpi-lost-calls').text(data.lost_calls);
+            $('#kpi-calls-answered-within-25-seconds').text(
+                data.calls_answered_within_25_seconds
+            );
+            $('#kpi-nsl-percentage').text(
+                data.nsl_percentage.replace('.00', '') + '%'
+            );
+            $('#kpi-abandoned-before-5-seconds').text(
+                data.abandoned_before_5_seconds
+            );
+            $('#kpi-abandonment').text(
+                data.abandonment.replace('.00', '') + '%'
+            );
+            $('#kpi-ath').text(data.ath.replace('.00', '') + ' min');
+            $('#kpi-average-time-in-answering-call').text(
+                data.average_time_in_answering_call + ' seg'
+            );
+            $('#kpi-speaking-time').text(data.speaking_time + ' hrs');
+        },
+        error: () => {
+            showAlert('error', "Ocurrió un problema al consultar los KPI's");
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function callDatabaseCallback(start, end, label, page = 1) {
+    $('.range-pick#premium-calls-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/find-calls',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+        },
+        success: (response) => {
+            $('#premium-calls-table tbody').html(null);
+            $.each(response.callsRecords, (index, callRecord) => {
+                $('#premium-calls-table tbody').append(
+                    createCallRecordRow(callRecord)
+                );
+            });
+            updatePaginator(
+                '#premium-calls-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createCallRecordRow(callRecord) {
+    return (
+        `
+        <tr>
+            <th scope="row">` +
+        callRecord.call_id +
+        `</th>
+            <td>` +
+        callRecord.answered_by +
+        `</td>
+            <td>` +
+        callRecord.callpicker_number +
+        `</td>
+            <td>Mapfre</td>
+            <td>` +
+        callRecord.date +
+        `</td>
+            <td>
+            ` +
+        callRecord.records.map(
+            (record) =>
+                `
+            <audio controls>
+                <source src="/assets/audio/` +
+                record +
+                `.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            `
+        ) +
+        `
+            </td>
+        </tr>
+    `
+    );
+}
+
+function onEnableBriefEdition() {
+    $('#premium-brief-campaign').find('input').prop('disabled', false);
+    $('#btn-edit-brief').hide();
+    $('#btn-cancel-edit-brief').show();
+    $('#btn-save-brief').show();
+}
+
+function onCancelBriefEdition() {
+    $('#premium-brief-campaign').find('input').prop('disabled', true);
+    $('#btn-edit-brief').show();
+    $('#btn-cancel-edit-brief').hide();
+    $('#btn-save-brief').hide();
+}
+
+function findBriefData() {
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/find-brief',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+        },
+        success: (data) => {
+            if (data != null) {
+                $(
+                    'input[name="brief-industry-type"][value="' +
+                        data.industryType +
+                        '"]'
+                ).prop('checked', true);
+                $('#campaign-name').val(data.name);
+                $('#product-description').val(data.productDescription);
+                $('#product-insights').val(data.productInsights);
+                $('#product-added-value').val(data.productAddedValue);
+                $('#product-average-price').val(data.productAveragePrice);
+                $('#product-first-payment-average-price').val(
+                    data.productFirstPaymentAveragePrice
+                );
+                $('#payment-frequency-yearly').prop(
+                    'checked',
+                    data.paymentFrequencyYearly
+                );
+                $('#payment-frequency-biannual').prop(
+                    'checked',
+                    data.paymentFrequencyBiannual
+                );
+                $('#payment-frequency-quarterly').prop(
+                    'checked',
+                    data.paymentFrequencyQuarterly
+                );
+                $('#payment-frequency-monthly').prop(
+                    'checked',
+                    data.paymentFrequencyMonthly
+                );
+                $('#payment-type-cash').prop('checked', data.paymentTypeCash);
+                $('#payment-type-card-months-without-interest').prop(
+                    'checked',
+                    data.paymentTypeCardMonthsWithoutInterest
+                );
+                $('#payment-type-card-single-payment').prop(
+                    'checked',
+                    data.paymentTypeCardSinglePayment
+                );
+                $('#payment-method-card').prop(
+                    'checked',
+                    data.paymentMethodCard
+                );
+                $('#payment-method-cash-pickup').prop(
+                    'checked',
+                    data.paymentMethodCashPickup
+                );
+                $('#payment-method-wire-transfer').prop(
+                    'checked',
+                    data.paymentMethodWireTransfer
+                );
+                $('#investment').val(data.investment);
+                $('#start-date').val(data.startDate);
+                $('#end-date').val(data.endDate);
+                $('#expected-bidding-per-lead').val(
+                    data.expectedBiddingPerLead
+                );
+                $('#expected-total-sales').val(data.expectedTotalSales);
+            }
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del Brief'
+            );
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function onSaveBrief() {
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/save-brief',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'PremiumBriefForm[campaignId]': urlSearchParams.get('id'),
+            'PremiumBriefForm[industryType]': $(
+                'input[name="brief-industry-type"]:checked'
+            ).val(),
+            'PremiumBriefForm[name]': $('#campaign-name').val(),
+            'PremiumBriefForm[productDescription]': $(
+                '#product-description'
+            ).val(),
+            'PremiumBriefForm[productInsights]': $('#product-insights').val(),
+            'PremiumBriefForm[productAddedValue]': $(
+                '#product-added-value'
+            ).val(),
+            'PremiumBriefForm[productAveragePrice]': $(
+                '#product-average-price'
+            ).val(),
+            'PremiumBriefForm[productFirstPaymentAveragePrice]': $(
+                '#product-first-payment-average-price'
+            ).val(),
+            'PremiumBriefForm[paymentFrequencyYearly]': $(
+                '#payment-frequency-yearly'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentFrequencyBiannual]': $(
+                '#payment-frequency-biannual'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentFrequencyQuarterly]': $(
+                '#payment-frequency-quarterly'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentFrequencyMonthly]': $(
+                '#payment-frequency-monthly'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentTypeCash]': $('#payment-type-cash').is(
+                ':checked'
+            )
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentTypeCardMonthsWithoutInterest]': $(
+                '#payment-type-card-months-without-interest'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentTypeCardSinglePayment]': $(
+                '#payment-type-card-single-payment'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentMethodCard]': $('#payment-method-card').is(
+                ':checked'
+            )
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentMethodCashPickup]': $(
+                '#payment-method-cash-pickup'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentMethodWireTransfer]': $(
+                '#payment-method-wire-transfer'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[investment]': $('#investment').val(),
+            'PremiumBriefForm[startDate]': $('#start-date').val(),
+            'PremiumBriefForm[endDate]': $('#end-date').val(),
+            'PremiumBriefForm[expectedBiddingPerLead]': $(
+                '#expected-bidding-per-lead'
+            ).val(),
+            'PremiumBriefForm[expectedTotalSales]': $(
+                '#expected-total-sales'
+            ).val(),
+        },
+        success: (response) => {
+            showAlert('success', 'El Brief se actualizó correctamente');
+            $('#premium-brief-campaign').find('input').prop('disabled', true);
+            $('#btn-edit-brief').show();
+            $('#btn-cancel-edit-brief').hide();
+            $('#btn-save-brief').hide();
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al guardar la información del Brief'
+            );
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}

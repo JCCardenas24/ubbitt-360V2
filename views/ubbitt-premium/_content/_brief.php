@@ -1,49 +1,64 @@
-<div class="premium-brief-campaign">
+<div class="premium-brief-campaign" id="premium-brief-campaign">
+    <?php
+    if (in_array('action_ubbitt_premium_edit_brief', Yii::$app->session->get("userPermissions"))) {
+    ?>
+    <button id="btn-edit-brief" class="btn btn-first c-white col-md-2 float-right" onclick="onEnableBriefEdition()"><i
+            class="ri-edit-box-line"></i> Editar</button>
+    <button id="btn-save-brief" class="btn btn-first c-white col-md-2 ml-3 float-right" style="display: none"
+        onclick="onSaveBrief()"><i class="ri-save-line"></i> Guardar</button>
+    <button id="btn-cancel-edit-brief" class="btn btn-first c-white col-md-2 float-right" style="display: none"
+        onclick="onCancelBriefEdition()">Cancelar Edición</button>
+    <?php } ?>
     <h1><span><img src="<?= Yii::getAlias('@web') ?>/assets/images/campana.svg" alt=""></span> Detalles generales de la
         campaña</h1>
     <hr>
     <h5>Tipo de Industria</h5>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio11" value="option1">
-        <label class="form-check-label" for="inlineRadio11">Seguros</label>
+        <input class="form-check-input" type="radio" name="brief-industry-type" id="brief-industry-type-insurance"
+            value="insurance" disabled>
+        <label class="form-check-label" for="brief-industry-type-insurance">Seguros</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio22" value="option2">
-        <label class="form-check-label" for="inlineRadio22">Telecomunicaciones</label>
+        <input class="form-check-input" type="radio" name="brief-industry-type"
+            id="brief-industry-type-telecommunications" value="telecommunications" disabled>
+        <label class="form-check-label" for="brief-industry-type-telecommunications">Telecomunicaciones</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio33" value="option3">
-        <label class="form-check-label" for="inlineRadio33">Servicios</label>
+        <input class="form-check-input" type="radio" name="brief-industry-type" id="brief-industry-type-services"
+            value="services" disabled>
+        <label class="form-check-label" for="brief-industry-type-services">Servicios</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-        <label class="form-check-label" for="inlineRadio1">Financieros</label>
+        <input class="form-check-input" type="radio" name="brief-industry-type" id="brief-industry-type-financial"
+            value="financial" disabled>
+        <label class="form-check-label" for="brief-industry-type-financial">Financieros</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-        <label class="form-check-label" for="inlineRadio2">Comercio</label>
+        <input class="form-check-input" type="radio" name="brief-industry-type" id="brief-industry-type-commerce"
+            value="commerce" disabled>
+        <label class="form-check-label" for="brief-industry-type-commerce">Comercio</label>
     </div>
     <div class="row details_campaigns">
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Nombre de la campaña</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="SEGURO DE AUTO">
+                <label for="campaign-name">Nombre de la campaña</label>
+                <input type="text" class="form-control" id="campaign-name" placeholder="SEGURO DE AUTO" disabled>
             </div>
             <div class="form-group">
-                <label for="formGroupExampleInput">Insights del producto</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Nombre campaña">
+                <label for="product-insights">Insights del producto</label>
+                <input type="text" class="form-control" id="product-insights" placeholder="Nombre campaña" disabled>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Descripción del producto</label>
-                <input type="text" class="form-control" id="formGroupExampleInput"
-                    placeholder="Describe brevemente tu producto o servicio">
+                <label for="product-description">Descripción del producto</label>
+                <input type="text" class="form-control" id="product-description"
+                    placeholder="Describe brevemente tu producto o servicio" disabled>
             </div>
             <div class="form-group">
-                <label for="formGroupExampleInput">¿Cuál es el valor agregado del producto?</label>
-                <input type="text" class="form-control" id="formGroupExampleInput"
-                    placeholder="Describe brevemente tu producto o servicio">
+                <label for="product-added-value">¿Cuál es el valor agregado del producto?</label>
+                <input type="text" class="form-control" id="product-added-value"
+                    placeholder="Describe brevemente tu producto o servicio" disabled>
             </div>
         </div>
     </div>
@@ -53,14 +68,16 @@
     <div class="row details_campaigns">
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Precio promedio del producto/servicio</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="$0.00">
+                <label for="product-average-price">Precio promedio del producto/servicio</label>
+                <input type="text" class="form-control" id="product-average-price" placeholder="$0.00" disabled>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Precio promedio del primer pago del producto/ servicio </label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="$0.00">
+                <label for="product-first-payment-average-price">Precio promedio del primer pago del producto/ servicio
+                </label>
+                <input type="text" class="form-control" id="product-first-payment-average-price" placeholder="$0.00"
+                    disabled>
             </div>
         </div>
     </div>
@@ -68,26 +85,26 @@
     <div class="row ml-0 mr-0">
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                <label class="form-check-label" for="inlineCheckbox1">Anual</label>
+                <input class="form-check-input" type="checkbox" id="payment-frequency-yearly" value="1" disabled>
+                <label class="form-check-label" for="payment-frequency-yearly">Anual</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                <label class="form-check-label" for="inlineCheckbox2">Semestral</label>
+                <input class="form-check-input" type="checkbox" id="payment-frequency-biannual" value="1" disabled>
+                <label class="form-check-label" for="payment-frequency-biannual">Semestral</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                <label class="form-check-label" for="inlineCheckbox3">Trimestral</label>
+                <input class="form-check-input" type="checkbox" id="payment-frequency-quarterly" value="1" disabled>
+                <label class="form-check-label" for="payment-frequency-quarterly">Trimestral</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox33" value="option33">
-                <label class="form-check-label" for="inlineCheckbox33">Mensual</label>
+                <input class="form-check-input" type="checkbox" id="payment-frequency-monthly" value="1" disabled>
+                <label class="form-check-label" for="payment-frequency-monthly">Mensual</label>
             </div>
         </div>
     </div>
@@ -96,20 +113,24 @@
     <div class="row ml-0 mr-0">
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox111" value="option111">
-                <label class="form-check-label" for="inlineCheckbox111">Contado</label>
+                <input class="form-check-input" type="checkbox" id="payment-type-cash" value="1" disabled>
+                <label class="form-check-label" for="payment-type-cash">Contado</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox222" value="option222">
-                <label class="form-check-label" for="inlineCheckbox222">Tarjeta Meses sin intereses</label>
+                <input class="form-check-input" type="checkbox" id="payment-type-card-months-without-interest" value="1"
+                    disabled>
+                <label class="form-check-label" for="payment-type-card-months-without-interest">Tarjeta Meses sin
+                    intereses</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox333" value="option333">
-                <label class="form-check-label" for="inlineCheckbox333">Tarjeta Una sola exhibición</label>
+                <input class="form-check-input" type="checkbox" id="payment-type-card-single-payment" value="1"
+                    disabled>
+                <label class="form-check-label" for="payment-type-card-single-payment">Tarjeta Una sola
+                    exhibición</label>
             </div>
         </div>
         <div class="col"></div>
@@ -119,20 +140,20 @@
     <div class="row ml-0 mr-0">
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1111" value="option1111">
-                <label class="form-check-label" for="inlineCheckbox1111">Tarjeta Crédito/Débito</label>
+                <input class="form-check-input" type="checkbox" id="payment-method-card" value="1" disabled>
+                <label class="form-check-label" for="payment-method-card">Tarjeta Crédito/Débito</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2222" value="option2222">
-                <label class="form-check-label" for="inlineCheckbox2222">Pago en ventanilla</label>
+                <input class="form-check-input" type="checkbox" id="payment-method-cash-pickup" value="1" disabled>
+                <label class="form-check-label" for="payment-method-cash-pickup">Pago en ventanilla</label>
             </div>
         </div>
         <div class="col">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox3333" value="option3333">
-                <label class="form-check-label" for="inlineCheckbox3333">Transferencia</label>
+                <input class="form-check-input" type="checkbox" id="payment-method-wire-transfer" value="1" disabled>
+                <label class="form-check-label" for="payment-method-wire-transfer">Transferencia</label>
             </div>
         </div>
         <div class="col"></div>
@@ -144,33 +165,33 @@
     <div class="row details_campaigns">
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Inversión</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="$350,000">
+                <label for="investment">Inversión</label>
+                <input type="text" class="form-control" id="investment" placeholder="$350,000" disabled>
                 <small>Nota: Inversión mínima de $350,000</small>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Fecha de inicio</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="">
+                <label for="start-date">Fecha de inicio</label>
+                <input type="text" class="form-control" id="start-date" placeholder="" disabled>
             </div>
             <div class="form-group">
-                <label for="formGroupExampleInput">Finalización</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="">
+                <label for="end-date">Finalización</label>
+                <input type="text" class="form-control" id="end-date" placeholder="" disabled>
             </div>
         </div>
     </div>
     <div class="row details_campaigns mt-0">
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Bidding por lead esperado </label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="$80.00">
+                <label for="expected-bidding-per-lead">Bidding por lead esperado </label>
+                <input type="text" class="form-control" id="expected-bidding-per-lead" placeholder="$80.00" disabled>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
-                <label for="formGroupExampleInput">Ventas totales esperadas </label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="2000">
+                <label for="expected-total-sales">Ventas totales esperadas </label>
+                <input type="text" class="form-control" id="expected-total-sales" placeholder="2000" disabled>
             </div>
         </div>
     </div>

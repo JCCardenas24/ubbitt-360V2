@@ -3,7 +3,7 @@ function showPreloader() {
 }
 
 function hidePreloader() {
-    setInterval(() => {
+    setTimeout(() => {
         $('#loading_content').modal('hide');
     }, 500);
 }

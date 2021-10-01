@@ -2,13 +2,13 @@
     <div class="d-flex justify-content-end ">
         <div class=" d-flex justify-content-between">
             <div class="form-group wid-100 d-flex m-0">
-                <div id="reportrange_clientes" class="range-pick mr-5">
+                <div id="premium-marketing-segment-date-range" class="range-pick mr-5">
                     <i class="fa fa-calendar"></i>&nbsp;
-                    <span>agosto 29, 2021 - septiembre 2, 2021</span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                    <span class="text-date"></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                 </div>
             </div>
         </div>
-        <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a>
+        <!-- <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a> -->
     </div>
 </div>
 

@@ -25,17 +25,17 @@
             <div class="d-flex">
                 <p>Inversión</p>
                 <span> | </span>
-                <small>$200,000.00</small>
+                <small id="header-forecast-investment">$0</small>
             </div>
             <div class="d-flex">
                 <p>Gasto</p>
                 <span> | </span>
-                <small>$40,000.00</small>
+                <small id="header-spent-budget">$0</small>
             </div>
             <div class="d-flex">
                 <p>Ventas</p>
                 <span> | </span>
-                <small>$40,000.00</small>
+                <small id="header-actual-sales">$0</small>
             </div>
         </div>
     </li>
