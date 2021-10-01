@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\db\Campaign;
 use app\models\db\FreemiumCallCenterKpi;
 use app\models\db\FreemiumSummaryDetail;
 use app\models\db\FreemiumSummaryGraph;
+use app\models\db\UserInfo;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
 use Yii;
@@ -13,6 +15,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use app\models\ReportFile;
+
 class UbbittFreemiumController extends Controller
 {
     /**
@@ -64,6 +67,21 @@ class UbbittFreemiumController extends Controller
     public function actionDashboard()
     {
         $reportFileModel = new ReportFile();
+        if (!in_array('menu_ubbitt_freemium', Yii::$app->session->get("userPermissions"))) {
+            if (in_array('menu_ubbitt_premium', Yii::$app->session->get("userPermissions"))) {
+                $userId = Yii::$app->session->get("userIdentity")->user_id;
+                $userInfo = UserInfo::findById($userId);
+                $campaignModel = new Campaign();
+                $campaigns = $campaignModel->findByCompanyId($userInfo->companyId);
+                $this->redirect('/ubbitt-premium/dashboard?id=' . $campaigns[0]->campaignId);
+            } else {
+                if (in_array('menu_ubbitt_beyond_collection', Yii::$app->session->get("userPermissions"))) {
+                    $this->redirect('/ubbitt-premium/collection-dashboard');
+                } else {
+                    $this->redirect('/ubbitt-premium/renewal-dashboard');
+                }
+            }
+        }
 
         return $this->render('dashboard', [
             'reportFileModel' => $reportFileModel
