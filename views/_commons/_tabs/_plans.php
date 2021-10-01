@@ -19,10 +19,11 @@ use yii\helpers\Url;
         $userInfo = UserInfo::findById($userId);
         $campaignModel = new Campaign();
         $campaigns = $campaignModel->findByCompanyId($userInfo->companyId);
+        $campaignId = count($campaigns) > 0 ? $campaigns[0]->campaignId : null;
     ?>
     <li class="nav-item" role="presentation">
         <a class="nav-link <?= Yii::$app->controller->id == 'ubbitt-premium' ? 'active' : '' ?>" id="premium-tab"
-            href="<?= Url::toRoute(['ubbitt-premium/dashboard', 'id' => ($campaigns[0]->campaignId)]) ?>">Ubbitt
+            href="<?= Url::toRoute(['ubbitt-premium/dashboard', 'id' => ($campaignId)]) ?>">Ubbitt
             Premium</a>
     </li>
     <?php } ?>

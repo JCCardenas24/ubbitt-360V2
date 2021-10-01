@@ -116,6 +116,8 @@ function summaryCallback(start, end) {
 }
 
 function findSummaryGraphData(start, end) {
+    startDate = start;
+    endDate = end;
     $.ajax({
         url: '/ubbitt-beyond/find-collection-summary-graph-data',
         type: 'POST',
@@ -805,6 +807,8 @@ function updateConcentrateOnTrackGraph(kpis) {
 }
 
 function loadKpis(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -850,6 +854,8 @@ function loadKpis(start, end) {
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
@@ -926,6 +932,8 @@ function createCallRecordRow(callRecord) {
 }
 
 function reportsListCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-collection-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
