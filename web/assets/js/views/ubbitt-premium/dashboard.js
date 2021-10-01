@@ -24,7 +24,7 @@ $(() => {
     if ($('[id^=premium-marketing-campaign][id$=tab]').is(':visible')) {
         marketingGeneralCallback(startDate, endDate);
     }
-    if ($('#brief-campaign-1').is(':visible')) {
+    if ($('div[id^="brief-campaign"]').is(':visible')) {
         findBriefData();
     }
     $('#pemp_yes').on('change', () => {
