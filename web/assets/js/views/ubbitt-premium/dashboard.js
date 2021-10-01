@@ -24,12 +24,19 @@ $(() => {
     if ($('[id^=premium-marketing-campaign][id$=tab]').is(':visible')) {
         marketingGeneralCallback(startDate, endDate);
     }
+    if ($('#brief-campaign-1').is(':visible')) {
+        findBriefData();
+    }
     $('#pemp_yes').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
     $('#pemp_no').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
+});
+
+$('[id^=brief-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+    findBriefData();
 });
 
 $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
@@ -987,13 +994,13 @@ function updateDailyPerformanceDataGraph(data) {
         },
         toolbox: {},
         legend: {
-            data: ['Inversión campaña', 'Leads', 'Ventas'],
+            data: ['Leads', 'Inversión campaña', 'Ventas'],
             x: 'right',
             top: '0%',
             right: '0%',
         },
         // Add custom colors
-        color: ['#ffd800', '#ff6f61', '#32d926'],
+        color: ['#ff6f61', '#ffd800', '#32d926'],
         xAxis: [
             {
                 type: 'category',
@@ -1008,17 +1015,8 @@ function updateDailyPerformanceDataGraph(data) {
                 type: 'value',
                 name: 'Leads',
                 min: 0,
-                // max:
-                //     Math.max.apply(
-                //         Math,
-                //         data.map(function (row) {
-                //             return row.investment;
-                //         })
-                //     ) + 100,
+                max: 100,
                 interval: 5,
-                // axisLabel: {
-                //     formatter: '{value} ml'
-                // }
             },
             {
                 type: 'value',
@@ -1032,18 +1030,9 @@ function updateDailyPerformanceDataGraph(data) {
                 //         })
                 //     ) + 50,
                 interval: 100,
-                // axisLabel: {
-                //     formatter: '{value} °C'
-                // }
             },
         ],
         series: [
-            {
-                name: 'Inversión campaña',
-                type: 'bar',
-                yAxisIndex: 1,
-                data: data.map((row) => row.investment),
-            },
             {
                 name: 'Leads',
                 type: 'line',
@@ -1051,15 +1040,21 @@ function updateDailyPerformanceDataGraph(data) {
                 data: data.map((row) => row.leads),
             },
             {
+                name: 'Inversión campaña',
+                type: 'bar',
+                yAxisIndex: 1,
+                data: data.map((row) => row.investment),
+            },
+            {
                 name: 'Ventas',
-                type: 'line',
+                type: 'bar',
                 yAxisIndex: 1,
                 data: data.map((row) => row.sales),
             },
         ],
     };
 
-    rendimiento_mixed_chart.setOption(options_redimiento_data);
+    rendimiento_mixed_chart.setOption(options_redimiento_data, true);
     $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
         rendimiento_mixed_chart.resize();
     });
@@ -1455,7 +1450,7 @@ function findCenterKpisData(start, end) {
             $('#kpi-speaking-time').text(data.speaking_time + ' hrs');
         },
         error: () => {
-            alert("Ocurrió un problema al consultar los KPI's");
+            showAlert('error', "Ocurrió un problema al consultar los KPI's");
         },
         complete: function () {
             hidePreloader();
@@ -1494,7 +1489,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1537,4 +1535,204 @@ function createCallRecordRow(callRecord) {
         </tr>
     `
     );
+}
+
+function onEnableBriefEdition() {
+    $('#premium-brief-campaign').find('input').prop('disabled', false);
+    $('#btn-edit-brief').hide();
+    $('#btn-cancel-edit-brief').show();
+    $('#btn-save-brief').show();
+}
+
+function onCancelBriefEdition() {
+    $('#premium-brief-campaign').find('input').prop('disabled', true);
+    $('#btn-edit-brief').show();
+    $('#btn-cancel-edit-brief').hide();
+    $('#btn-save-brief').hide();
+}
+
+function findBriefData() {
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/find-brief',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateCampaignForm[campaignId]': urlSearchParams.get('id'),
+        },
+        success: (data) => {
+            if (data != null) {
+                $(
+                    'input[name="brief-industry-type"][value="' +
+                        data.industryType +
+                        '"]'
+                ).prop('checked', true);
+                $('#campaign-name').val(data.name);
+                $('#product-description').val(data.productDescription);
+                $('#product-insights').val(data.productInsights);
+                $('#product-added-value').val(data.productAddedValue);
+                $('#product-average-price').val(data.productAveragePrice);
+                $('#product-first-payment-average-price').val(
+                    data.productFirstPaymentAveragePrice
+                );
+                $('#payment-frequency-yearly').prop(
+                    'checked',
+                    data.paymentFrequencyYearly
+                );
+                $('#payment-frequency-biannual').prop(
+                    'checked',
+                    data.paymentFrequencyBiannual
+                );
+                $('#payment-frequency-quarterly').prop(
+                    'checked',
+                    data.paymentFrequencyQuarterly
+                );
+                $('#payment-frequency-monthly').prop(
+                    'checked',
+                    data.paymentFrequencyMonthly
+                );
+                $('#payment-type-cash').prop('checked', data.paymentTypeCash);
+                $('#payment-type-card-months-without-interest').prop(
+                    'checked',
+                    data.paymentTypeCardMonthsWithoutInterest
+                );
+                $('#payment-type-card-single-payment').prop(
+                    'checked',
+                    data.paymentTypeCardSinglePayment
+                );
+                $('#payment-method-card').prop(
+                    'checked',
+                    data.paymentMethodCard
+                );
+                $('#payment-method-cash-pickup').prop(
+                    'checked',
+                    data.paymentMethodCashPickup
+                );
+                $('#payment-method-wire-transfer').prop(
+                    'checked',
+                    data.paymentMethodWireTransfer
+                );
+                $('#investment').val(data.investment);
+                $('#start-date').val(data.startDate);
+                $('#end-date').val(data.endDate);
+                $('#expected-bidding-per-lead').val(
+                    data.expectedBiddingPerLead
+                );
+                $('#expected-total-sales').val(data.expectedTotalSales);
+            }
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al recuperar la información del Brief'
+            );
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function onSaveBrief() {
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/save-brief',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'PremiumBriefForm[campaignId]': urlSearchParams.get('id'),
+            'PremiumBriefForm[industryType]': $(
+                'input[name="brief-industry-type"]:checked'
+            ).val(),
+            'PremiumBriefForm[name]': $('#campaign-name').val(),
+            'PremiumBriefForm[productDescription]': $(
+                '#product-description'
+            ).val(),
+            'PremiumBriefForm[productInsights]': $('#product-insights').val(),
+            'PremiumBriefForm[productAddedValue]': $(
+                '#product-added-value'
+            ).val(),
+            'PremiumBriefForm[productAveragePrice]': $(
+                '#product-average-price'
+            ).val(),
+            'PremiumBriefForm[productFirstPaymentAveragePrice]': $(
+                '#product-first-payment-average-price'
+            ).val(),
+            'PremiumBriefForm[paymentFrequencyYearly]': $(
+                '#payment-frequency-yearly'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentFrequencyBiannual]': $(
+                '#payment-frequency-biannual'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentFrequencyQuarterly]': $(
+                '#payment-frequency-quarterly'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentFrequencyMonthly]': $(
+                '#payment-frequency-monthly'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentTypeCash]': $('#payment-type-cash').is(
+                ':checked'
+            )
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentTypeCardMonthsWithoutInterest]': $(
+                '#payment-type-card-months-without-interest'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentTypeCardSinglePayment]': $(
+                '#payment-type-card-single-payment'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentMethodCard]': $('#payment-method-card').is(
+                ':checked'
+            )
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentMethodCashPickup]': $(
+                '#payment-method-cash-pickup'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[paymentMethodWireTransfer]': $(
+                '#payment-method-wire-transfer'
+            ).is(':checked')
+                ? 1
+                : 0,
+            'PremiumBriefForm[investment]': $('#investment').val(),
+            'PremiumBriefForm[startDate]': $('#start-date').val(),
+            'PremiumBriefForm[endDate]': $('#end-date').val(),
+            'PremiumBriefForm[expectedBiddingPerLead]': $(
+                '#expected-bidding-per-lead'
+            ).val(),
+            'PremiumBriefForm[expectedTotalSales]': $(
+                '#expected-total-sales'
+            ).val(),
+        },
+        success: (response) => {
+            showAlert('success', 'El Brief se actualizó correctamente');
+            $('#premium-brief-campaign').find('input').prop('disabled', true);
+            $('#btn-edit-brief').show();
+            $('#btn-cancel-edit-brief').hide();
+            $('#btn-save-brief').hide();
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al guardar la información del Brief'
+            );
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
 }

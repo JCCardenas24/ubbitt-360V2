@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\db\Campaign;
 use app\models\db\PremiumAgeData;
+use app\models\db\PremiumBrief;
 use app\models\db\PremiumCallCenterKpi;
 use app\models\db\PremiumCampaignForecast;
 use app\models\db\PremiumDailyPerformance;
@@ -16,12 +18,14 @@ use app\models\db\PremiumSummaryInputs;
 use app\models\db\PremiumVehicleModel;
 use app\models\db\PremiumVehicleYear;
 use app\models\db\webhook\WebHookCalls;
+use app\models\forms\PremiumBriefForm;
 use app\models\forms\SearchByDateCampaignForm;
 use app\models\forms\SearchByDateForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 class UbbittPremiumController extends Controller
@@ -40,7 +44,9 @@ class UbbittPremiumController extends Controller
                             'dashboard', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
-                            'find-calls', 'find-marketing-kpis-data'
+                            'find-calls', 'find-marketing-kpis-data',
+                            'find-brief',
+                            'save-brief'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -60,6 +66,8 @@ class UbbittPremiumController extends Controller
                     'find-marketing-segment-data' => ['post'],
                     'find-calls' => ['post'],
                     'find-marketing-kpis-data' => ['post'],
+                    'find-brief' => ['post'],
+                    'save-brief' => ['post'],
                 ],
             ],
         ];
@@ -198,5 +206,87 @@ class UbbittPremiumController extends Controller
         $model = new PremiumCallCenterKpi();
         $data = $model->findByDates($searchParams->campaignId, $searchParams->startDate, $searchParams->endDate);
         return $data;
+    }
+
+    public function actionFindBrief()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateCampaignForm();
+        $searchParams->load(Yii::$app->request->post());
+        $model = new PremiumBrief();
+        $data = $model->findByCampaignId($searchParams->campaignId);
+        $campaignModel = new Campaign();
+        $campaign = $campaignModel->findById($searchParams->campaignId);
+        $returnModel = new PremiumBriefForm();
+        $returnModel->name = $campaign->name;
+        if ($data != null) {
+            $returnModel->industryType = $data->industry_type;
+            $returnModel->productDescription = $data->product_description;
+            $returnModel->productInsights = $data->product_insights;
+            $returnModel->productAddedValue = $data->product_added_value;
+            $returnModel->productAveragePrice = $data->product_average_price;
+            $returnModel->productFirstPaymentAveragePrice = $data->product_first_payment_average_price;
+            $returnModel->paymentFrequencyYearly = $data->payment_frequency_yearly;
+            $returnModel->paymentFrequencyBiannual = $data->payment_frequency_biannual;
+            $returnModel->paymentFrequencyQuarterly = $data->payment_frequency_quarterly;
+            $returnModel->paymentFrequencyMonthly = $data->payment_frequency_monthly;
+            $returnModel->paymentTypeCash = $data->payment_type_cash;
+            $returnModel->paymentTypeCardMonthsWithoutInterest = $data->payment_type_card_months_without_interest;
+            $returnModel->paymentTypeCardSinglePayment = $data->payment_type_card_single_payment;
+            $returnModel->paymentMethodCard = $data->payment_method_card;
+            $returnModel->paymentMethodCashPickup = $data->payment_method_cash_pickup;
+            $returnModel->paymentMethodWireTransfer = $data->payment_method_wire_transfer;
+            $returnModel->investment = $data->investment;
+            $returnModel->startDate = $data->start_date;
+            $returnModel->endDate = $data->end_date;
+            $returnModel->expectedBiddingPerLead = $data->expected_bidding_per_lead;
+            $returnModel->expectedTotalSales = $data->expected_total_sales;
+        }
+        return $returnModel;
+    }
+
+    public function actionSaveBrief()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $briefForm = new PremiumBriefForm();
+        $briefForm->load(Yii::$app->request->post());
+
+        $campaignModel = new Campaign();
+        $campaign = $campaignModel->findById($briefForm->campaignId);
+
+        if ($campaign == null) {
+            throw new BadRequestHttpException('La campaña no existe');
+        }
+        $campaign->name = $briefForm->name;
+        $campaign->save();
+
+        $briefDbModel = new PremiumBrief();
+        $briefDb = $briefDbModel->findByCampaignId($briefForm->campaignId);
+        if ($briefDb == null) {
+            $briefDb = new PremiumBrief();
+            $briefDb->campaignId = $briefForm->campaignId;
+        }
+        $briefDb->industry_type = $briefForm->industryType;
+        $briefDb->product_description = $briefForm->productDescription;
+        $briefDb->product_insights = $briefForm->productInsights;
+        $briefDb->product_added_value = $briefForm->productAddedValue;
+        $briefDb->product_average_price = $briefForm->productAveragePrice;
+        $briefDb->product_first_payment_average_price = $briefForm->productFirstPaymentAveragePrice;
+        $briefDb->payment_frequency_yearly = $briefForm->paymentFrequencyYearly;
+        $briefDb->payment_frequency_biannual = $briefForm->paymentFrequencyBiannual;
+        $briefDb->payment_frequency_quarterly = $briefForm->paymentFrequencyQuarterly;
+        $briefDb->payment_frequency_monthly = $briefForm->paymentFrequencyMonthly;
+        $briefDb->payment_type_cash = $briefForm->paymentTypeCash;
+        $briefDb->payment_type_card_months_without_interest = $briefForm->paymentTypeCardMonthsWithoutInterest;
+        $briefDb->payment_type_card_single_payment = $briefForm->paymentTypeCardSinglePayment;
+        $briefDb->payment_method_card = $briefForm->paymentMethodCard;
+        $briefDb->payment_method_cash_pickup = $briefForm->paymentMethodCashPickup;
+        $briefDb->payment_method_wire_transfer = $briefForm->paymentMethodWireTransfer;
+        $briefDb->investment = $briefForm->investment;
+        $briefDb->start_date = $briefForm->startDate;
+        $briefDb->end_date = $briefForm->endDate;
+        $briefDb->expected_bidding_per_lead = $briefForm->expectedBiddingPerLead;
+        $briefDb->expected_total_sales = $briefForm->expectedTotalSales;
+        $briefDb->save();
     }
 }
