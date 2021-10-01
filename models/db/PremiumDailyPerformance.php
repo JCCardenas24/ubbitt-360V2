@@ -29,8 +29,8 @@ class PremiumDailyPerformance extends ActiveRecord
     {
         return [
             [['campaign_id', 'upload_date', 'date', 'investment', 'leads', 'sales'], 'required'],
-            [['campaign_id', 'leads', 'sales'], 'integer'],
-            [['investment'], 'double'],
+            [['campaign_id', 'leads'], 'integer'],
+            [['investment', 'sales'], 'double'],
             [['upload_date', 'date'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
