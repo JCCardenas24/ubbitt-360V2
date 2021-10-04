@@ -61,10 +61,18 @@ $('#kpis-info-beyond-renovacion-tab').on('shown.bs.tab', function (event) {
     resetDatePickers();
     loadKpis(startDate, endDate, null, 1);
 });
-$('#beyond-renovacion-callcenter-bd-tab').on('shown.bs.tab', function (event) {
+$('#beyond-renovacion-callcenter-bd-calls-tab').on('shown.bs.tab', function (event) {
     // Initialize the date picker on the call center calls database tab
     resetDatePickers();
     callDatabaseCallback(startDate, endDate, null, 1);
+});
+$('#beyond-renovacion-callcenter-bd-sales-tab').on('shown.bs.tab', function (event) {
+    // Initialize the date picker on the call center calls database tab
+    $('.range-pick#beyond-sales-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseSalesCallback
+    );
+    callDatabaseSalesCallback(startDate, endDate, null, 1);
 });
 $('#beyond-renovacion-reportes-tab, .nav-link-beyond-renewal-reports').on(
     'shown.bs.tab',
@@ -947,6 +955,57 @@ function createCallRecordRow(callRecord) {
         ) +
         `
             </td>
+        </tr>
+    `
+    );
+}
+
+function callDatabaseSalesCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#beyond-sales-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-beyond/find-renewal-sales',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+        },
+        success: (response) => {
+            $('#ubbitt-beyond-renewal-sales-table tbody').html(null);
+            $.each(response.salesRecords, (index, callRecord) => {
+                $('#ubbitt-beyond-renewal-sales-table tbody').append(
+                    createSalesRecordRow(callRecord)
+                );
+            });
+            updatePaginator(
+                '#ubbitt-beyond-renewal-sales-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createSalesRecordRow(salesRecord) {
+    return (
+        `
+        <tr>
+            <th scope="row" colspan="10"></td>
         </tr>
     `
     );

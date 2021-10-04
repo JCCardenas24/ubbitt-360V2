@@ -5,9 +5,14 @@
             aria-selected="true">KPI's de telefonía</a>
     </li>
     <li class="nav-item table_llamadas" role="presentation">
-        <a class="nav-link" id="beyond-renovacion-callcenter-bd-tab" data-toggle="pill"
-            href="#beyond-renovacion-callcenter-bd" role="tab" aria-controls="beyond-renovacion-callcenter-bd"
+        <a class="nav-link" id="beyond-renovacion-callcenter-bd-calls-tab" data-toggle="pill"
+            href="#beyond-renovacion-callcenter-bd-calls" role="tab" aria-controls="beyond-renovacion-callcenter-bd-calls"
             aria-selected="false">Base de datos (Llamadas)</a>
+    </li>
+    <li class="nav-item table_llamadas" role="presentation">
+        <a class="nav-link" id="beyond-renovacion-callcenter-bd-sales-tab" data-toggle="pill"
+            href="#beyond-renovacion-callcenter-bd-sales" role="tab" aria-controls="beyond-renovacion-callcenter-bd-sales"
+            aria-selected="false">Base de datos (Ventas)</a>
     </li>
 </ul>
 <div class="tab-content" id="beyond-renovacion-callcenter-base-datosContent">
@@ -15,8 +20,12 @@
         aria-labelledby="kpis-info-beyond-renovacion-tab">
         <?= $this->render('_call-center/_kpis') ?>
     </div>
-    <div class="tab-pane fade" id="beyond-renovacion-callcenter-bd" role="tabpanel"
-        aria-labelledby="beyond-renovacion-callcenter-bd-tab">
-        <?= $this->render('_call-center/_database') ?>
+    <div class="tab-pane fade" id="beyond-renovacion-callcenter-bd-calls" role="tabpanel"
+        aria-labelledby="beyond-renovacion-callcenter-bd-calls-tab">
+        <?= $this->render('_call-center/_database-calls') ?>
+    </div>
+    <div class="tab-pane fade" id="beyond-renovacion-callcenter-bd-sales" role="tabpanel"
+        aria-labelledby="beyond-renovacion-callcenter-bd-sales-tab">
+        <?= $this->render('_call-center/_database-sales') ?>
     </div>
 </div>
