@@ -28,15 +28,15 @@ class PremiumBrief extends ActiveRecord
     public function rules()
     {
         return [
-            [[
-                'campaign_id', 'industry_type', 'product_description', 'product_insights',
-                'product_added_value', 'product_average_price', 'product_first_payment_average_price',
-                'payment_frequency_yearly', 'payment_frequency_biannual', 'payment_frequency_quarterly',
-                'payment_frequency_monthly', 'payment_type_cash',
-                'payment_type_card_months_without_interest', 'payment_type_card_single_payment',
-                'payment_method_card', 'payment_method_cash_pickup', 'payment_method_wire_transfer',
-                'investment', 'start_date', 'end_date', 'expected_bidding_per_lead', 'expected_total_sales'
-            ], 'required'],
+            // [[
+            //     'campaign_id', 'industry_type', 'product_description', 'product_insights',
+            //     'product_added_value', 'product_average_price', 'product_first_payment_average_price',
+            //     'payment_frequency_yearly', 'payment_frequency_biannual', 'payment_frequency_quarterly',
+            //     'payment_frequency_monthly', 'payment_type_cash',
+            //     'payment_type_card_months_without_interest', 'payment_type_card_single_payment',
+            //     'payment_method_card', 'payment_method_cash_pickup', 'payment_method_wire_transfer',
+            //     'investment', 'start_date', 'end_date', 'expected_bidding_per_lead', 'expected_total_sales'
+            // ], 'required'],
             [[
                 'industry_type', 'product_description', 'product_insights',
                 'product_added_value', 'product_average_price', 'investment',

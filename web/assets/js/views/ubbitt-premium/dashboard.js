@@ -184,14 +184,13 @@ function findForecastData(start, end, moneyFormatter) {
         },
         success: (data) => {
             $('#forecast-investment').text(
-                moneyFormatter
-                    .format(parseInt(data.ubbitt_investment))
-                    .replace('.00', '')
+                moneyFormatter.format(data.ubbitt_investment).replace('.00', '')
             );
             $('#ubbitt-investment').text(
-                moneyFormatter
-                    .format(parseInt(data.ubbitt_investment))
-                    .replace('.00', '')
+                moneyFormatter.format(data.ubbitt_investment).replace('.00', '')
+            );
+            $('#spent-investment').text(
+                moneyFormatter.format(data.ubbitt_investment).replace('.00', '')
             );
             $('#forecast-sales').text(
                 moneyFormatter
@@ -229,35 +228,27 @@ function findSummaryGraphData(start, end, moneyFormatter) {
         success: (response) => {
             summaryGraphData = response;
             updateSummaryGraphChart(response);
-            $('#actual-investment').text(
-                moneyFormatter.format(
-                    Math.round(
-                        response.reduce(
-                            (total, record) =>
-                                total + parseFloat(record.investment),
-                            0
-                        )
-                    )
-                )
-            );
             $('#actual-sales').text(
                 moneyFormatter.format(
                     Math.round(
-                        response.reduce(
-                            (total, record) => total + parseFloat(record.sales),
-                            0
-                        )
+                        response.reduce((total, record) => {
+                            if (record.type == 'actual') {
+                                total = total + parseFloat(record.sales);
+                            }
+                            return total;
+                        }, 0)
                     )
                 )
             );
             $('#actual-collected').text(
                 moneyFormatter.format(
                     Math.round(
-                        response.reduce(
-                            (total, record) =>
-                                total + parseFloat(record.collected),
-                            0
-                        )
+                        response.reduce((total, record) => {
+                            if (record.type == 'actual') {
+                                total = total + parseFloat(record.collected);
+                            }
+                            return total;
+                        }, 0)
                     )
                 )
             );
@@ -538,6 +529,9 @@ function findSummaryInputs(start, end, moneyFormatter) {
             $('#spent-budget').text(
                 moneyFormatter.format(data.spent_budget).replace('.00', '')
             );
+            $('#actual-investment').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
             $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
             $('#roi-percentage').text(
                 data.roi_percentage.replace('.00', '') + '%'
@@ -558,24 +552,27 @@ function findSummaryInputs(start, end, moneyFormatter) {
                 data.collected_percentage.replace('.00', '') + '%'
             );
             updateFunnelChart(data, moneyFormatter);
-            $('#spent-investment').text(
-                moneyFormatter.format(data.spent_investment).replace('.00', '')
-            );
             $('#sales-total-amount').text(
                 moneyFormatter
                     .format(data.sales_total_amount)
                     .replace('.00', '')
             );
+            // $('#sales-percentage').text(
+            //     data.sales_percentage.replace('.00', '') + '%'
+            // );
             $('#sales-percentage').text(
-                data.sales_percentage.replace('.00', '') + '%'
+                data.roi_percentage.replace('.00', '') + '%'
             );
             $('#collected-total-amount').text(
                 moneyFormatter
                     .format(data.collected_total_amount)
                     .replace('.00', '')
             );
+            // $('#collection-percentage').text(
+            //     data.collection_percentage.replace('.00', '') + '%'
+            // );
             $('#collection-percentage').text(
-                data.collection_percentage.replace('.00', '') + '%'
+                data.collected_percentage.replace('.00', '') + '%'
             );
             updateSalesConcentrate(data);
             $('#total-emitted-sales').text(
@@ -642,8 +639,8 @@ function updateFunnelChart(data, moneyFormatter) {
                 },
                 data: [
                     { value: 100, name: 'Inversion total' },
-                    { value: data.sales_percentage, name: 'Total ventas' },
-                    { value: data.collection_percentage, name: 'Total cobros' },
+                    { value: data.roi_percentage, name: 'Total ventas' },
+                    { value: data.collected_percentage, name: 'Total cobros' },
                 ],
                 // Ensure outer shape will not be over inner shape when hover.
                 z: 100,

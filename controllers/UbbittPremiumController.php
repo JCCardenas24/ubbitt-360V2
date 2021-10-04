@@ -114,7 +114,9 @@ class UbbittPremiumController extends Controller
         $headerData = new PremiumHeader();
         $headerData->investment = $forecastData['ubbitt_investment'];
         $headerData->sales = array_reduce($summaryGraphData, function ($carry, $item) {
-            $carry += $item->sales;
+            if ($item->type == 'actual') {
+                $carry += $item->sales;
+            }
             return $carry;
         }, 0);
         $headerData->spentBudget = $summaryInputsData['spent_budget'];
