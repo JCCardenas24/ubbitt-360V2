@@ -1517,7 +1517,7 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
             $('#freemium-sales-table tbody').html(null);
             $.each(response.salesRecords, (index, callRecord) => {
                 $('#freemium-sales-table tbody').append(
-                    createCallRecordRow(callRecord)
+                    createSalesRecordRow(callRecord)
                 );
             });
             updatePaginator(

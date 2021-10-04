@@ -34,7 +34,7 @@ class UbbittBeyondController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis', 'find-collection-calls', 'find-collection-summary-detail-data', 'renewal-dashboard', 'find-renewal-summary-graph-data', 'find-renewal-call-center-kpis', 'find-renewal-calls', 'find-renewal-summary-detail-data', 'upload-database'],
+                        'actions' => ['collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis', 'find-collection-calls', 'find-collection-sales', 'find-collection-summary-detail-data', 'renewal-dashboard', 'find-renewal-summary-graph-data', 'find-renewal-call-center-kpis', 'find-renewal-calls', 'find-renewal-summary-detail-data', 'upload-database'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -47,6 +47,7 @@ class UbbittBeyondController extends Controller
                     'find-collection-summary-graph-data' => ['post'],
                     'find-collection-call-center-kpis' => ['post'],
                     'find-collection-calls' => ['post'],
+                    'find-collection-sales' => ['post'],
                     'find-collection-summary-detail-data' => ['post'],
                     'renewal-dashboard' => ['get'],
                     'find-renewal-summary-graph-data' => ['post'],
@@ -115,6 +116,13 @@ class UbbittBeyondController extends Controller
         $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_beyond_collection_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+    
+    public function actionFindCollectionSales()
+    {
+        $data = [];
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
     }
 
     public function actionFindCollectionSummaryDetailData()

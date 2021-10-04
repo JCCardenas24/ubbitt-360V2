@@ -1,1 +1,0 @@
-<?= $this->render('_database/_calls-table') ?>
