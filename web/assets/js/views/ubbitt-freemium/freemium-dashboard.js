@@ -27,10 +27,7 @@ $(function () {
         },
     };
 
-    $('.range-pick#freemium-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
+    resetDatePickers();
     summaryCallback(startDate, endDate);
     $('.nav-link-freemium-reports').first().addClass('active');
     $('#freemium-inbound-options .nav-link').first().tab('show');
@@ -40,28 +37,16 @@ $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
     summaryCallback(startDate, endDate);
 });
 $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#freemium-kpis-date-range').daterangepicker(
-        dateRangePickerConfig,
-        loadKpis
-    );
+    resetDatePickers();
     loadKpis(startDate, endDate);
 });
 $('#freemium-call-center-bd-calls-tab').on('shown.bs.tab', function (event) {
-    // Initialize the date picker on the call center calls database tab
-    $('.range-pick#freemium-calls-database-date-range').daterangepicker(
-        dateRangePickerConfig,
-        callDatabaseCallback
-    );
+    resetDatePickers();
     callDatabaseCallback(startDate, endDate, null, 1);
 });
 
 $('#freemium-call-center-bd-sales-tab').on('shown.bs.tab', function (event) {
-    // Initialize the date picker on the call center calls database tab
-    $('.range-pick#freemium-sales-database-date-range').daterangepicker(
-        dateRangePickerConfig,
-        callDatabaseSalesCallback
-    );
+    resetDatePickers();
     callDatabaseSalesCallback(startDate, endDate, null, 1);
 });
 
@@ -72,15 +57,36 @@ $('#freemium-inbound-reportes-tab, .nav-link-freemium-reports').on(
             'tab-type'
         );
         $('#type-file').val(tab_report_type);
-        // Initialize the date picker on the call center kpi's tab
-        $('.range-pick#freemium-report-date-range').daterangepicker(
-            dateRangePickerConfig,
-            reportsListCallback
-        );
+        resetDatePickers();
         reportsListCallback(startDate, endDate, null, 1);
         showHideAddButton(tab_report_type);
     }
 );
+
+function resetDatePickers() {
+    dateRangePickerConfig.startDate = startDate;
+    dateRangePickerConfig.endDate = endDate;
+    $('.range-pick#freemium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    $('.range-pick#freemium-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        loadKpis
+    );
+    $('.range-pick#freemium-calls-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseCallback
+    );
+    $('.range-pick#freemium-sales-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseSalesCallback
+    );
+    $('.range-pick#freemium-report-date-range').daterangepicker(
+        dateRangePickerConfig,
+        reportsListCallback
+    );
+}
 
 function showHideAddButton(reportType) {
     if (userHasPermission(reportType + '-add')) {
@@ -1539,13 +1545,11 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
 }
 
 function createSalesRecordRow(salesRecord) {
-    return (
-        `
+    return `
         <tr>
             <th scope="row" colspan="10"></td>
         </tr>
-    `
-    );
+    `;
 }
 
 function createCallRecordRow(callRecord) {
