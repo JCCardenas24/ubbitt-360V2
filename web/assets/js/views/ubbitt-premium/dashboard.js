@@ -3,8 +3,8 @@ let endDate = null;
 let summaryGraphData = [];
 const urlSearchParams = new URLSearchParams(window.location.search);
 $(() => {
-    startDate = moment().subtract(1, 'months').startOf('month');
-    endDate = moment().subtract(1, 'months').endOf('month');
+    startDate = moment().startOf('month');
+    endDate = moment();
 
     dateRangePickerConfig = {
         showDropdowns: true,
@@ -407,10 +407,6 @@ function updateSummaryGraphChart(data) {
     };
 
     stackedChart.setOption(option, true);
-
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        stackedChart.resize();
-    });
 }
 
 function findLeadsCallsGraphData(start, end) {
@@ -510,9 +506,6 @@ function updateLeadsCallsGraph(data) {
     };
 
     stackedChart.setOption(option, true);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        stackedChart.resize();
-    });
 }
 
 function findSummaryInputs(start, end, moneyFormatter) {
@@ -637,6 +630,7 @@ function updateFunnelChart(data, moneyFormatter) {
                         formatter: '{b}: {c}%',
                     },
                 },
+                sort: 'none',
                 data: [
                     { value: 100, name: 'Inversion total' },
                     { value: data.roi_percentage, name: 'Total ventas' },
@@ -649,9 +643,6 @@ function updateFunnelChart(data, moneyFormatter) {
     };
 
     funnel_ventas_inversiones_chart.setOption(options_funnel_data);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        funnel_ventas_inversiones_chart.resize();
-    });
 }
 
 function updateSalesConcentrate(data) {
@@ -780,9 +771,6 @@ function updateSalesConcentrate(data) {
     };
 
     basicdoughnut_concentrado_ventas.setOption(options);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        basicdoughnut_concentrado_ventas.resize();
-    });
 }
 
 function marketingGeneralCallback(start, end) {
@@ -1082,7 +1070,7 @@ function updateDailyPerformanceDataGraph(data) {
                 //             return row.sales;
                 //         })
                 //     ) + 50,
-                interval: 100,
+                //interval: 100,
             },
         ],
         series: [
@@ -1108,12 +1096,6 @@ function updateDailyPerformanceDataGraph(data) {
     };
 
     rendimiento_mixed_chart.setOption(options_redimiento_data, true);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        rendimiento_mixed_chart.resize();
-    });
-    window.addEventListener('resize', function () {
-        rendimiento_mixed_chart.resize();
-    });
 }
 
 function marketingSegmentCallback(start, end) {
@@ -1217,12 +1199,6 @@ function updateAgeDataGraph(ageData) {
     };
 
     horizontal_double_bar.setOption(options_edad);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        horizontal_double_bar.resize();
-    });
-    window.addEventListener('resize', function () {
-        horizontal_double_bar.resize();
-    });
 }
 
 function updateRegionDataGraph(regionData) {
@@ -1350,12 +1326,6 @@ function updateScheduleDataGraph(scheduleData) {
     };
 
     horarios_double_bar.setOption(options_horarios);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        horarios_double_bar.resize();
-    });
-    window.addEventListener('resize', function () {
-        horarios_double_bar.resize();
-    });
 }
 
 function updateTopModelsDataGraph(topModelsData) {
@@ -1403,12 +1373,6 @@ function updateTopModelsDataGraph(topModelsData) {
     };
 
     horizontal_top_7_leads.setOption(options_top_7_leads);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        horizontal_top_7_leads.resize();
-    });
-    window.addEventListener('resize', function () {
-        horizontal_top_7_leads.resize();
-    });
 }
 
 function updateTopYearsDataGraph(topYearsData) {
@@ -1455,12 +1419,6 @@ function updateTopYearsDataGraph(topYearsData) {
     };
 
     horizontal_top_5_leads.setOption(options_top_5_leads);
-    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
-        horizontal_top_5_leads.resize();
-    });
-    window.addEventListener('resize', function () {
-        horizontal_top_5_leads.resize();
-    });
 }
 
 function callCenterKpisCallback(start, end) {
