@@ -3,8 +3,8 @@ let endDate = null;
 let summaryGraphData = [];
 const urlSearchParams = new URLSearchParams(window.location.search);
 $(() => {
-    startDate = moment().startOf('month');
-    endDate = moment();
+    startDate = moment().subtract(1, 'months').startOf('month');
+    endDate = moment().subtract(1, 'months').endOf('month');
 
     dateRangePickerConfig = {
         showDropdowns: true,
@@ -407,6 +407,10 @@ function updateSummaryGraphChart(data) {
     };
 
     stackedChart.setOption(option, true);
+
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        stackedChart.resize();
+    });
 }
 
 function findLeadsCallsGraphData(start, end) {
@@ -506,6 +510,9 @@ function updateLeadsCallsGraph(data) {
     };
 
     stackedChart.setOption(option, true);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        stackedChart.resize();
+    });
 }
 
 function findSummaryInputs(start, end, moneyFormatter) {
@@ -630,7 +637,6 @@ function updateFunnelChart(data, moneyFormatter) {
                         formatter: '{b}: {c}%',
                     },
                 },
-                sort: 'none',
                 data: [
                     { value: 100, name: 'Inversion total' },
                     { value: data.roi_percentage, name: 'Total ventas' },
@@ -643,6 +649,9 @@ function updateFunnelChart(data, moneyFormatter) {
     };
 
     funnel_ventas_inversiones_chart.setOption(options_funnel_data);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        funnel_ventas_inversiones_chart.resize();
+    });
 }
 
 function updateSalesConcentrate(data) {
@@ -771,6 +780,9 @@ function updateSalesConcentrate(data) {
     };
 
     basicdoughnut_concentrado_ventas.setOption(options);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        basicdoughnut_concentrado_ventas.resize();
+    });
 }
 
 function marketingGeneralCallback(start, end) {
@@ -1070,7 +1082,7 @@ function updateDailyPerformanceDataGraph(data) {
                 //             return row.sales;
                 //         })
                 //     ) + 50,
-                //interval: 100,
+                interval: 100,
             },
         ],
         series: [
@@ -1096,6 +1108,12 @@ function updateDailyPerformanceDataGraph(data) {
     };
 
     rendimiento_mixed_chart.setOption(options_redimiento_data, true);
+    $('[id^=resumen-campaign][id$=tab]').on('shown.bs.tab', function (event) {
+        rendimiento_mixed_chart.resize();
+    });
+    window.addEventListener('resize', function () {
+        rendimiento_mixed_chart.resize();
+    });
 }
 
 function marketingSegmentCallback(start, end) {
