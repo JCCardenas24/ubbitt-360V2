@@ -27,10 +27,7 @@ $(function () {
         },
     };
 
-    $('.range-pick#beyond-collection-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
+    resetDatePickers();
     summaryCallback(startDate, endDate);
 
     $('#management-selector').on('change', updateKpisByManagement);
@@ -40,34 +37,44 @@ $(function () {
         collected_total: 0,
     };
     updateConcentrateOnTrackGraph(initialChartKpis);
+    setTimeout(() => {
+        if ($('div[id="kpis-info-beyond-cobranza"]').is(':visible')) {
+            resetDatePickers();
+            loadKpis(startDate, endDate, null, 1);
+        }
+    }, 500);
 });
 
 /** TAB CHANGE EVENTS  **/
-$('#resumen-cobranza-tab').on('shown.bs.tab', function (event) {});
-$('#beyond-cobranza-callcenter-tab').on('shown.bs.tab', function (event) {
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#beyond-kpis-date-range').daterangepicker(
-        dateRangePickerConfig,
-        loadKpis
-    );
-    loadKpis(startDate, endDate);
+$('#resumen-cobranza-tab').on('shown.bs.tab', function (event) {
+    resetDatePickers();
+    summaryCallback(startDate, endDate);
 });
-$('#beyond-cobranza-callcenter-bd-calls-tab').on('shown.bs.tab', function (event) {
-    // Initialize the date picker on the call center calls database tab
-    $('.range-pick#beyond-calls-database-date-range').daterangepicker(
-        dateRangePickerConfig,
-        callDatabaseCallback
-    );
+$('#beyond-cobranza-callcenter-tab').on('shown.bs.tab', function (event) {
+    resetDatePickers();
+    loadKpis(startDate, endDate);
     callDatabaseCallback(startDate, endDate, null, 1);
 });
-$('#beyond-cobranza-callcenter-bd-sales-tab').on('shown.bs.tab', function (event) {
-    // Initialize the date picker on the call center sales database tab
-    $('.range-pick#beyond-sales-database-date-range').daterangepicker(
-        dateRangePickerConfig,
-        callDatabaseSalesCallback
-    );
-    callDatabaseSalesCallback(startDate, endDate, null, 1);
+$('#kpis-info-beyond-cobranza-tab').on('shown.bs.tab', function (event) {
+    s;
+    // Initialize the date picker on the call center calls database tab
+    resetDatePickers();
+    loadKpis(startDate, endDate, null, 1);
 });
+$('#beyond-cobranza-callcenter-bd-calls-tab').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        callDatabaseCallback(startDate, endDate, null, 1);
+    }
+);
+$('#beyond-cobranza-callcenter-bd-sales-tab').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        callDatabaseSalesCallback(startDate, endDate, null, 1);
+    }
+);
 $('#beyond-cobranza-reportes-tab, .nav-link-beyond-collection-reports').on(
     'shown.bs.tab',
     function (event) {
@@ -76,14 +83,36 @@ $('#beyond-cobranza-reportes-tab, .nav-link-beyond-collection-reports').on(
         ).data('tab-type');
         $('#type-file').val(tab_report_type);
         // Initialize the date picker on the call center kpi's tab
-        $('.range-pick#beyond-collection-report-date-range').daterangepicker(
-            dateRangePickerConfig,
-            reportsListCallback
-        );
+        resetDatePickers();
         reportsListCallback(startDate, endDate, null, 1);
         showHideAddButton(tab_report_type);
     }
 );
+
+function resetDatePickers() {
+    dateRangePickerConfig.startDate = startDate;
+    dateRangePickerConfig.endDate = endDate;
+    $('.range-pick#beyond-collection-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    $('.range-pick#beyond-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        loadKpis
+    );
+    $('.range-pick#beyond-calls-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseCallback
+    );
+    $('.range-pick#beyond-collection-report-date-range').daterangepicker(
+        dateRangePickerConfig,
+        reportsListCallback
+    );
+    $('.range-pick#beyond-sales-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseSalesCallback
+    );
+}
 
 function showHideAddButton(reportType) {
     if (userHasPermission(reportType + '-add')) {
@@ -981,13 +1010,11 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
 }
 
 function createSalesRecordRow(salesRecord) {
-    return (
-        `
+    return `
         <tr>
             <th scope="row" colspan="10"></td>
         </tr>
-    `
-    );
+    `;
 }
 
 function reportsListCallback(start, end, label, page = 1) {
