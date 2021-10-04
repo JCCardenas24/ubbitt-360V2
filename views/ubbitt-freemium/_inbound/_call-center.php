@@ -5,8 +5,12 @@
             aria-selected="true">KPI's de telefonía</a>
     </li>
     <li class="nav-item table_llamadas" role="presentation">
-        <a class="nav-link" id="freemium-call-center-bd-tab" data-toggle="pill" href="#freemium-call-center-bd"
-            role="tab" aria-controls="freemium-call-center-bd" aria-selected="false">Base de Datos</a>
+        <a class="nav-link nav-link-freemium-database" id="freemium-call-center-bd-calls-tab" data-toggle="pill" href="#freemium-call-center-bd-calls"
+            role="tab" aria-controls="freemium-call-center-bd" aria-selected="false" data-tab-type="calls">Base de Datos (Llamadas)</a>
+    </li>
+    <li class="nav-item table_llamadas" role="presentation">
+        <a class="nav-link nav-link-freemium-database" id="freemium-call-center-bd-sales-tab" data-toggle="pill" href="#freemium-call-center-bd-sales"
+            role="tab" aria-controls="freemium-call-center-bd" aria-selected="false" data-tab-type="sales">Base de Datos (Ventas)</a>
     </li>
 </ul>
 <div class="tab-content" id="freemium-call-center-optionsContent">
@@ -14,8 +18,12 @@
         aria-labelledby="freemium-call-center-kpis-tab">
         <?= $this->render('_call-center/_kpis') ?>
     </div>
-    <div class="tab-pane fade" id="freemium-call-center-bd" role="tabpanel"
+    <div class="tab-pane fade" id="freemium-call-center-bd-calls" role="tabpanel"
         aria-labelledby="freemium-call-center-bd-tab">
-        <?= $this->render('_call-center/_database') ?>
+        <?= $this->render('_call-center/_database-calls') ?>
+    </div>
+    <div class="tab-pane fade" id="freemium-call-center-bd-sales" role="tabpanel"
+        aria-labelledby="freemium-call-center-bd-tab">
+        <?= $this->render('_call-center/_database-sales') ?>
     </div>
 </div>
