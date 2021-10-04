@@ -14,7 +14,8 @@ use yii\helpers\Url;
     <li class="nav-item">
         <a class="nav-link<?= $campaignId == $campaign->campaignId ? ' active' : '' ?>"
             id="campaigns-<?= $campaign->campaignId ?>-tab"
-            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'brief-campaign']) ?>"><?= $campaign->name ?></a>
+            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'brief-campaign']) ?>"
+            style="width: 135px;"><?= $campaign->name ?></a>
     </li>
     <?php } ?>
 </ul>

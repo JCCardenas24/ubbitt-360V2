@@ -181,7 +181,7 @@
             </div>
         </div>
     </div>
-    <div class="row details_campaigns mt-0">
+    <!-- <div class="row details_campaigns mt-0">
         <div class="col-6">
             <div class="form-group">
                 <label for="expected-bidding-per-lead">Bidding por lead esperado </label>
@@ -194,5 +194,5 @@
                 <input type="text" class="form-control" id="expected-total-sales" placeholder="2000" disabled>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>

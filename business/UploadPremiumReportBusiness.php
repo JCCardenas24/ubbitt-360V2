@@ -59,7 +59,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumCampaignForecast::getDb()->beginTransaction();
+        // $transaction = PremiumCampaignForecast::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumCampaignForecast();
             $data->campaignId = $campaignId;
@@ -75,11 +75,11 @@ class UploadPremiumReportBusiness
             $data->salesForecast = $sheet->getCell("C$currentRowIndex")->getValue();
             $data->collectedForecast = $sheet->getCell("D$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Forecast Campaña - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function getValidationErrorsAsString($errors)
@@ -101,7 +101,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
-        $transaction = PremiumSummaryGraph::getDb()->beginTransaction();
+        // $transaction = PremiumSummaryGraph::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             $data = new PremiumSummaryGraph();
             $data->campaignId = $campaignId;
@@ -122,11 +122,11 @@ class UploadPremiumReportBusiness
             $data->collected = $sheet->getCellByColumnAndRow($currentColumnIndex, 5)->getValue();
             if (!$data->save()) {
                 $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException($sheetName . ' - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     function saveLeadsCallsGraphData($campaignId, Spreadsheet $spreadsheet)
@@ -138,7 +138,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
-        $transaction = PremiumLeadsCallsGraph::getDb()->beginTransaction();
+        // $transaction = PremiumLeadsCallsGraph::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             $data = new PremiumLeadsCallsGraph();
             $data->campaignId = $campaignId;
@@ -157,11 +157,11 @@ class UploadPremiumReportBusiness
             $data->calls = $sheet->getCellByColumnAndRow($currentColumnIndex, 4)->getValue();
             if (!$data->save()) {
                 $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Gráfica llamadas leads - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveSummaryInputs($campaignId, Spreadsheet $spreadsheet)
@@ -173,7 +173,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumSummaryInputs::getDb()->beginTransaction();
+        // $transaction = PremiumSummaryInputs::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumSummaryInputs();
             $data->campaignId = $campaignId;
@@ -205,11 +205,11 @@ class UploadPremiumReportBusiness
             $data->total_emitted_sales = $sheet->getCell("S$currentRowIndex")->getValue();
             $data->total_paid_sales = $sheet->getCell("T$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Resumen inputs - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveMarketingInputs($campaignId, Spreadsheet $spreadsheet)
@@ -221,7 +221,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumMarketingInputs::getDb()->beginTransaction();
+        // $transaction = PremiumMarketingInputs::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumMarketingInputs();
             $data->campaignId = $campaignId;
@@ -260,11 +260,11 @@ class UploadPremiumReportBusiness
             $data->expenses = $sheet->getCell("Z$currentRowIndex")->getValue();
             $data->investment = $sheet->getCell("AA$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Marketing inputs - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveMarketingMediaData($campaignId, Spreadsheet $spreadsheet)
@@ -276,7 +276,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumMediaData::getDb()->beginTransaction();
+        // $transaction = PremiumMediaData::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumMediaData();
             $data->campaignId = $campaignId;
@@ -296,11 +296,11 @@ class UploadPremiumReportBusiness
             $data->contacted = $sheet->getCell("G$currentRowIndex")->getValue();
             $data->sales = $sheet->getCell("H$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Tabla medios - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveMarketingDailyPerformance($campaignId, Spreadsheet $spreadsheet)
@@ -312,7 +312,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
-        $transaction = PremiumDailyPerformance::getDb()->beginTransaction();
+        // $transaction = PremiumDailyPerformance::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             $data = new PremiumDailyPerformance();
             $data->campaignId = $campaignId;
@@ -333,11 +333,11 @@ class UploadPremiumReportBusiness
 
             if (!$data->save()) {
                 $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Gráfica Marketing - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveMarketingAgeData($campaignId, Spreadsheet $spreadsheet)
@@ -349,7 +349,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumAgeData::getDb()->beginTransaction();
+        // $transaction = PremiumAgeData::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumAgeData();
             $data->campaignId = $campaignId;
@@ -372,11 +372,11 @@ class UploadPremiumReportBusiness
             $data->women_segment_55_64 = $sheet->getCell("J$currentRowIndex")->getValue();
             $data->women_segment_65_plus = $sheet->getCell("K$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Grafica de edad - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveMarketingRegionData($campaignId, Spreadsheet $spreadsheet)
@@ -389,7 +389,7 @@ class UploadPremiumReportBusiness
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumRegionData::getDb()->beginTransaction();
+        // $transaction = PremiumRegionData::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
                 $data = new PremiumRegionData();
@@ -406,12 +406,13 @@ class UploadPremiumReportBusiness
                 $data->amount = $sheet->getCellByColumnAndRow($currentColumnIndex, $currentRowIndex)->getValue();
                 if (!$data->save()) {
                     $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
-                    $transaction->rollback();
+                    // $transaction->rollback();
                     throw new UploadBusinessException('Grafica de Región - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
                 }
+                unset($data);
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveMarketingScheduleData($campaignId, Spreadsheet $spreadsheet)
@@ -423,7 +424,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumScheduleData::getDb()->beginTransaction();
+        // $transaction = PremiumScheduleData::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumScheduleData();
             $data->campaignId = $campaignId;
@@ -448,11 +449,12 @@ class UploadPremiumReportBusiness
             $data->schedule_00_02_clicks = $sheet->getCell("L$currentRowIndex")->getValue();
             $data->schedule_00_02_impressions = $sheet->getCell("M$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Gráfica de horarios - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
+            unset($data);
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveCallCenterKpis($campaignId, Spreadsheet $spreadsheet)
@@ -464,7 +466,7 @@ class UploadPremiumReportBusiness
         }
         $sheet = $spreadsheet->getActiveSheet();
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumCallCenterKpi::getDb()->beginTransaction();
+        // $transaction = PremiumCallCenterKpi::getDb()->beginTransaction();
         for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
             $data = new PremiumCallCenterKpi();
             $data->campaignId = $campaignId;
@@ -488,11 +490,11 @@ class UploadPremiumReportBusiness
             $data->averageTimeInAnsweringCall = $sheet->getCell("K$currentRowIndex")->getValue();
             $data->speakingTime = $sheet->getCell("L$currentRowIndex")->getValue();
             if (!$data->save()) {
-                $transaction->rollback();
+                // $transaction->rollback();
                 throw new UploadBusinessException('Call center - Los siguientes errores se encontraron en la fila ' . $currentRowIndex . ': ' . $this->getValidationErrorsAsString($data->errors));
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveVehicleModelsData($campaignId, Spreadsheet $spreadsheet)
@@ -505,7 +507,7 @@ class UploadPremiumReportBusiness
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumVehicleModel::getDb()->beginTransaction();
+        // $transaction = PremiumVehicleModel::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
                 $data = new PremiumVehicleModel();
@@ -522,12 +524,13 @@ class UploadPremiumReportBusiness
                 $data->amount = $sheet->getCellByColumnAndRow($currentColumnIndex, $currentRowIndex)->getValue();
                 if (!$data->save()) {
                     $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
-                    $transaction->rollback();
+                    // $transaction->rollback();
                     throw new UploadBusinessException('Gráfica Modelo top - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
                 }
+                unset($data);
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 
     private function saveVehicleYearsData($campaignId, Spreadsheet $spreadsheet)
@@ -540,7 +543,7 @@ class UploadPremiumReportBusiness
         $sheet = $spreadsheet->getActiveSheet();
         $maxColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
         $maxRow = $sheet->getHighestRow();
-        $transaction = PremiumVehicleYear::getDb()->beginTransaction();
+        // $transaction = PremiumVehicleYear::getDb()->beginTransaction();
         for ($currentColumnIndex = 2; $currentColumnIndex <= $maxColumn; $currentColumnIndex++) {
             for ($currentRowIndex = 2; $currentRowIndex <= $maxRow; $currentRowIndex++) {
                 $data = new PremiumVehicleYear();
@@ -557,11 +560,12 @@ class UploadPremiumReportBusiness
                 $data->amount = $sheet->getCellByColumnAndRow($currentColumnIndex, $currentRowIndex)->getValue();
                 if (!$data->save()) {
                     $currentColumnString = Coordinate::stringFromColumnIndex($currentColumnIndex);
-                    $transaction->rollback();
+                    // $transaction->rollback();
                     throw new UploadBusinessException('Gráfica de año top - Los siguientes errores se encontraron en la columna ' . $currentColumnString . ': ' . $this->getValidationErrorsAsString($data->errors));
                 }
+                unset($data);
             }
         }
-        $transaction->commit();
+        // $transaction->commit();
     }
 }
