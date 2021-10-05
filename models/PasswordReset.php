@@ -61,13 +61,6 @@ class PasswordReset extends \yii\db\ActiveRecord
             'email' => $this->email,
         ]);
 
-        /* if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
-            $user->generatePasswordResetToken();
-            if (!$user->save()) {
-                return false;
-            }
-        } */
-
         return Yii::$app
             ->mailer
             ->compose('forgot-password', ['user' => $user, 'token' => $this->token])

@@ -28,13 +28,6 @@ class PasswordResetController extends Controller
                     ],
                 ],
             ],
-            /* 'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'index' => ['get', 'post'],
-                    'logout' => ['get'],
-                ],
-            ], */
         ];
     }
     /**
