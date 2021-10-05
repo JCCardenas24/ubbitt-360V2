@@ -45,7 +45,7 @@ class UbbittPremiumController extends Controller
                             'dashboard', 'find-header-data', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
-                            'find-calls', 'find-marketing-kpis-data',
+                            'find-calls', 'find-sales', 'find-marketing-kpis-data',
                             'find-brief',
                             'save-brief'
                         ],
@@ -67,6 +67,7 @@ class UbbittPremiumController extends Controller
                     'find-marketing-daily-performance-data' => ['post'],
                     'find-marketing-segment-data' => ['post'],
                     'find-calls' => ['post'],
+                    'find-sales' => ['post'],
                     'find-marketing-kpis-data' => ['post'],
                     'find-brief' => ['post'],
                     'save-brief' => ['post'],
@@ -221,6 +222,13 @@ class UbbittPremiumController extends Controller
         $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionFindSales()
+    {
+        $data = [];
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $data;
     }
 
     public function actionFindMarketingKpisData()

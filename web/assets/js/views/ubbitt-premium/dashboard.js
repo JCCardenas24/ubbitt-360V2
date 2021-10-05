@@ -74,6 +74,14 @@ $('[id^=premium-call-center-bd-llamadas-campaign][id$=content-tab]').on(
     }
 );
 
+$('[id^=premium-call-center-bd-sales-campaign-1-content][id$=content-tab]').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        callDatabaseSalesCallback(startDate, endDate);
+    }
+);
+
 $('[id^=premium-marketing-campaign][id$=vista-general-tab]').on(
     'shown.bs.tab',
     function (event) {
@@ -110,6 +118,10 @@ function resetDatePickers() {
         callCenterKpisCallback
     );
     $('.range-pick#premium-calls-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseCallback
+    );
+    $('.range-pick#premium-sales-database-date-range').daterangepicker(
         dateRangePickerConfig,
         callDatabaseCallback
     );
@@ -1572,6 +1584,55 @@ function createCallRecordRow(callRecord) {
         </tr>
     `
     );
+}
+
+function callDatabaseSalesCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#premium-sales-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-premium/find-sales',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+        },
+        success: (response) => {
+            $('#premium-sales-table tbody').html(null);
+            $.each(response.salesRecords, (index, callRecord) => {
+                $('#premium-sales-table tbody').append(
+                    createSalesRecordRow(callRecord)
+                );
+            });
+            updatePaginator(
+                '#premium-sales-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseSalesCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createSalesRecordRow(salesRecord) {
+    return `
+        <tr>
+            <th scope="row" colspan="10"></td>
+        </tr>
+    `;
 }
 
 function onEnableBriefEdition() {

@@ -6,6 +6,10 @@
     </div>
     <div class="tab-pane fade" id="premium-call-center-bd-llamadas-campaign-1-content" role="tabpanel"
         aria-labelledby="premium-call-center-bd-llamadas-campaign-1-content-tab">
-        <?= $this->render('_call-center/_database') ?>
+        <?= $this->render('_call-center/_database-calls') ?>
+    </div>
+    <div class="tab-pane fade" id="premium-call-center-bd-sales-campaign-1-content" role="tabpanel"
+        aria-labelledby="premium-call-center-bd-sales-campaign-1-content-tab">
+        <?= $this->render('_call-center/_database-sales') ?>
     </div>
 </div>

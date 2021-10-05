@@ -8,6 +8,12 @@
         <a class="nav-link" id="premium-call-center-bd-llamadas-campaign-1-content-tab" data-toggle="pill"
             href="#premium-call-center-bd-llamadas-campaign-1-content" role="tab"
             aria-controls="premium-call-center-bd-llamadas-campaign-1-content" aria-selected="false">Base de datos
-            (llamadas)</a>
+            (Llamadas)</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="premium-call-center-bd-sales-campaign-1-content-tab" data-toggle="pill"
+            href="#premium-call-center-bd-sales-campaign-1-content" role="tab"
+            aria-controls="premium-call-center-bd-sales-campaign-1-content" aria-selected="false">Base de datos
+            (Ventas)</a>
     </li>
 </ul>
