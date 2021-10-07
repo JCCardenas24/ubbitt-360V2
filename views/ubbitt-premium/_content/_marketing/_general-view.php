@@ -212,7 +212,7 @@
 </div>
 
 <div class="row ml-0 mr-0 row_table_medios">
-    <div class="col-7 pl-0">
+    <!-- <div class="col-7 pl-0">
         <div class="header_table_medios">
             <h5>Por medio</h5>
         </div>
@@ -233,8 +233,8 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    <div class="col-5 pr-0">
+    </div> -->
+    <div class="col-6 offset-3 pr-0">
         <div class="card_roa">
             <h1>ROA | <span id="marketing-roa">0%</span></h1>
             <div class="wrapper_bars">

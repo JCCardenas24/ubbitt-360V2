@@ -811,7 +811,7 @@ function marketingGeneralCallback(start, end) {
     });
     findHeaderData(start, end);
     findMarketingGeneralData(start, end, moneyFormatter);
-    findMarketingMediaData(start, end);
+    // findMarketingMediaData(start, end);
     findMarketingDailyPerformanceData(start, end);
 }
 
@@ -1477,23 +1477,23 @@ function findCenterKpisData(start, end) {
             $('#kpi-answered-calls').text(data.answered_calls);
             $('#kpi-outbound-calls').text(data.outbound_calls);
             $('#kpi-lost-calls').text(data.lost_calls);
-            $('#kpi-calls-answered-within-25-seconds').text(
-                data.calls_answered_within_25_seconds
-            );
-            $('#kpi-nsl-percentage').text(
-                data.nsl_percentage.replace('.00', '') + '%'
-            );
-            $('#kpi-abandoned-before-5-seconds').text(
-                data.abandoned_before_5_seconds
-            );
-            $('#kpi-abandonment').text(
-                data.abandonment.replace('.00', '') + '%'
-            );
-            $('#kpi-ath').text(data.ath.replace('.00', '') + ' min');
-            $('#kpi-average-time-in-answering-call').text(
-                data.average_time_in_answering_call + ' seg'
-            );
-            $('#kpi-speaking-time').text(data.speaking_time + ' hrs');
+            // $('#kpi-calls-answered-within-25-seconds').text(
+            //     data.calls_answered_within_25_seconds
+            // );
+            // $('#kpi-nsl-percentage').text(
+            //     data.nsl_percentage.replace('.00', '') + '%'
+            // );
+            // $('#kpi-abandoned-before-5-seconds').text(
+            //     data.abandoned_before_5_seconds
+            // );
+            // $('#kpi-abandonment').text(
+            //     data.abandonment.replace('.00', '') + '%'
+            // );
+            // $('#kpi-ath').text(data.ath.replace('.00', '') + ' min');
+            // $('#kpi-average-time-in-answering-call').text(
+            //     data.average_time_in_answering_call + ' seg'
+            // );
+            // $('#kpi-speaking-time').text(data.speaking_time + ' hrs');
         },
         error: () => {
             showAlert('error', "Ocurrió un problema al consultar los KPI's");

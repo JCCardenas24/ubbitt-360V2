@@ -77,7 +77,7 @@
             </div>
         </div>
     </div>
-    <div class="scd_row row m-0">
+    <!-- <div class="scd_row row m-0">
         <div class="col ">
             <div class="card info_t2">
                 <p class="m-0 big_ttl"></p>
@@ -131,5 +131,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
