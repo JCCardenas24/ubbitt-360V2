@@ -104,9 +104,9 @@ class PremiumMarketingInputs extends ActiveRecord
             SELECT
                 COALESCE(SUM(budget), 0) AS budget,
                 COALESCE(SUM(spent_budget), 0) AS spent_budget,
-                COALESCE(CAST(AVG(spent_budget_percentage) AS DECIMAL(5,2)), 0) AS spent_budget_percentage,
-                COALESCE(SUM(available_budget), 0) AS available_budget,
-                COALESCE(CAST(AVG(available_budget_percentage) AS DECIMAL(5,2)), 0) AS available_budget_percentage,
+                COALESCE(SUM(spent_budget_percentage), 0) AS spent_budget_percentage,
+                COALESCE(MIN(available_budget), 0) AS available_budget,
+                COALESCE(MIN(available_budget_percentage), 0) AS available_budget_percentage,
                 COALESCE(SUM(impressions), 0) AS impressions,
                 COALESCE(CAST(AVG(ctr) AS DECIMAL(5,2)), 0) AS ctr,
                 COALESCE(SUM(clicks), 0) AS clicks,
