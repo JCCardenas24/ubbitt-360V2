@@ -1,9 +1,23 @@
 <?php
 
 /* @var $this yii\web\View */
+
+use yii\web\View;
+
 $this->title = 'Ubbitt 360';
 \app\assets\ChartsAsset::register($this);
-$this->registerJsFIle('@web/assets/js/beyond-renovacion-charts.js');
+$this->registerJsFile('@web/assets/js/views/ubbitt-beyond/renewal-dashboard.js', ['position' => View::POS_END, 'depends' => [\app\assets\ChartsAsset::class]]);
+$userPermissions = Yii::$app->session->get("userPermissions");
+$permissionMap = [
+    'kpis-add' => 'button_add_ubbitt_beyond_renewal_reports_kpis_detail',
+    'kpis-delete' => 'button_delete_ubbitt_beyond_renewal_reports_kpis_detail',
+    'trackers-add' => 'button_add_ubbitt_beyond_renewal_reports_typifications_detail',
+    'trackers-delete' => 'button_delete_ubbitt_beyond_renewal_reports_typifications_detail',
+    'productivity-add' => 'button_add_ubbitt_beyond_renewal_reports_productivity_detail',
+    'productivity-delete' => 'button_delete_ubbitt_beyond_renewal_reports_productivity_detail',
+];
+$this->registerJs('var userPermissions = ' . json_encode($userPermissions) . ';
+                var permissionsMap = ' . json_encode($permissionMap) . ';', View::POS_END);
 ?>
 <div class="container container-beyond" id="dynamic-tabs">
     <?= $this->render('../_commons/_tabs/_plans.php') ?>
@@ -14,7 +28,7 @@ $this->registerJsFIle('@web/assets/js/beyond-renovacion-charts.js');
                 <div class="tab-pane fade show active" id="cobranza-home" role="tabpanel"
                     aria-labelledby="cobranza-home-tab">
                     <?= $this->render('renewal-dashboard/_submenu') ?>
-                    <?= $this->render('renewal-dashboard/_content') ?>
+                    <?= $this->render('renewal-dashboard/_content', ['reportFileModel' => $reportFileModel, 'databaseUploadModel' => $databaseUploadModel]) ?>
                 </div>
             </div>
         </div>

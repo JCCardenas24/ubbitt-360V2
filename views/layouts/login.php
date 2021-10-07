@@ -60,6 +60,9 @@ app\assets\LoginAsset::register($this);
     <?= $content ?>
     </div>
     <?php $this->endBody(); ?>
+    <?php if (isset($this->blocks['resetFormMessage'])): ?>
+        <?= $this->blocks['resetFormMessage'] ?>
+    <?php endif; ?>
 </body>
 
 </html>

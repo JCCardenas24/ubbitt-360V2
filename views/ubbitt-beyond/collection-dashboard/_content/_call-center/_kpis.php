@@ -7,7 +7,7 @@
             </div>
         </div>
     </div>
-    <a class="pdf_button"><i class="icon-download_pdf c-gray"></i></a>
+    <!-- <a class="pdf_button"><i class="icon-download_pdf c-gray"></i></a> -->
 </div>
 <br>
 <div class="container_kpis_cards">
@@ -67,7 +67,7 @@
                         <div class="text-left he-100 wid-100">
                             <p class="m-0">Número de
                                 llamadas
-                                perdidas</p>
+                                no enlazadas</p>
                         </div>
                     </div>
                     <div class="col-6 p-0 number_calls">
@@ -77,7 +77,7 @@
             </div>
         </div>
     </div>
-    <div class="scd_row row m-0">
+    <!-- <div class="scd_row row m-0">
         <div class="col ">
             <div class="card info_t2">
                 <p class="m-0 big_ttl"></p>
@@ -131,5 +131,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>

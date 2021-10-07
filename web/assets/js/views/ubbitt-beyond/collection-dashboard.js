@@ -3,15 +3,13 @@ let startDate = null;
 let endDate = null;
 
 $(function () {
-    $('#li-beyond-collection-summary').addClass('font-weight-bold');
+    $('#resumen-cobranza_side_menu').addClass('font-weight-bold');
     const urlParams = new URLSearchParams(window.location.search);
     const initialDate = urlParams.get('initial_date');
     const finalDate = urlParams.get('final_date');
 
     startDate =
-        initialDate == null
-            ? moment().subtract(6, 'days')
-            : moment(initialDate);
+        initialDate == null ? moment().startOf('month') : moment(initialDate);
     endDate = finalDate == null ? moment() : moment(finalDate);
 
     dateRangePickerConfig = {
@@ -20,7 +18,7 @@ $(function () {
         endDate,
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
-            'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
+            'Este mes': [moment().startOf('month'), moment()],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -29,10 +27,7 @@ $(function () {
         },
     };
 
-    $('.range-pick#beyond-collection-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
+    resetDatePickers();
     summaryCallback(startDate, endDate);
 
     $('#management-selector').on('change', updateKpisByManagement);
@@ -42,61 +37,124 @@ $(function () {
         collected_total: 0,
     };
     updateConcentrateOnTrackGraph(initialChartKpis);
+    setTimeout(() => {
+        if ($('div[id="kpis-info-beyond-cobranza"]').is(':visible')) {
+            resetDatePickers();
+            loadKpis(startDate, endDate, null, 1);
+        }
+    }, 500);
 });
 
 /** TAB CHANGE EVENTS  **/
 $('#resumen-cobranza-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-summary').addClass('font-weight-bold');
+    resetDatePickers();
+    summaryCallback(startDate, endDate);
 });
 $('#beyond-cobranza-callcenter-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-call-center').addClass('font-weight-bold');
-    // Initialize the date picker on the call center kpi's tab
+    resetDatePickers();
+    loadKpis(startDate, endDate);
+    callDatabaseCallback(startDate, endDate, null, 1);
+});
+$('#kpis-info-beyond-cobranza-tab').on('shown.bs.tab', function (event) {
+    s;
+    // Initialize the date picker on the call center calls database tab
+    resetDatePickers();
+    loadKpis(startDate, endDate, null, 1);
+});
+$('#beyond-cobranza-callcenter-bd-calls-tab').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        callDatabaseCallback(startDate, endDate, null, 1);
+    }
+);
+$('#beyond-cobranza-callcenter-bd-sales-tab').on(
+    'shown.bs.tab',
+    function (event) {
+        resetDatePickers();
+        callDatabaseSalesCallback(startDate, endDate, null, 1);
+    }
+);
+$('#beyond-cobranza-reportes-tab, .nav-link-beyond-collection-reports').on(
+    'shown.bs.tab',
+    function (event) {
+        var tab_report_type = $(
+            '.nav-link-beyond-collection-reports.active'
+        ).data('tab-type');
+        $('#type-file').val(tab_report_type);
+        // Initialize the date picker on the call center kpi's tab
+        resetDatePickers();
+        reportsListCallback(startDate, endDate, null, 1);
+        showHideAddButton(tab_report_type);
+    }
+);
+
+function resetDatePickers() {
+    dateRangePickerConfig.startDate = startDate;
+    dateRangePickerConfig.endDate = endDate;
+    $('.range-pick#beyond-collection-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
     $('.range-pick#beyond-kpis-date-range').daterangepicker(
         dateRangePickerConfig,
         loadKpis
     );
-    loadKpis(startDate, endDate);
-});
-$('#beyond-cobranza-callcenter-bd-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-call-center').addClass('font-weight-bold');
-    // Initialize the date picker on the call center calls database tab
     $('.range-pick#beyond-calls-database-date-range').daterangepicker(
         dateRangePickerConfig,
         callDatabaseCallback
     );
-    callDatabaseCallback(startDate, endDate, null, 1);
+    $('.range-pick#beyond-collection-report-date-range').daterangepicker(
+        dateRangePickerConfig,
+        reportsListCallback
+    );
+    $('.range-pick#beyond-sales-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseSalesCallback
+    );
+}
+
+function showHideAddButton(reportType) {
+    if (userHasPermission(reportType + '-add')) {
+        $('#upload_report_btn').show();
+    } else {
+        $('#upload_report_btn').hide();
+    }
+}
+
+function userHasPermission(checkedPermission) {
+    let requiredPermission = permissionsMap[checkedPermission];
+    return userPermissions.indexOf(requiredPermission) > -1;
+}
+
+$('#beyond-cobranza-carga-base-datos-tab').on(
+    'shown.bs.tab',
+    function (event) {}
+);
+
+// Show upload report form
+$('#upload_report_btn').click(function () {
+    $('#reports_info_contents').toggle();
+    $('#view_upload_report_form').toggle();
 });
-$('#beyond-cobranza-reportes-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-reports').addClass('font-weight-bold');
-});
-$('#beyond-cobranza-carga-base-datos-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.menu-sidebar li span').removeClass('font-weight-bold');
-    $('#li-beyond-collection-database-upload').addClass('font-weight-bold');
+// Cancel upload report form
+$('#cancel_upload_report').click(function () {
+    $('#view_upload_report_form').toggle();
+    $('#reports_info_contents').toggle();
 });
 
 function summaryCallback(start, end) {
     $('.range-pick#beyond-collection-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    showPreloader();
     findSummaryGraphData(start, end);
     findSummaryDetailData(start, end);
 }
 
 function findSummaryGraphData(start, end) {
+    startDate = start;
+    endDate = end;
     $.ajax({
         url: '/ubbitt-beyond/find-collection-summary-graph-data',
         type: 'POST',
@@ -161,19 +219,16 @@ function updateTransactionChart(data) {
             {
                 name: 'Registros',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.registries),
             },
             {
                 name: 'Llamadas',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.calls),
             },
             {
                 name: 'Cobrados',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.collected),
             },
         ],
@@ -210,6 +265,9 @@ function findSummaryDetailData(start, end) {
                 'error',
                 'Ocurrió un problema al recuperar la información del resumen'
             );
+        },
+        complete: function () {
+            hidePreloader();
         },
     });
 }
@@ -367,118 +425,124 @@ function addAllManagement(kpis) {
 function updateManagementSummaryKpis(kpis, moneyFormatter) {
     $('#delivered-base').text(kpis.delivered_base);
     $('#delivered-base-accepted').html(
-        kpis.delivered_base_accepted +
-            ' / <span>' +
-            kpis.delivered_base_accepted_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.delivered_base_accepted //+
+        // ' / <span>' +
+        // kpis.delivered_base_accepted_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#delivered-base-rejected').html(
-        kpis.delivered_base_rejected +
-            ' / <span>' +
-            kpis.delivered_base_rejected_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.delivered_base_rejected //+
+        // ' / <span>' +
+        // kpis.delivered_base_rejected_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#first-management').html(
-        kpis.first_management +
-            ' / <span>' +
-            kpis.first_management_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.first_management //+
+        // ' / <span>' +
+        // kpis.first_management_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#first-management-effective-registries').html(
         kpis.first_management_effective_registries +
-            ' / <span>' +
-            kpis.first_management_percentage.replace('.00', '') +
-            '%</span><span class="mini_price"> (' +
+            // ' / <span>' +
+            // kpis.first_management_percentage.replace('.00', '') +
+            // '%</span>' +
+            '<span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.first_management_effective_registries_amount)
                 .replace('.00', '') +
             ')</span>'
     );
     $('#first-management-on-track-registries').html(
-        kpis.first_management_on_track_registries +
-            ' / <span>' +
-            kpis.first_management_on_track_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.first_management_on_track_registries //+
+        // ' / <span>' +
+        // kpis.first_management_on_track_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#first-management-out-of-management-registries').html(
-        kpis.first_management_out_of_management_registries +
-            ' / <span>' +
-            kpis.first_management_out_of_management_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.first_management_out_of_management_registries //+
+        // ' / <span>' +
+        // kpis.first_management_out_of_management_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#second-management').html(
-        kpis.second_management +
-            ' / <span>' +
-            kpis.second_management_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.second_management //+
+        // ' / <span>' +
+        // kpis.second_management_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#second-management-effective-registries').html(
         kpis.second_management_effective_registries +
             ' / <span>' +
-            kpis.second_management_percentage.replace('.00', '') +
-            '%</span><span class="mini_price"> (' +
+            // kpis.second_management_effective_registries_percentage.replace(
+            //     '.00',
+            //     ''
+            // ) +
+            // '%</span>' +
+            '<span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.second_management_effective_registries_amount)
                 .replace('.00', '') +
             ')</span>'
     );
     $('#second-management-on-track-registries').html(
-        kpis.second_management_on_track_registries +
-            ' / <span>' +
-            kpis.second_management_on_track_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.second_management_on_track_registries //+
+        // ' / <span>' +
+        // kpis.second_management_on_track_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#second-management-out-of-management-registries').html(
-        kpis.second_management_out_of_management_registries +
-            ' / <span>' +
-            kpis.second_management_out_of_management_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.second_management_out_of_management_registries //+
+        // ' / <span>' +
+        // kpis.second_management_out_of_management_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#third-management').html(
-        kpis.third_management +
-            ' / <span>' +
-            kpis.third_management_percentage.replace('.00', '') +
-            '%</span>'
+        kpis.third_management //+
+        // ' / <span>' +
+        // kpis.third_management_percentage.replace('.00', '') +
+        // '%</span>'
     );
     $('#third-management-effective-registries').html(
         kpis.third_management_effective_registries +
-            ' / <span>' +
-            kpis.third_management_percentage.replace('.00', '') +
-            '%</span><span class="mini_price"> (' +
+            // ' / <span>' +
+            // kpis.third_management_percentage.replace('.00', '') +
+            // '%</span>' +
+            '<span class="mini_price"> (' +
             moneyFormatter
                 .format(kpis.third_management_effective_registries_amount)
                 .replace('.00', '') +
             ')</span>'
     );
     $('#third-management-on-track-registries').html(
-        kpis.third_management_on_track_registries +
-            ' / <span>' +
-            kpis.third_management_on_track_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.third_management_on_track_registries //+
+        // ' / <span>' +
+        // kpis.third_management_on_track_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#third-management-out-of-management-registries').html(
-        kpis.third_management_out_of_management_registries +
-            ' / <span>' +
-            kpis.third_management_out_of_management_registries_percentage.replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        kpis.third_management_out_of_management_registries //+
+        // ' / <span>' +
+        // kpis.third_management_out_of_management_registries_percentage.replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
 }
 
@@ -499,13 +563,13 @@ function updateTotalKpis(kpis, moneyFormatter) {
 function updateKpisByManagement() {
     let kpisPrefix = $('#management-selector').val();
     $('#by-management-effective-registries').html(
-        savedKpis[kpisPrefix + 'effective_registries'] +
-            ' / <span>' +
-            savedKpis[kpisPrefix + 'effective_registries_percentage'].replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        savedKpis[kpisPrefix + 'effective_registries'] //+
+        // ' / <span>' +
+        // savedKpis[kpisPrefix + 'effective_registries_percentage'].replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#by-management-effective-registries-payment-promise-scheduled').text(
         savedKpis[kpisPrefix + 'effective_registries_payment_promise_scheduled']
@@ -566,13 +630,13 @@ function updateKpisByManagement() {
     );
     /** ON TRACK **/
     $('#by-management-on-track-registries').html(
-        savedKpis[kpisPrefix + 'on_track_registries'] +
-            ' / <span>' +
-            savedKpis[kpisPrefix + 'on_track_registries_percentage'].replace(
-                '.00',
-                ''
-            ) +
-            '%</span>'
+        savedKpis[kpisPrefix + 'on_track_registries'] //+
+        // ' / <span>' +
+        // savedKpis[kpisPrefix + 'on_track_registries_percentage'].replace(
+        //     '.00',
+        //     ''
+        // ) +
+        // '%</span>'
     );
     $('#by-management-on-track-registries-call-scheduled').text(
         savedKpis[kpisPrefix + 'on_track_registries_call_scheduled']
@@ -606,12 +670,12 @@ function updateKpisByManagement() {
     );
     /** OUT OF MANAGEMENT **/
     $('#by-management-out-of-management-registries').html(
-        savedKpis[kpisPrefix + 'out_of_management_registries'] +
-            ' / <span>' +
-            savedKpis[
-                kpisPrefix + 'out_of_management_registries_percentage'
-            ].replace('.00', '') +
-            '%</span>'
+        savedKpis[kpisPrefix + 'out_of_management_registries'] //+
+        // ' / <span>' +
+        // savedKpis[
+        //     kpisPrefix + 'out_of_management_registries_percentage'
+        // ].replace('.00', '') +
+        // '%</span>'
     );
     $('#by-management-out-of-management-registries-wrong-number').text(
         savedKpis[kpisPrefix + 'out_of_management_registries_wrong_number']
@@ -780,9 +844,12 @@ function updateConcentrateOnTrackGraph(kpis) {
 }
 
 function loadKpis(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    showPreloader();
     $.ajax({
         url: '/ubbitt-beyond/find-collection-call-center-kpis',
         type: 'POST',
@@ -817,13 +884,19 @@ function loadKpis(start, end) {
         error: () => {
             alert("Ocurrió un problema al consultar los KPI's de telefonía");
         },
+        complete: function () {
+            hidePreloader();
+        },
     });
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#beyond-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    showPreloader();
     $.ajax({
         url: '/ubbitt-beyond/find-collection-calls',
         type: 'POST',
@@ -851,6 +924,9 @@ function callDatabaseCallback(start, end, label, page = 1) {
         },
         error: () => {
             alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
         },
     });
 }
@@ -891,3 +967,148 @@ function createCallRecordRow(callRecord) {
     `
     );
 }
+
+function callDatabaseSalesCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#beyond-sales-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-beyond/find-collection-sales',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+        },
+        success: (response) => {
+            $('#ubbitt-beyond-collection-sales-table tbody').html(null);
+            $.each(response.salesRecords, (index, callRecord) => {
+                $('#ubbitt-beyond-collection-sales-table tbody').append(
+                    createSalesRecordRow(callRecord)
+                );
+            });
+            updatePaginator(
+                '#ubbitt-beyond-collection-sales-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createSalesRecordRow(salesRecord) {
+    return `
+        <tr>
+            <th scope="row" colspan="10"></td>
+        </tr>
+    `;
+}
+
+function reportsListCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#beyond-collection-report-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    var report_type = $('.nav-link-beyond-collection-reports.active').data(
+        'tab-type'
+    );
+    showPreloader();
+    $.ajax({
+        url: '/report-file/find-reports',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+            'SearchByDateForm[module_origin]': 'beyond',
+            'SearchByDateForm[submodule_origin]': 'collection',
+            'SearchByDateForm[type]': report_type,
+        },
+        success: (response) => {
+            $('#beyond-collection-reports-table tbody').html(null);
+            $.each(response.reportsRecords, (index, reportRecord) => {
+                $('#beyond-collection-reports-table tbody').append(
+                    createReportRecordRow(reportRecord)
+                );
+            });
+            updatePaginator(
+                '#beyond-collection-reports-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    reportsListCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de reportes');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createReportRecordRow(record) {
+    return (
+        `
+        <tr>
+            <td scope="row">
+                ${record.id}
+            </td>
+            <td>
+                ${record.file_path}
+            </td>
+            <td>
+                ${record.user_id}
+            </td>
+            <td>
+                ${record.created_at}
+            </td>
+            <td>
+                <a href="/${record.file_path}" download>
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                </a>` +
+        (userHasPermission(
+            $('.nav-link-beyond-collection-reports.active').data('tab-type') +
+                '-delete'
+        )
+            ? `<a href="#" class="btn-delete-report" data-report-id="${record.id}">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>`
+            : '') +
+        `
+            </td>
+        </tr>
+    `
+    );
+}
+
+$('#beyond-collection-reports-table tbody').on(
+    'click',
+    '.btn-delete-report',
+    function (evt) {
+        evt.preventDefault();
+        var report_id = $(this).data('report-id');
+        $('#btn-confirm-delete-report').attr(
+            'href',
+            `/report-file/delete?id=${report_id}`
+        );
+        $('#modal-delete-report').modal('show');
+    }
+);

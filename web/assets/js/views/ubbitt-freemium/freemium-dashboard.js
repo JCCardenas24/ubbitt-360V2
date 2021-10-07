@@ -3,14 +3,13 @@ let startDate = null;
 let endDate = null;
 
 $(function () {
+    $('#freemium-inbound-resumen_side_menu').addClass('font-weight-bold');
     const urlParams = new URLSearchParams(window.location.search);
     const initialDate = urlParams.get('initial_date');
     const finalDate = urlParams.get('final_date');
 
     startDate =
-        initialDate == null
-            ? moment().subtract(6, 'days')
-            : moment(initialDate);
+        initialDate == null ? moment().startOf('month') : moment(initialDate);
     endDate = finalDate == null ? moment() : moment(finalDate);
 
     dateRangePickerConfig = {
@@ -19,7 +18,7 @@ $(function () {
         endDate,
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
-            'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
+            'Este mes': [moment().startOf('month'), moment()],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -28,64 +27,66 @@ $(function () {
         },
     };
 
-    $('.range-pick#freemium-summary-date-range').daterangepicker(
-        dateRangePickerConfig,
-        summaryCallback
-    );
+    resetDatePickers();
     summaryCallback(startDate, endDate);
+    $('.nav-link-freemium-reports').first().addClass('active');
+    $('#freemium-inbound-options .nav-link').first().tab('show');
 });
 
 $('#freemium-inbound-resumen-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_resumen_inbound_freemium').addClass('font-weight-bold');
     summaryCallback(startDate, endDate);
 });
 $('#freemium-inbound-call-center-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_call_center_inbound_freemium').addClass('font-weight-bold');
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#freemium-kpis-date-range').daterangepicker(
-        dateRangePickerConfig,
-        loadKpis
-    );
+    resetDatePickers();
     loadKpis(startDate, endDate);
 });
-$('#freemium-call-center-bd-tab').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    $('.options_inbound_freemium').removeClass('font-weight-bold');
-    $('#li_call_center_inbound_freemium').addClass('font-weight-bold');
-    // Initialize the date picker on the call center calls database tab
-    $('.range-pick#freemium-calls-database-date-range').daterangepicker(
-        dateRangePickerConfig,
-        callDatabaseCallback
-    );
+$('#freemium-call-center-bd-calls-tab').on('shown.bs.tab', function (event) {
+    resetDatePickers();
     callDatabaseCallback(startDate, endDate, null, 1);
 });
+
+$('#freemium-call-center-bd-sales-tab').on('shown.bs.tab', function (event) {
+    resetDatePickers();
+    callDatabaseSalesCallback(startDate, endDate, null, 1);
+});
+
 $('#freemium-inbound-reportes-tab, .nav-link-freemium-reports').on(
     'shown.bs.tab',
     function (event) {
-        event.target; // newly activated tab
-        event.relatedTarget; // previous active tab
-        $('.options_inbound_freemium').removeClass('font-weight-bold');
-        $('#li_reportes_inbound_freemium').addClass('font-weight-bold');
         var tab_report_type = $('.nav-link-freemium-reports.active').data(
             'tab-type'
         );
         $('#type-file').val(tab_report_type);
-        // Initialize the date picker on the call center kpi's tab
-        $('.range-pick#freemium-report-date-range').daterangepicker(
-            dateRangePickerConfig,
-            reportsListCallback
-        );
+        resetDatePickers();
         reportsListCallback(startDate, endDate, null, 1);
         showHideAddButton(tab_report_type);
     }
 );
+
+function resetDatePickers() {
+    dateRangePickerConfig.startDate = startDate;
+    dateRangePickerConfig.endDate = endDate;
+    $('.range-pick#freemium-summary-date-range').daterangepicker(
+        dateRangePickerConfig,
+        summaryCallback
+    );
+    $('.range-pick#freemium-kpis-date-range').daterangepicker(
+        dateRangePickerConfig,
+        loadKpis
+    );
+    $('.range-pick#freemium-calls-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseCallback
+    );
+    $('.range-pick#freemium-sales-database-date-range').daterangepicker(
+        dateRangePickerConfig,
+        callDatabaseSalesCallback
+    );
+    $('.range-pick#freemium-report-date-range').daterangepicker(
+        dateRangePickerConfig,
+        reportsListCallback
+    );
+}
 
 function showHideAddButton(reportType) {
     if (userHasPermission(reportType + '-add')) {
@@ -100,20 +101,6 @@ function userHasPermission(checkedPermission) {
     return userPermissions.indexOf(requiredPermission) > -1;
 }
 
-/* $('.nav-link-freemium-reports').on('shown.bs.tab', function (event) {
-    event.target; // newly activated tab
-    event.relatedTarget; // previous active tab
-    console.log('reload reports tab');
-    var tab_report_type = $('.nav-link-freemium-reports.active').data('tab-type');
-   $('#type-file').val(tab_report_type);
-    // Initialize the date picker on the call center kpi's tab
-    $('.range-pick#freemium-report-date-range').daterangepicker(
-        dateRangePickerConfig,
-        reportsListCallback
-    );
-    reportsListCallback(startDate, endDate, null, 1, tab_report_type)
-}); */
-
 // Show upload report form
 $('#upload_report_btn').click(function () {
     $('#reports_info_contents').toggle();
@@ -126,9 +113,12 @@ $('#cancel_upload_report').click(function () {
 });
 
 function summaryCallback(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-summary-date-range  > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    showPreloader();
     findSummaryGraphData(start, end);
     findSummaryDetailData(start, end);
 }
@@ -199,25 +189,21 @@ function updateTransactionChart(data) {
             {
                 name: 'Leads',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.leads),
             },
             {
                 name: 'Llamadas',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.calls),
             },
             {
                 name: 'Ventas',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.sales),
             },
             {
                 name: 'Cobrado',
                 type: 'line',
-                stack: 'Total',
                 data: data.map((row) => row.collected),
             },
         ],
@@ -255,13 +241,16 @@ function findSummaryDetailData(start, end) {
                 'Ocurrió un problema al recuperar la información del resumen'
             );
         },
+        complete: function () {
+            hidePreloader();
+        },
     });
 }
 
 function updateSummaryKpis(kpis, formatter) {
     $('#nco-total-calls-1').text(kpis.nco_total_calls);
-    $('#nco-total-calls-2').text(kpis.nco_total_calls);
-    $('#nco-total-calls-3').text(kpis.nco_total_calls);
+    $('#sale-reason-det').text(kpis.sale_reason);
+    $('#cust-serv-calls-det').text(kpis.cust_serv_calls);
     $('#total-sales').text(kpis.total_sales);
     $('#sales-total-amount').text(
         formatter.format(kpis.sales_total_amount).replace('.00', '')
@@ -1475,9 +1464,12 @@ function updateCollectionQuestionsChart(kpis) {
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-calls-database-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    showPreloader();
     $.ajax({
         url: '/ubbitt-freemium/find-calls',
         type: 'POST',
@@ -1506,7 +1498,58 @@ function callDatabaseCallback(start, end, label, page = 1) {
         error: () => {
             alert('Ocurrió un problema al consultar el registro de llamadas');
         },
+        complete: function () {
+            hidePreloader();
+        },
     });
+}
+function callDatabaseSalesCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#freemium-sales-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-freemium/find-sales',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateForm[page]': page,
+        },
+        success: (response) => {
+            $('#freemium-sales-table tbody').html(null);
+            $.each(response.salesRecords, (index, callRecord) => {
+                $('#freemium-sales-table tbody').append(
+                    createSalesRecordRow(callRecord)
+                );
+            });
+            updatePaginator(
+                '#freemium-sales-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseSalesCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createSalesRecordRow(salesRecord) {
+    return `
+        <tr>
+            <th scope="row" colspan="10"></td>
+        </tr>
+    `;
 }
 
 function createCallRecordRow(callRecord) {
@@ -1547,9 +1590,12 @@ function createCallRecordRow(callRecord) {
 }
 
 function loadKpis(start, end) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-kpis-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
+    showPreloader();
     $.ajax({
         url: '/ubbitt-freemium/find-call-center-kpis',
         type: 'POST',
@@ -1584,14 +1630,20 @@ function loadKpis(start, end) {
         error: () => {
             alert("Ocurrió un problema al consultar los KPI's de telefonía");
         },
+        complete: function () {
+            hidePreloader();
+        },
     });
 }
 
 function reportsListCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
     $('.range-pick#freemium-report-date-range > .text-date').html(
         start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     );
     var report_type = $('.nav-link-freemium-reports.active').data('tab-type');
+    showPreloader();
     $.ajax({
         url: '/report-file/find-reports',
         type: 'POST',
@@ -1600,6 +1652,8 @@ function reportsListCallback(start, end, label, page = 1) {
             'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
             'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
             'SearchByDateForm[page]': page,
+            'SearchByDateForm[module_origin]': 'freemium',
+            'SearchByDateForm[submodule_origin]': 'inbound',
             'SearchByDateForm[type]': report_type,
         },
         success: (response) => {
@@ -1621,6 +1675,9 @@ function reportsListCallback(start, end, label, page = 1) {
         error: () => {
             alert('Ocurrió un problema al consultar el registro de reportes');
         },
+        complete: function () {
+            hidePreloader();
+        },
     });
 }
 
@@ -1641,7 +1698,7 @@ function createReportRecordRow(record) {
                 ${record.created_at}
             </td>
             <td>
-                <a href="${record.file_path}" download>
+                <a href="/${record.file_path}" download>
                     <i class="fa fa-download" aria-hidden="true"></i>
                 </a>` +
         (userHasPermission(

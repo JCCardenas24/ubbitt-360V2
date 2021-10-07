@@ -71,16 +71,19 @@ class ReportFileController extends Controller
      */
     public function actionCreate()
     {
-        $model = new ReportFile();
-
         if ($this->request->isPost) {
+            $model = new ReportFile();
+     
             if ($model->load($this->request->post())) {
                 $model->file = UploadedFile::getInstance($model, 'file');
+     
                 if ($model->validate()) {
                     $filePath = "uploads/report_freemium_".time().".".$model->file->extension;
+     
                     if ($model->file->saveAs($filePath)) {
                         $model->file_path = $filePath;
                         $model->user_id = Yii::$app->user->id;
+                        $model->submodule_origin = Yii::$app->params['report_submodule_dict'][$model->submodule_origin];
                         $model->type = Yii::$app->params['report_type_dict'][$model->type];
                         $now = new DateTime('now');
                         $model->created_at = $now->format("Y-m-d H:i:s");
@@ -92,12 +95,8 @@ class ReportFileController extends Controller
                 }
             }
         } else {
-            $model->loadDefaultValues();
+            return $this->goBack();
         }
-
-        return $this->render('dashboard', [
-            'reportFileModel' => $model
-        ]);
     }
 
     /**
@@ -162,7 +161,7 @@ class ReportFileController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $reports = new ReportFile();
-        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page, $searchParams->type);
+        $reportsArray = $reports->findByDate($searchParams->startDate, $searchParams->endDate, $searchParams->page, $searchParams->module_origin, $searchParams->submodule_origin, $searchParams->type);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $reportsArray;
     }

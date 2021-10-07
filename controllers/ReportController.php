@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\business\UploadPremiumReportBusiness;
 use app\business\UploadReportBusiness;
 use app\exception\UploadBusinessException;
+use app\models\forms\CampaignForm;
 use Exception;
 use Yii;
 use yii\filters\AccessControl;
@@ -26,7 +28,7 @@ class ReportController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['upload', 'upload-file'],
+                        'actions' => ['upload', 'upload-file', 'upload-premium', 'upload-premium-file'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -37,6 +39,8 @@ class ReportController extends Controller
                 'actions' => [
                     'upload' => ['get'],
                     'upload-file' => ['post'],
+                    'upload-premium' => ['get'],
+                    'upload-premium-file' => ['post'],
                 ],
             ],
         ];
@@ -66,6 +70,28 @@ class ReportController extends Controller
         $uploadReportsBusiness = new UploadReportBusiness();
         try {
             $uploadReportsBusiness->saveReports($file);
+        } catch (UploadBusinessException $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
+        } catch (Exception $exception) {
+            Yii::error($exception);
+            throw new ServerErrorHttpException();
+        }
+    }
+
+    public function actionUploadPremium()
+    {
+        return $this->render('upload-premium');
+    }
+
+    public function actionUploadPremiumFile()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $file = UploadedFile::getInstanceByName('file');
+        $companyForm = new CampaignForm();
+        $companyForm->load($this->request->post());
+        $uploadReportsBusiness = new UploadPremiumReportBusiness();
+        try {
+            $uploadReportsBusiness->saveReports($companyForm->campaignId, $file);
         } catch (UploadBusinessException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         } catch (Exception $exception) {

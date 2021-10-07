@@ -14,14 +14,14 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 <h5>Datos personales</h5>
                 <div class="d-flex avatar_container">
                     <img src="<?= Yii::getAlias('@web') ?>/assets/images/avatar_ubbitt.png" alt="">
-                    <h4>Oscar Fady</h4>
+                    <h4><?= $userInfo->name ?></h4>
                 </div>
                 <hr>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="exampleFormControlInput1">Email</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="email@mail.com"
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="<?= $email ?>"
                         readonly>
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Contraseña</label>
                     <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="*******"
@@ -29,11 +29,11 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 </div>
                 <a type="button" class="" data-toggle="modal" data-target="#modal_cambiar_contrasena"><small>Cambiar
                         contraseña</small></a>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="exampleFormControlInput1">Teléfono contacto</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="5566778899"
-                        readonly>
-                </div>
+                    <input type="text" class="form-control" id="exampleFormControlInput1"
+                        placeholder="<?= $userInfo->phoneNumber ?>" readonly>
+                </div> -->
             </div>
         </div>
         <div class="col-7">
@@ -42,41 +42,41 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                 <div class="row m-0">
                     <div class="col-4">
                         <h4>Nombre</h4>
-                        <p>Nombre empresa</p>
+                        <p><?= $userInfo->company->name ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Razón social</h4>
-                        <p>Razón social</p>
+                        <p><?= $userInfo->company->businessName ?></p>
                     </div>
                     <div class="col-4"></div>
                 </div>
                 <div class="row m-0">
                     <div class="col-4">
                         <h4>Dirección</h4>
-                        <p>Calle y número</p>
+                        <p><?= $userInfo->company->address ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Ciudad</h4>
-                        <p>Ciudad de México</p>
+                        <p><?= $userInfo->company->city ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Municipio</h4>
-                        <p>Municipio</p>
+                        <p><?= $userInfo->company->municipality ?></p>
                     </div>
                 </div>
                 <div class="row m-0">
                     <div class="col-4">
                         <h4>Código postal</h4>
-                        <p>12345</p>
+                        <p><?= $userInfo->company->zipCode ?></p>
                     </div>
-                    <div class="col-4">
+                    <!-- <div class="col-4">
                         <h4>Email</h4>
-                        <p>Ciudad de México</p>
+                        <p><?= $userInfo->company->email ?></p>
                     </div>
                     <div class="col-4">
                         <h4>Teléfono</h4>
-                        <p>Municipio</p>
-                    </div>
+                        <p><?= $userInfo->company->phone ?></p>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -91,32 +91,21 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                         <p>Para continuar con tu solicitud, por favor ingresa los siguientes datos.</p>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Contraseña actual</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="current-password">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nueva contraseña</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="new-password">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Confirmar nueva contraseña</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="new-password-confirm">
                         </div>
                         <div class="d-flex btns_wrappers">
                             <a class="cancel_btn" data-dismiss="modal">Cancelar</a>
-                            <a class="btn_continuar" data-dismiss="modal">Continuar</a>
+                            <a class="btn_continuar" id="btn-change-password">Continuar</a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <!-- Toast -->
-        <div class="toast_wrapper" style="z-index: 5;">
-            <div id="sucess" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-                <div class="toast-body">
-                    <button type="button" class="close" data-dismiss="toast" aria-label="Close">
-                        X
-                    </button>
-                    <p class="m-0">¡Tu contraseña se ha cambiado con éxito!</p>
                 </div>
             </div>
         </div>

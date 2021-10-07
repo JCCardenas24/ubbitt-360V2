@@ -11,6 +11,9 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Ubbitt 360';
 $this->registerJsFile('@web/assets/js/views/login/index.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
+$this->registerJsFile('@web/assets/js/vendors.min.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
+$this->registerJsFile('@web/assets/js/common/alert.js', ['position' => View::POS_END, 'depends' => [\app\assets\LoginAsset::class]]);
+$this->registerCssFile('@web/assets/css/views/login/login.css', ['position' => View::POS_HEAD, 'depends' => [\app\assets\LoginAsset::class]]);
 ?>
 <div class="container h-p100">
     <div class="row align-items-center justify-content-md-center h-p100">
@@ -82,20 +85,62 @@ $this->registerJsFile('@web/assets/js/views/login/index.js', ['position' => View
                         </div>
                     </div>
                     <div id="recovery_psw_container" style="display: none;">
+                        <?php $formPasswordReset = ActiveForm::begin([
+                            'id' => 'password-reset-form',
+                            'fieldConfig' => [
+                                'template' => "{input}{error}",
+                                'options' => [
+                                    'tag' => false,
+                                ],
+                            ],
+                            'action' => [Url::toRoute(['password-reset/request-reset'])],
+                            'options' => [
+                                'class' => 'mt-10',
+
+                            ]
+                        ]); ?>
                         <div class="recovery_step_1">
                             <h5>Recuperar contraseña</h5>
                             <p>Ingresa tu correo electrónico y se te enviará un link para reestabecer tu contraseña
                             </p>
                             <div class="form-group">
                                 <label for="email_recovery_input">Email</label>
-                                <input type="email" class="form-control email_input" id="email_recovery_input"
-                                    placeholder="test@gmail.com">
+                                <?= $formPasswordReset->field($modelPasswordReset, 'email')->textInput(['id' => 'email_recovery_input', 'class' => 'form-control email_input', 'placeholder' => 'test@gmail.com']) ?>
                             </div>
-                            <a class="send_request_email">Enviar</a>
+                            <?= Html::submitButton('Enviar', ['class' => 'send_request_email']) ?>
                             <a class="cancel_request_email">Cancelar</a>
                         </div>
+                        <?php ActiveForm::end(); ?>
                     </div>
                 </div>
+                <?php $this->beginBlock('resetFormMessage'); ?>
+                <?= $this->render('/_commons/_widgets/_toast') ?>
+                <?php if (Yii::$app->session->hasFlash('success-reset')) { ?>
+                <script>
+                $(() => {
+                    showAlert('success', "<?= Yii::$app->session->getFlash('success-reset') ?>");
+                });
+                </script>
+                <?php } ?>
+                <?php if (Yii::$app->session->hasFlash('reset-form-errors')) : ?>
+                <script>
+                $(() => {
+                    var errors =
+                        <?= json_encode(Yii::$app->session->getFlash('reset-form-errors'), JSON_UNESCAPED_UNICODE) ?>;
+                    var error_txt = "";
+
+                    for (const prop in errors) {
+                        error_txt += errors[prop].join("<br>")
+                    }
+
+                    $('#login_container').toggle();
+                    $('#recovery_psw_container').toggle();
+
+                    showAlert('error', error_txt);
+                });
+                </script>
+                <?php endif; ?>
+                <?php $this->endBlock(); ?>
             </div>
         </div>
     </div>

@@ -1,64 +1,19 @@
-<div class="d-flex mb-20">
-    <div class="d-flex wid-100 justify-content-end">
-        <div class="col-4 d-flex justify-content-between">
-            <div class="form-group wid-100 d-flex m-0">
-                <div id="reportrange_clientes" class="range-pick">
-                    <i class="fa fa-calendar"></i>&nbsp;
-                    <span></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-                </div>
-            </div>
-        </div>
-        <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a>
-        <a href="" class="pdf_button"><i class="icon-agegarnuevo"></i></a>
-    </div>
-</div>
-
-<table class="table table-hover">
+<table class="table table-hover" id="beyond-collection-reports-table">
     <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Nombre archivo</th>
+            <th scope="col">Nombre de archivo</th>
+            <th scope="col">Usuario</th>
             <th scope="col">Fecha</th>
-            <th scope="col">Hora</th>
             <th scope="col">Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">121212</th>
-            <td>documento.xml</td>
-            <td>02/06/2021</td>
-            <td>18:35px</td>
-            <td>
-                <i class="fa fa-download" aria-hidden="true"></i>
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">121212</th>
-            <td>documento.xml</td>
-            <td>02/06/2021</td>
-            <td>18:35px</td>
-            <td>
-                <i class="fa fa-download" aria-hidden="true"></i>
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">121212</th>
-            <td>documento.xml</td>
-            <td>02/06/2021</td>
-            <td>18:35px</td>
-            <td>
-                <i class="fa fa-download" aria-hidden="true"></i>
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </td>
-        </tr>
     </tbody>
 </table>
 
 <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-end">
+    <ul class="pagination justify-content-end" id="beyond-collection-reports-paginator">
         <li class="page-item disabled">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
         </li>
@@ -68,3 +23,18 @@
         </li>
     </ul>
 </nav>
+<div class="modal fade modal-delete-report" id="modal-delete-report" tabindex="-1" aria-labelledby="modal-delete-reportLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <img class="alert_icon" src="<?= Yii::getAlias('@web') ?>/assets/images/alert_icon.svg" alt="">
+        <p class="">¿Estas seguro que deseas eliminar este reporte?</p>
+        <input type="hidden" id="report_delete_id" name="report_delete_id">
+        <div class="d-flex justify-content-end align-items-center">
+            <a class="btn_cancel" data-dismiss="modal">Cancelar</a>
+            <a class="btn_continue_delete_report" id="btn-confirm-delete-report" href="#">Continuar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

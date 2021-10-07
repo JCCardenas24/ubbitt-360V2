@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\PasswordReset;
 
 class LoginController extends Controller
 {
@@ -66,6 +67,7 @@ class LoginController extends Controller
     public function actionIndex()
     {
         $model = new LoginForm();
+        $modelPasswordReset = new PasswordReset();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
@@ -73,6 +75,7 @@ class LoginController extends Controller
         $model->password = '';
         return $this->render('index', [
             'model' => $model,
+            'modelPasswordReset' => $modelPasswordReset
         ]);
     }
 
