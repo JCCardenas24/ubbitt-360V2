@@ -646,6 +646,7 @@ function updateFunnelChart(data, moneyFormatter) {
                         formatter: '{b}: {c}%',
                     },
                 },
+                sort: 'none',
                 data: [
                     { value: 100, name: 'Inversion total' },
                     { value: data.roi_percentage, name: 'Total ventas' },
