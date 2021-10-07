@@ -873,9 +873,9 @@ function findMarketingGeneralData(start, end, moneyFormatter) {
             $('#marketing-cpl-contacted').text(
                 moneyFormatter.format(data.cpl_contacted).replace('.00', '')
             );
-            $('#marketing-sale-cost').text(
-                moneyFormatter.format(data.sale_cost).replace('.00', '')
-            );
+            // $('#marketing-sale-cost').text(
+            //     moneyFormatter.format(data.sale_cost).replace('.00', '')
+            // );
             $('#marketing-roa').text(data.roa.replace('.00', '') + '%');
             $('#marketing-sales-amount').text(
                 moneyFormatter.format(data.sales_amount).replace('.00', '')
