@@ -1080,8 +1080,8 @@ function updateDailyPerformanceDataGraph(data) {
                 type: 'value',
                 name: 'Leads',
                 min: 0,
-                max: 100,
-                interval: 5,
+                // max: 100,
+                // interval: 5,
             },
             {
                 type: 'value',
@@ -1094,7 +1094,7 @@ function updateDailyPerformanceDataGraph(data) {
                 //             return row.sales;
                 //         })
                 //     ) + 50,
-                interval: 100,
+                // interval: 100,
             },
         ],
         series: [
