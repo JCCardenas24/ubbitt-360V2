@@ -13,8 +13,8 @@
     </div>
     <!-- <a href="./assets/reportes/prueba.xlsx" class="pdf_button mr-5" download><i class="icon-download_xls c-gray"
             aria-hidden="true"></i></a> -->
-    <a href="./assets/reportes/prueba.xlsx" class="pdf_button" download><i class="fa fa-download"
-            aria-hidden="true"></i></a>
+    <!-- <a href="./assets/reportes/prueba.xlsx" class="pdf_button" download><i class="fa fa-download"
+            aria-hidden="true"></i></a> -->
 </div>
 <br>
 <?= $this->render('_database-sales/_table') ?>
