@@ -650,7 +650,7 @@ function updateFunnelChart(data, moneyFormatter) {
                 data: [
                     { value: 100, name: 'Inversion total' },
                     { value: data.roi_percentage, name: 'Total ventas' },
-                    { value: data.collected_percentage, name: 'Total cobros' },
+                    { value: data.collection_percentage, name: 'Total cobros' },
                 ],
                 // Ensure outer shape will not be over inner shape when hover.
                 z: 100,
