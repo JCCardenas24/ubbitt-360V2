@@ -181,7 +181,30 @@
             </div>
         </div>
     </div>
-    <div class="row details_campaigns mt-0">
+    <h1><span><img src="<?= Yii::getAlias('@web') ?>/assets/images/inversion.svg" alt=""></span> Inversión y
+        periodicidad de campaña Ubbitt 2</h1>
+    <hr>
+    <div class="row details_campaigns">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="investment">Inversión</label>
+                <input type="text" class="form-control" id="investment" placeholder="$350,000" valie="$350,000"
+                    disabled>
+                <small>Nota: Inversión mínima de $350,000</small>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="start-date">Fecha de inicio</label>
+                <input type="text" class="form-control" id="start-date" placeholder="" value="27/09/2021" disabled>
+            </div>
+            <div class="form-group">
+                <label for="end-date">Finalización</label>
+                <input type="text" class="form-control" id="end-date" placeholder="" value="27/10/21" disabled>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row details_campaigns mt-0">
         <div class="col-6">
             <div class="form-group">
                 <label for="expected-bidding-per-lead">Bidding por lead esperado </label>
@@ -194,5 +217,5 @@
                 <input type="text" class="form-control" id="expected-total-sales" placeholder="2000" disabled>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
