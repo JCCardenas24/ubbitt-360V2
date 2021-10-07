@@ -232,7 +232,7 @@ table.dataTable thead .sorting_desc:before {
 }
 
 .container-login {
-    height: 390px;
+    height: 460px;
     width: 455px;
     margin: auto;
     display: flex;
@@ -313,7 +313,8 @@ table.dataTable thead .sorting_desc:before {
     color: #ff0000;
 }
 
-.custom-file-label::after {
+
+/* .custom-file-label::after {
     position: absolute;
     top: 0;
     right: 0;
@@ -327,8 +328,10 @@ table.dataTable thead .sorting_desc:before {
     content: "Buscar";
     background-color: #ced4da;
     border-left: inherit;
-    border-radius: 0 0.25rem 0.25rem 0;
-}
+    border-radius: 0 0.25rem 0.25rem 0; */
+
+
+/* } */
 
 .brd-gray {
     border-color: #ced4da !important;
@@ -1255,40 +1258,6 @@ form#add_new_lead .form-control {
     width: 100%;
 }
 
-[type="file"] {
-    /* Style the color of the message that says 'No file chosen' */
-    color: #1A233A;
-}
-
-[type="file"]::-webkit-file-upload-button {
-    background: #9FCC00;
-    border: 2px solid #9FCC00;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 12px;
-    outline: none;
-    padding: 10px 25px;
-    text-transform: uppercase;
-    /* transition: all 1s ease; */
-}
-
-[type="file"]::-webkit-file-upload-button:hover {
-    background: #fff;
-    border: 2px solid #9FCC00;
-    color: #000;
-}
-
-.upload_file {
-    padding: 50px;
-    width: 80%;
-    margin: auto;
-}
-
-.upload_file img {
-    width: 85%;
-}
-
 .br-10p {
     border-radius: 10px;
 }
@@ -1400,10 +1369,11 @@ form#add_new_lead .form-control {
     font-size: 18px
 }
 
-#input_upload_file_form {
+
+/* #input_upload_file_form {
     border: none !important;
     height: 50px;
-}
+} */
 
 #modal_form_poliza_emitida .modal-body {
     padding: 35px 40px;
@@ -1568,8 +1538,6 @@ table tbody tr td i {
     cursor: pointer;
 }
 
-.node-rect {}
-
 .node-rect-closed {
     stroke-width: 2px;
     stroke: rgb(0, 0, 0);
@@ -1675,7 +1643,7 @@ a.exchangeName {
 }
 
 .mini-tree_card span {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .mini-tree_card small {
@@ -1711,13 +1679,19 @@ table.table tbody {
     padding: 9px;
 }
 
-.pagination .page-link {
+
+/* .pagination .page-link {
     background-color: black;
     color: white;
-}
+} */
 
-.pagination .page-link:hover {
+.page-item.active .page-link {
     background-color: black;
+    border-color: black;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .navbar-custom-menu {
@@ -1746,6 +1720,20 @@ table.table tbody {
 
 .collapsing a {
     color: white;
+}
+
+.wrapper_error_mesg {
+    display: flex;
+    align-items: center;
+}
+
+.wrapper_error_mesg i {
+    margin-right: 10px;
+    font-size: 1.25em;
+}
+
+.form-check .wrapper_error_mesg {
+    justify-content: center;
 }
 
 
