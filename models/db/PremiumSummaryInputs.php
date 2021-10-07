@@ -99,8 +99,8 @@ class PremiumSummaryInputs extends ActiveRecord
                 SELECT
                     COALESCE(SUM(spent_budget), 0) AS spent_budget,
                     COALESCE(SUM(roi), 0) AS roi,
-                    COALESCE(SUM(roi_percentage), 0) AS roi_percentage,
-                    COALESCE(SUM(cpl), 0) AS cpl,
+                    COALESCE(MAX(roi_percentage), 0) AS roi_percentage,
+                    COALESCE(CAST(AVG(cpl) AS DECIMAL(5,2)), 0) AS cpl,
                     COALESCE(SUM(cpa), 0) AS cpa,
                     COALESCE(CAST(AVG(cpa_percentage) AS DECIMAL(5,2)), 0) AS cpa_percentage,
                     COALESCE(SUM(leads), 0) AS leads,

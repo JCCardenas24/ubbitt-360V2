@@ -561,7 +561,7 @@ function findSummaryInputs(start, end, moneyFormatter) {
             );
             $('#collected-total').text(data.collected_total);
             $('#collected-percentage').text(
-                data.collected_percentage.replace('.00', '') + '%'
+                data.collection_percentage.replace('.00', '') + '%'
             );
             updateFunnelChart(data, moneyFormatter);
             $('#sales-total-amount').text(
@@ -580,11 +580,8 @@ function findSummaryInputs(start, end, moneyFormatter) {
                     .format(data.collected_total_amount)
                     .replace('.00', '')
             );
-            // $('#collection-percentage').text(
-            //     data.collection_percentage.replace('.00', '') + '%'
-            // );
             $('#collection-percentage').text(
-                data.collected_percentage.replace('.00', '') + '%'
+                data.collection_percentage.replace('.00', '') + '%'
             );
             updateSalesConcentrate(data);
             $('#total-emitted-sales').text(
