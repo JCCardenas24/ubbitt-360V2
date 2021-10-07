@@ -8,6 +8,7 @@ use app\models\db\FreemiumSummaryDetail;
 use app\models\db\FreemiumSummaryGraph;
 use app\models\db\UserInfo;
 use app\models\db\webhook\WebHookCalls;
+use app\models\forms\SearchByDateAndTermsForm;
 use app\models\forms\SearchByDateForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -99,12 +100,35 @@ class UbbittFreemiumController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
-    
+
     public function actionFindSales()
     {
-        $data = [];
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $url = 'http://qa.ubbitt.com:8081/consultsapp/report_new_sale/' . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/0eb422ebc0760f6a22c3c24125aa5f9b';
+        if (!empty($searchParams->term)) {
+            $url .= '/' . urlencode($searchParams->term);
+        }
+        $response = file_get_contents($url);
+        $response = json_decode($response);
+        $data = [];
+        $data['totalPages'] = $response[1];
+        $data['salesRecords'] = $response[2];
         return $data;
+    }
+
+    function actionDownloadPolicies()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->post());
+        $url = 'http://qa.ubbitt.com:8081/consultsapp/report_new_sale/' . $searchParams->startDate . '/' . $searchParams->endDate . '/1/0eb422ebc0760f6a22c3c24125aa5f9b';
+        if (!empty($searchParams->term)) {
+            $url .= '/' . urlencode($searchParams->term);
+        }
+        $response = file_get_contents($url);
+        $response = json_decode($response);
     }
 
     public function actionFindSummaryGraphData()

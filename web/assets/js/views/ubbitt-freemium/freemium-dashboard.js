@@ -19,6 +19,10 @@ $(function () {
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
             'Este mes': [moment().startOf('month'), moment()],
+            'Mes anterior': [
+                moment().subtract(1, 'months').startOf('month'),
+                moment().subtract(1, 'months').endOf('month'),
+            ],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -1503,54 +1507,6 @@ function callDatabaseCallback(start, end, label, page = 1) {
         },
     });
 }
-function callDatabaseSalesCallback(start, end, label, page = 1) {
-    startDate = start;
-    endDate = end;
-    $('.range-pick#freemium-sales-database-date-range > .text-date').html(
-        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
-    );
-    showPreloader();
-    $.ajax({
-        url: '/ubbitt-freemium/find-sales',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
-        },
-        success: (response) => {
-            $('#freemium-sales-table tbody').html(null);
-            $.each(response.salesRecords, (index, callRecord) => {
-                $('#freemium-sales-table tbody').append(
-                    createSalesRecordRow(callRecord)
-                );
-            });
-            updatePaginator(
-                '#freemium-sales-paginator',
-                page,
-                parseInt(response.totalPages),
-                (page) => {
-                    callDatabaseSalesCallback(start, end, '', page);
-                }
-            );
-        },
-        error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
-        },
-        complete: function () {
-            hidePreloader();
-        },
-    });
-}
-
-function createSalesRecordRow(salesRecord) {
-    return `
-        <tr>
-            <th scope="row" colspan="10"></td>
-        </tr>
-    `;
-}
 
 function createCallRecordRow(callRecord) {
     return (
@@ -1584,6 +1540,114 @@ function createCallRecordRow(callRecord) {
         ) +
         `
             </td>
+        </tr>
+    `
+    );
+}
+
+function onFilterSalesDatabase() {
+    callDatabaseSalesCallback(
+        startDate,
+        endDate,
+        null,
+        parseInt($('.page-item.active a').text())
+    );
+}
+
+function callDatabaseSalesCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#freemium-sales-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-freemium/find-sales',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term').val(),
+            'SearchByDateAndTermsForm[page]': page,
+        },
+        success: (response) => {
+            $('#freemium-sales-table tbody').html(null);
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                maximumFractionDigits: 0,
+            });
+            $.each(response.salesRecords, (index, callRecord) => {
+                $('#freemium-sales-table tbody').append(
+                    createSalesRecordRow(callRecord, moneyFormatter)
+                );
+            });
+            updatePaginator(
+                '#freemium-sales-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseSalesCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            alert('Ocurrió un problema al consultar el registro de llamadas');
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createSalesRecordRow(salesRecord, moneyFormatter) {
+    return (
+        `
+        <tr>
+            <th scope="row">` +
+        salesRecord.id +
+        `</th>
+            <td>` +
+        salesRecord.nombre_contacto +
+        `</td>
+            <td>` +
+        salesRecord.telefono_contacto +
+        `</td>
+            <td>` +
+        salesRecord.correo_contacto +
+        `</td>
+            <td>` +
+        salesRecord.producto +
+        `</td>
+            <td>` +
+        salesRecord.estatus_cobro +
+        `</td>
+            <td>` +
+        salesRecord.num_poliza +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.prima_total) +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.monto_pagado) +
+        `</td>
+            <td>` +
+        salesRecord.asignado +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_venta, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_cobro, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td><a href="` +
+        salesRecord.documento +
+        `" download target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
         </tr>
     `
     );
