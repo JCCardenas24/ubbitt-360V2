@@ -123,12 +123,13 @@ class UbbittFreemiumController extends Controller
     {
         $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
-        $url = Yii::$app->params['sales_database_service_url'] . $searchParams->startDate . '/' . $searchParams->endDate . '/1/0eb422ebc0760f6a22c3c24125aa5f9b';
+        $url = Yii::$app->params['sales_database_service_url'] . $searchParams->startDate . '/' . $searchParams->endDate . '/0/0eb422ebc0760f6a22c3c24125aa5f9b';
         if (!empty($searchParams->term)) {
             $url .= '/' . urlencode($searchParams->term);
         }
         $response = file_get_contents($url);
         $response = json_decode($response);
+        $policies = $response[0];
     }
 
     public function actionFindSummaryGraphData()
