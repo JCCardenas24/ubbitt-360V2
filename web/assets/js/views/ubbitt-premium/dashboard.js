@@ -550,9 +550,9 @@ function findSummaryInputs(start, end, moneyFormatter) {
             );
             $('#cpl').text(moneyFormatter.format(data.cpl).replace('.00', ''));
             // $('#cpa').text(moneyFormatter.format(data.cpa).replace('.00', ''));
-            // $('#cpa-percentage').text(
-            //     data.cpa_percentage.replace('.00', '') + '%'
-            // );
+            $('#cpa-percentage').text(
+                data.cpa_percentage.replace('.00', '') + '%'
+            );
             $('#leads').text(data.leads);
             $('#calls-total').text(data.calls_total);
             $('#sales-total').text(data.sales_total);
