@@ -1546,12 +1546,7 @@ function createCallRecordRow(callRecord) {
 }
 
 function onFilterSalesDatabase() {
-    callDatabaseSalesCallback(
-        startDate,
-        endDate,
-        null,
-        parseInt($('.page-item.active a').text())
-    );
+    callDatabaseSalesCallback(startDate, endDate, null, 1);
 }
 
 function callDatabaseSalesCallback(start, end, label, page = 1) {
