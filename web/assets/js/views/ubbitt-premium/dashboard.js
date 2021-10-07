@@ -1562,7 +1562,7 @@ function createCallRecordRow(callRecord) {
             <td>` +
         callRecord.callpicker_number +
         `</td>
-            <td>Mapfre</td>
+            <td>GS</td>
             <td>` +
         callRecord.date +
         `</td>
