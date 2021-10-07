@@ -200,14 +200,14 @@
                 </div>
             </div>
         </div>
-        <div class="col p-0">
+        <!-- <div class="col p-0">
             <div class="card_bottom bottom_card_orange">
                 <div>
                     <p>Costo por venta</p>
                     <h1 id="marketing-sale-cost">$0</h1>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 
