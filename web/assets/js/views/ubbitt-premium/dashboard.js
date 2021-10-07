@@ -544,15 +544,15 @@ function findSummaryInputs(start, end, moneyFormatter) {
             $('#actual-investment').text(
                 moneyFormatter.format(data.spent_budget).replace('.00', '')
             );
-            $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
+            // $('#roi').text(moneyFormatter.format(data.roi).replace('.00', ''));
             $('#roi-percentage').text(
                 data.roi_percentage.replace('.00', '') + '%'
             );
             $('#cpl').text(moneyFormatter.format(data.cpl).replace('.00', ''));
-            $('#cpa').text(moneyFormatter.format(data.cpa).replace('.00', ''));
-            $('#cpa-percentage').text(
-                data.cpa_percentage.replace('.00', '') + '%'
-            );
+            // $('#cpa').text(moneyFormatter.format(data.cpa).replace('.00', ''));
+            // $('#cpa-percentage').text(
+            //     data.cpa_percentage.replace('.00', '') + '%'
+            // );
             $('#leads').text(data.leads);
             $('#calls-total').text(data.calls_total);
             $('#sales-total').text(data.sales_total);

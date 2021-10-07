@@ -25,12 +25,12 @@
             <h5 id="spent-budget">$0</h5>
         </div>
     </div>
-    <div class="col">
+    <!-- <div class="col">
         <div class="card gray">
             <p>ROI</p>
             <h5 id="roi">$0</h5>
         </div>
-    </div>
+    </div> -->
     <div class="col">
         <div class="card gray">
             <p>ROI</p>
@@ -43,7 +43,7 @@
             <h5 id="cpl">$0</h5>
         </div>
     </div>
-    <div class="col">
+    <!-- <div class="col">
         <div class="card yellow">
             <p>CPA</p>
             <h5 id="cpa">$0</h5>
@@ -54,7 +54,7 @@
             <p>CPA</p>
             <h5 id="cpa-percentage">0%</h5>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <div class="row ml-0 mr-0 card_actual_forecast">
