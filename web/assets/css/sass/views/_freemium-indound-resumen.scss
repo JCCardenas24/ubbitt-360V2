@@ -398,3 +398,34 @@
         color: #4d4d4d;
     }
 }
+
+.input_group_search {
+    width: 177px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 33px;
+    input {
+        width: 140px !important;
+        height: 100%;
+    }
+    .input-group-append {
+        width: 35px !important;
+        height: 100%;
+        button {
+            width: 100%;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0;
+        }
+    }
+}
+
+.range_dates_width {
+    width: 360px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

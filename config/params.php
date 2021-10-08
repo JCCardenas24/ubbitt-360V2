@@ -22,5 +22,6 @@ return [
         "renewal" => "Renovación",
     ],
     'reset_password_token_expires' => 60,
-    'email_address_database_to' => 'juancarlos.cardenas@ubbitt.com'
+    'email_address_database_to' => 'juancarlos.cardenas@ubbitt.com',
+    'sales_database_service_url' => 'http://qa.ubbitt.com:8081/consultsapp/report_new_sale/',
 ];

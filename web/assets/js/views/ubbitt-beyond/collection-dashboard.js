@@ -19,6 +19,10 @@ $(function () {
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
             'Este mes': [moment().startOf('month'), moment()],
+            'Mes anterior': [
+                moment().subtract(1, 'months').startOf('month'),
+                moment().subtract(1, 'months').endOf('month'),
+            ],
         },
         locale: {
             applyLabel: 'Aplicar',

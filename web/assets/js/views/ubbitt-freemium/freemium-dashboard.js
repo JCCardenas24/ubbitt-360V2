@@ -19,6 +19,10 @@ $(function () {
         ranges: {
             'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
             'Este mes': [moment().startOf('month'), moment()],
+            'Mes anterior': [
+                moment().subtract(1, 'months').startOf('month'),
+                moment().subtract(1, 'months').endOf('month'),
+            ],
         },
         locale: {
             applyLabel: 'Aplicar',
@@ -1496,60 +1500,15 @@ function callDatabaseCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
-        },
-        complete: function () {
-            hidePreloader();
-        },
-    });
-}
-function callDatabaseSalesCallback(start, end, label, page = 1) {
-    startDate = start;
-    endDate = end;
-    $('.range-pick#freemium-sales-database-date-range > .text-date').html(
-        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
-    );
-    showPreloader();
-    $.ajax({
-        url: '/ubbitt-freemium/find-sales',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
-        },
-        success: (response) => {
-            $('#freemium-sales-table tbody').html(null);
-            $.each(response.salesRecords, (index, callRecord) => {
-                $('#freemium-sales-table tbody').append(
-                    createSalesRecordRow(callRecord)
-                );
-            });
-            updatePaginator(
-                '#freemium-sales-paginator',
-                page,
-                parseInt(response.totalPages),
-                (page) => {
-                    callDatabaseSalesCallback(start, end, '', page);
-                }
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
             );
         },
-        error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
-        },
         complete: function () {
             hidePreloader();
         },
     });
-}
-
-function createSalesRecordRow(salesRecord) {
-    return `
-        <tr>
-            <th scope="row" colspan="10"></td>
-        </tr>
-    `;
 }
 
 function createCallRecordRow(callRecord) {
@@ -1587,6 +1546,164 @@ function createCallRecordRow(callRecord) {
         </tr>
     `
     );
+}
+
+function onFilterSalesDatabase() {
+    callDatabaseSalesCallback(startDate, endDate, null, 1);
+}
+
+function callDatabaseSalesCallback(start, end, label, page = 1) {
+    startDate = start;
+    endDate = end;
+    $('.range-pick#freemium-sales-database-date-range > .text-date').html(
+        start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    );
+    showPreloader();
+    $.ajax({
+        url: '/ubbitt-freemium/find-sales',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term').val(),
+            'SearchByDateAndTermsForm[page]': page,
+        },
+        success: (response) => {
+            $('#freemium-sales-table tbody').html(null);
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                maximumFractionDigits: 0,
+            });
+            $.each(response.salesRecords, (index, callRecord) => {
+                $('#freemium-sales-table tbody').append(
+                    createSalesRecordRow(callRecord, moneyFormatter)
+                );
+            });
+            updatePaginator(
+                '#freemium-sales-paginator',
+                page,
+                parseInt(response.totalPages),
+                (page) => {
+                    callDatabaseSalesCallback(start, end, '', page);
+                }
+            );
+        },
+        error: () => {
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
+        },
+        complete: function () {
+            hidePreloader();
+        },
+    });
+}
+
+function createSalesRecordRow(salesRecord, moneyFormatter) {
+    return (
+        `
+        <tr>
+            <th scope="row">` +
+        salesRecord.id +
+        `</th>
+            <td>` +
+        salesRecord.nombre_contacto +
+        `</td>
+            <td>` +
+        salesRecord.telefono_contacto +
+        `</td>
+            <td>` +
+        salesRecord.correo_contacto +
+        `</td>
+            <td>` +
+        salesRecord.producto +
+        `</td>
+            <td>` +
+        salesRecord.estatus_cobro +
+        `</td>
+            <td>` +
+        salesRecord.num_poliza +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.prima_total) +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.monto_pagado) +
+        `</td>
+            <td>` +
+        salesRecord.asignado +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_venta, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_cobro, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td><a href="` +
+        salesRecord.documento +
+        `" download target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+    `
+    );
+}
+
+function onDownloadPolicies(event) {
+    event.preventDefault();
+    showPreloader();
+    let headers = new Headers();
+    let fileName = '';
+    fetch(
+        '/ubbitt-freemium/download-policies?SearchByDateAndTermsForm[startDate]=' +
+            startDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[endDate]=' +
+            endDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[term]=' +
+            encodeURIComponent($('#search-term').val()),
+        {
+            headers,
+        }
+    )
+        .then((resp) => {
+            if (resp.status == 200) {
+                const header = resp.headers.get('Content-Disposition');
+                const parts = header.split(';');
+                fileName = parts[1].split('=')[1].replaceAll('"', '');
+                return resp.blob();
+            } else {
+                throw 'Hubo un problema al descargar las pólizas.';
+            }
+        })
+        .then((blob) => {
+            // IE doesn't allow using a blob object directly as link href
+            // instead it is necessary to use msSaveOrOpenBlob
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob);
+                return;
+            }
+
+            // For other browsers:
+            // Create a link pointing to the ObjectURL containing the blob.
+            const url = window.URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.click();
+            setTimeout(function () {
+                // For Firefox it is necessary to delay revoking the ObjectURL
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        })
+        .catch((error) => showAlert('error', error))
+        .finally(() => {
+            hidePreloader();
+        });
 }
 
 function loadKpis(start, end) {
@@ -1628,7 +1745,10 @@ function loadKpis(start, end) {
             $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
         },
         error: () => {
-            alert("Ocurrió un problema al consultar los KPI's de telefonía");
+            showAlert(
+                'error',
+                "Ocurrió un problema al consultar los KPI's de telefonía"
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1673,7 +1793,10 @@ function reportsListCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de reportes');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de reportes'
+            );
         },
         complete: function () {
             hidePreloader();
