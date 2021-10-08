@@ -16,6 +16,10 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use app\models\ReportFile;
+use app\models\utils\FilenameHelper;
+use Exception;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
+use ZipArchive;
 
 class UbbittFreemiumController extends Controller
 {
@@ -29,7 +33,7 @@ class UbbittFreemiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-calls', 'find-sales', 'find-summary-graph-data', 'find-call-center-kpis', 'find-summary-detail-data'],
+                        'actions' => ['dashboard', 'find-calls', 'find-sales', 'download-policies', 'find-summary-graph-data', 'find-call-center-kpis', 'find-summary-detail-data'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -41,6 +45,7 @@ class UbbittFreemiumController extends Controller
                     'dashboard' => ['get', 'post'],
                     'find-calls' => ['post'],
                     'find-sales' => ['post'],
+                    'download-policies' => ['get'],
                     'find-summary-graph-data' => ['post'],
                     'find-call-center-kpis' => ['post'],
                     'find-summary-detail-data' => ['post'],
@@ -109,7 +114,7 @@ class UbbittFreemiumController extends Controller
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $url = Yii::$app->params['sales_database_service_url'] . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/0eb422ebc0760f6a22c3c24125aa5f9b';
         if (!empty($searchParams->term)) {
-            $url .= '/' . urlencode($searchParams->term);
+            $url .= '/' . rawurlencode($searchParams->term);
         }
         $response = file_get_contents($url);
         $response = json_decode($response);
@@ -122,14 +127,58 @@ class UbbittFreemiumController extends Controller
     function actionDownloadPolicies()
     {
         $searchParams = new SearchByDateAndTermsForm();
-        $searchParams->load(Yii::$app->request->post());
+        $searchParams->load(Yii::$app->request->get());
         $url = Yii::$app->params['sales_database_service_url'] . $searchParams->startDate . '/' . $searchParams->endDate . '/0/0eb422ebc0760f6a22c3c24125aa5f9b';
         if (!empty($searchParams->term)) {
-            $url .= '/' . urlencode($searchParams->term);
+            $url .= '/' . $searchParams->term;
         }
         $response = file_get_contents($url);
         $response = json_decode($response);
         $policies = $response[0];
+        try {
+            $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+            if (!file_exists($outputPath)) {
+                mkdir($outputPath, 0777, true);
+            }
+            $fileName = FilenameHelper::createTimeStampedFileName('polizas.zip');
+            $zipArchive = new ZipArchive();
+            $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
+
+            foreach ($policies as $policy) {
+                $encodedUrl = urlencode($policy->documento);
+                $fixedEncodedUrl = str_replace(['%2F', '%3A'], ['/', ':'], $encodedUrl);
+                $policyFile = $this->getUrlContents($fixedEncodedUrl);
+                if ($policyFile) {
+                    $zipArchive->addFromString(basename($policy->documento), $policyFile);
+                }
+            }
+            $zipArchive->close();
+            // Envía el archivo al navegador
+            Yii::$app->response->sendFile($outputPath . $fileName, basename($fileName))
+                ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                    // Elimina el archivo una vez enviado
+                    unlink($event->data);
+                }, $outputPath . $fileName);
+        } catch (Exception $exception) {
+            Yii::error('Ocurrió un problema al descargar las pólizas.');
+            Yii::error($exception);
+            throw new InternalErrorException('Ocurrió un problema al descargar las pólizas.', 500, $exception);
+        }
+    }
+
+    function getUrlContents($url)
+    {
+        $userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        return curl_exec($ch);
     }
 
     public function actionFindSummaryGraphData()

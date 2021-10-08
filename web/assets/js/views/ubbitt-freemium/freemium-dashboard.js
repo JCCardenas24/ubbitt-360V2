@@ -1500,7 +1500,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1588,7 +1591,10 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1648,6 +1654,58 @@ function createSalesRecordRow(salesRecord, moneyFormatter) {
     );
 }
 
+function onDownloadPolicies(event) {
+    event.preventDefault();
+    showPreloader();
+    let headers = new Headers();
+    let fileName = '';
+    fetch(
+        '/ubbitt-freemium/download-policies?SearchByDateAndTermsForm[startDate]=' +
+            startDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[endDate]=' +
+            endDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[term]=' +
+            encodeURIComponent($('#search-term').val()),
+        {
+            headers,
+        }
+    )
+        .then((resp) => {
+            if (resp.status == 200) {
+                const header = resp.headers.get('Content-Disposition');
+                const parts = header.split(';');
+                fileName = parts[1].split('=')[1].replaceAll('"', '');
+                return resp.blob();
+            } else {
+                throw 'Hubo un problema al descargar las pólizas.';
+            }
+        })
+        .then((blob) => {
+            // IE doesn't allow using a blob object directly as link href
+            // instead it is necessary to use msSaveOrOpenBlob
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob);
+                return;
+            }
+
+            // For other browsers:
+            // Create a link pointing to the ObjectURL containing the blob.
+            const url = window.URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.click();
+            setTimeout(function () {
+                // For Firefox it is necessary to delay revoking the ObjectURL
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        })
+        .catch((error) => showAlert('error', error))
+        .finally(() => {
+            hidePreloader();
+        });
+}
+
 function loadKpis(start, end) {
     startDate = start;
     endDate = end;
@@ -1687,7 +1745,10 @@ function loadKpis(start, end) {
             $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
         },
         error: () => {
-            alert("Ocurrió un problema al consultar los KPI's de telefonía");
+            showAlert(
+                'error',
+                "Ocurrió un problema al consultar los KPI's de telefonía"
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1732,7 +1793,10 @@ function reportsListCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de reportes');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de reportes'
+            );
         },
         complete: function () {
             hidePreloader();
