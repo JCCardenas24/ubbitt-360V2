@@ -2,6 +2,11 @@ let startDate = null;
 let endDate = null;
 let summaryGraphData = [];
 const urlSearchParams = new URLSearchParams(window.location.search);
+let productAveragePrice = null;
+let productFirstPaymentAveragePrice = null;
+let investment = null;
+let expectedBiddingPerLead = null;
+let expectedTotalSales = null;
 $(() => {
     startDate = moment().subtract(1, 'months').startOf('month');
     endDate = moment().subtract(1, 'months').endOf('month');
@@ -37,7 +42,90 @@ $(() => {
     $('#pemp_no').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
+
+    productAveragePrice = new AutoNumeric(
+        '#product-average-price'
+    ).northAmerican();
+    $('#dec-product-average-price').on('click', () => {
+        dec(productAveragePrice, 10);
+    });
+    $('#inc-product-average-price').on('click', () => {
+        inc(productAveragePrice, 10);
+    });
+
+    productFirstPaymentAveragePrice = new AutoNumeric(
+        '#product-first-payment-average-price'
+    ).northAmerican();
+    $('#dec-product-first-payment-average-price').on('click', () => {
+        dec(productFirstPaymentAveragePrice, 10);
+    });
+    $('#inc-product-first-payment-average-price').on('click', () => {
+        inc(productFirstPaymentAveragePrice, 10);
+    });
+
+    investment = new AutoNumeric('#investment').northAmerican();
+    $('#dec-investment').on('click', () => {
+        dec(investment, 1000, 350000);
+    });
+    $('#inc-investment').on('click', () => {
+        inc(investment, 1000, 350000);
+    });
+
+    expectedBiddingPerLead = new AutoNumeric(
+        '#expected-bidding-per-lead'
+    ).northAmerican();
+    $('#dec-expected-bidding-per-lead').on('click', () => {
+        dec(expectedBiddingPerLead, 10);
+    });
+    $('#inc-expected-bidding-per-lead').on('click', () => {
+        inc(expectedBiddingPerLead, 10);
+    });
+
+    expectedTotalSales = new AutoNumeric('#expected-total-sales', {
+        currencySymbol: '',
+        decimalPlaces: 0,
+        allowDecimalPadding: false,
+        minimumValue: 0,
+    });
+    $('#dec-expected-total-sales').on('click', () => {
+        dec(expectedTotalSales, 50);
+    });
+    $('#inc-expected-total-sales').on('click', () => {
+        inc(expectedTotalSales, 50);
+    });
+
+    // Single range Input
+    $('input[class~="singlerange"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: parseInt(moment().format('YYYY')),
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: 'Aplicar',
+            cancelLabel: 'Cancelar',
+        },
+    });
 });
+
+function inc(element, increment, min = 0) {
+    let elementValue = element.getNumericString();
+    if (elementValue === '') {
+        elementValue = min;
+    }
+    element.set(parseFloat(elementValue) + parseInt(increment));
+}
+
+function dec(element, decrement, min = 0) {
+    let elementValue = element.getNumericString();
+    if (elementValue === '') {
+        elementValue = 0;
+    }
+    let value = parseFloat(elementValue) - parseInt(decrement);
+    if (value < min) {
+        value = min;
+    }
+    element.set(value);
+}
 
 $('[id^=brief-campaign][id$=tab]').on('shown.bs.tab', function (event) {
     findBriefData();
@@ -159,9 +247,6 @@ function findHeaderData(start, end) {
                 'Ocurrió un problema al recuperar la información del header'
             );
         },
-        // complete: () => {
-        //     hidePreloader();
-        // },
     });
 }
 
@@ -1635,6 +1720,7 @@ function createSalesRecordRow(salesRecord) {
 
 function onEnableBriefEdition() {
     $('#premium-brief-campaign').find('input').prop('disabled', false);
+    $('#premium-brief-campaign').find('button').prop('disabled', false);
     $('#btn-edit-brief').hide();
     $('#btn-cancel-edit-brief').show();
     $('#btn-save-brief').show();
@@ -1642,6 +1728,7 @@ function onEnableBriefEdition() {
 
 function onCancelBriefEdition() {
     $('#premium-brief-campaign').find('input').prop('disabled', true);
+    $('#premium-brief-campaign').find('button').prop('disabled', true);
     $('#btn-edit-brief').show();
     $('#btn-cancel-edit-brief').hide();
     $('#btn-save-brief').hide();
@@ -1667,8 +1754,8 @@ function findBriefData() {
                 $('#product-description').val(data.productDescription);
                 $('#product-insights').val(data.productInsights);
                 $('#product-added-value').val(data.productAddedValue);
-                $('#product-average-price').val(data.productAveragePrice);
-                $('#product-first-payment-average-price').val(
+                productAveragePrice.set(data.productAveragePrice);
+                productFirstPaymentAveragePrice.set(
                     data.productFirstPaymentAveragePrice
                 );
                 $('#payment-frequency-yearly').prop(
@@ -1708,13 +1795,11 @@ function findBriefData() {
                     'checked',
                     data.paymentMethodWireTransfer
                 );
-                $('#investment').val(data.investment);
+                investment.set(data.investment);
                 $('#start-date').val(data.startDate);
                 $('#end-date').val(data.endDate);
-                $('#expected-bidding-per-lead').val(
-                    data.expectedBiddingPerLead
-                );
-                $('#expected-total-sales').val(data.expectedTotalSales);
+                expectedBiddingPerLead.set(data.expectedBiddingPerLead);
+                expectedTotalSales.set(data.expectedTotalSales);
             }
         },
         error: () => {
@@ -1748,12 +1833,10 @@ function onSaveBrief() {
             'PremiumBriefForm[productAddedValue]': $(
                 '#product-added-value'
             ).val(),
-            'PremiumBriefForm[productAveragePrice]': $(
-                '#product-average-price'
-            ).val(),
-            'PremiumBriefForm[productFirstPaymentAveragePrice]': $(
-                '#product-first-payment-average-price'
-            ).val(),
+            'PremiumBriefForm[productAveragePrice]':
+                productAveragePrice.getNumericString(),
+            'PremiumBriefForm[productFirstPaymentAveragePrice]':
+                productFirstPaymentAveragePrice.getNumericString(),
             'PremiumBriefForm[paymentFrequencyYearly]': $(
                 '#payment-frequency-yearly'
             ).is(':checked')
@@ -1804,15 +1887,13 @@ function onSaveBrief() {
             ).is(':checked')
                 ? 1
                 : 0,
-            'PremiumBriefForm[investment]': $('#investment').val(),
+            'PremiumBriefForm[investment]': investment.getNumericString(),
             'PremiumBriefForm[startDate]': $('#start-date').val(),
             'PremiumBriefForm[endDate]': $('#end-date').val(),
-            'PremiumBriefForm[expectedBiddingPerLead]': $(
-                '#expected-bidding-per-lead'
-            ).val(),
-            'PremiumBriefForm[expectedTotalSales]': $(
-                '#expected-total-sales'
-            ).val(),
+            'PremiumBriefForm[expectedBiddingPerLead]':
+                expectedBiddingPerLead.getNumericString(),
+            'PremiumBriefForm[expectedTotalSales]':
+                expectedTotalSales.getNumericString(),
         },
         success: (response) => {
             showAlert('success', 'El Brief se actualizó correctamente');

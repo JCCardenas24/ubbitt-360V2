@@ -116,7 +116,7 @@ class UbbittFreemiumController extends Controller
         if (!empty($searchParams->term)) {
             $url .= '/' . rawurlencode($searchParams->term);
         }
-        $response = file_get_contents($url);
+        $response = $this->getUrlContents($url);
         $response = json_decode($response);
         $data = [];
         $data['totalPages'] = $response[1];
@@ -132,7 +132,7 @@ class UbbittFreemiumController extends Controller
         if (!empty($searchParams->term)) {
             $url .= '/' . $searchParams->term;
         }
-        $response = file_get_contents($url);
+        $response = $this->getUrlContents($url);
         $response = json_decode($response);
         $policies = $response[0];
         try {
