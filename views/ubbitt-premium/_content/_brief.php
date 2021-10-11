@@ -69,15 +69,24 @@
         <div class="col-6">
             <div class="form-group">
                 <label for="product-average-price">Precio promedio del producto/servicio</label>
-                <input type="text" class="form-control" id="product-average-price" placeholder="$0.00" disabled>
+                <div class="wrapper_input_number_custom">
+                    <button class="btn mr-2" id="dec-product-average-price" disabled>-</button>
+                    <input type="text" class="form-control input_number_custom" id="product-average-price"
+                        placeholder="$0.00" disabled>
+                    <button class="btn ml-2 inc_amount" id="inc-product-average-price" disabled>+</button>
+                </div>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
                 <label for="product-first-payment-average-price">Precio promedio del primer pago del producto/ servicio
                 </label>
-                <input type="text" class="form-control" id="product-first-payment-average-price" placeholder="$0.00"
-                    disabled>
+                <div class="wrapper_input_number_custom">
+                    <button class="btn mr-2" id="dec-product-first-payment-average-price" disabled>-</button>
+                    <input type="text" class="form-control input_number_custom" id="product-first-payment-average-price"
+                        placeholder="$0.00" disabled>
+                    <button class="btn ml-2 inc_amount" id="inc-product-first-payment-average-price" disabled>+</button>
+                </div>
             </div>
         </div>
     </div>
@@ -166,18 +175,23 @@
         <div class="col-6">
             <div class="form-group">
                 <label for="investment">Inversión</label>
-                <input type="text" class="form-control" id="investment" placeholder="$350,000" disabled>
+                <div class="wrapper_input_number_custom">
+                    <button class="btn mr-2" id="dec-investment" disabled>-</button>
+                    <input type="text" class="form-control input_number_custom" id="investment" placeholder="$350,000"
+                        disabled>
+                    <button class="btn ml-2 inc_amount" id="inc-investment" disabled>+</button>
+                </div>
                 <small>Nota: Inversión mínima de $350,000</small>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
                 <label for="start-date">Fecha de inicio</label>
-                <input type="text" class="form-control" id="start-date" placeholder="" disabled>
+                <input type="text" class="form-control singlerange" id="start-date" placeholder="DD/MM/AAAA" disabled>
             </div>
             <div class="form-group">
                 <label for="end-date">Finalización</label>
-                <input type="text" class="form-control" id="end-date" placeholder="" disabled>
+                <input type="text" class="form-control singlerange" id="end-date" placeholder="DD/MM/AAAA" disabled>
             </div>
         </div>
     </div>
@@ -185,13 +199,23 @@
         <div class="col-6">
             <div class="form-group">
                 <label for="expected-bidding-per-lead">Bidding por lead esperado </label>
-                <input type="text" class="form-control" id="expected-bidding-per-lead" placeholder="$80.00" disabled>
+                <div class="wrapper_input_number_custom">
+                    <button class="btn mr-2" id="dec-expected-bidding-per-lead" disabled>-</button>
+                    <input type="text" class="form-control input_number_custom" id="expected-bidding-per-lead"
+                        placeholder="$80.00" disabled>
+                    <button class="btn ml-2 inc_amount" id="inc-expected-bidding-per-lead" disabled>+</button>
+                </div>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
                 <label for="expected-total-sales">Ventas totales esperadas </label>
-                <input type="text" class="form-control" id="expected-total-sales" placeholder="2000" disabled>
+                <div class="wrapper_input_number_custom">
+                    <button class="btn mr-2" id="dec-expected-total-sales" disabled>-</button>
+                    <input type="text" class="form-control input_number_custom" id="expected-total-sales"
+                        placeholder="2000" disabled>
+                    <button class="btn ml-2 inc_amount" id="inc-expected-total-sales" disabled>+</button>
+                </div>
             </div>
         </div>
     </div>

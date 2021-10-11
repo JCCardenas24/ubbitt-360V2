@@ -34,7 +34,7 @@ class AppAsset extends AssetBundle
         'assets/js/vendors.min.js',
         'assets/js/common/alert.js',
         'assets/js/common/menu.js',
-        'assets/js/common/maskmoney.js',
+        'assets/js/common/autonumeric-4.5.4.js',
         'assets/js/functions.js',
         'assets/icons/feather-icons/feather.min.js',
         'assets/js/template.js',
