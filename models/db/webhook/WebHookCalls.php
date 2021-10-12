@@ -155,6 +155,7 @@ class WebHookCalls extends ActiveRecord
      */
     public function findByDateAndTerm($phoneNumber, $startDate, $endDate, $term, $page)
     {
+        $term = $term == null ? '' : $term;
         $query = self::find()
             ->with('callRecords')
             ->leftJoin('callpicker_records', 'callpicker_records.pk_callpicker_id = calls.pk_callpicker_id')
@@ -176,6 +177,7 @@ class WebHookCalls extends ActiveRecord
      */
     public function findAllByDateAndTerm($phoneNumber, $startDate, $endDate, $term)
     {
+        $term = $term == null ? '' : $term;
         return self::find()
             ->with('callRecords')
             ->leftJoin('callpicker_records', 'callpicker_records.pk_callpicker_id = calls.pk_callpicker_id')
