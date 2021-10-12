@@ -131,7 +131,7 @@ class WebHookCalls extends ActiveRecord
      * @param integer $id
      * @return array[] \app\models\db\webhook\WebHookCalls
      */
-    public function findByDate($phoneNumber, $startDate, $endDate, $term, $page)
+    public function findByDate($phoneNumber, $startDate, $endDate, $page)
     {
         $query = self::find()
             ->with('callRecords')
