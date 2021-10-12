@@ -15,6 +15,8 @@
         <span class="text-date"></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
     </div>
     <!-- <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a> -->
+    <a href="#" class="pdf_button" onclick="onDownloadCalls(event)"><i class="fa fa-download"
+            aria-hidden="true"></i></a>
 </div>
 
 <div class="wrapper_container_preload">

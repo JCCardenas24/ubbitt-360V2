@@ -151,7 +151,7 @@ class WebHookCalls extends ActiveRecord
     /**
      * Finds a Permission by its id
      * @param integer $id
-     * @return array[] \app\models\db\webhook\WebHookCalls
+     * @return \app\models\db\webhook\WebHookCalls[]
      */
     public function findByDateAndTerm($phoneNumber, $startDate, $endDate, $term, $page)
     {
@@ -167,5 +167,19 @@ class WebHookCalls extends ActiveRecord
             'callsRecords' => $calls,
             'totalPages' => $pages->pageCount
         ];
+    }
+
+    /**
+     * Finds a Permission by its id
+     * @param integer $id
+     * @return \app\models\db\webhook\WebHookCalls[]
+     */
+    public function findAllByDateAndTerm($phoneNumber, $startDate, $endDate, $term)
+    {
+        return self::find()
+            ->with('callRecords')
+            ->leftJoin('callpicker_records', 'callpicker_records.pk_callpicker_id = calls.pk_callpicker_id')
+            ->where(['and', ['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59'], ['like', 'callpicker_number', $phoneNumber], 'callpicker_records.callpicker_record_id IS NOT NULL'])
+            ->andWhere(['or', ['like', 'dialed_by', $term], ['like', 'dialed_number', $term]])->all();
     }
 }
