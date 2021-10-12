@@ -19,15 +19,20 @@ use app\models\db\PremiumVehicleModel;
 use app\models\db\PremiumVehicleYear;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\PremiumBriefForm;
+use app\models\forms\SearchByDateAndTermsForm;
 use app\models\response\PremiumHeader;
 use app\models\forms\SearchByDateCampaignForm;
 use app\models\forms\SearchByDateForm;
+use app\models\utils\FilenameHelper;
+use Exception;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
+use ZipArchive;
 
 class UbbittPremiumController extends Controller
 {
@@ -45,7 +50,7 @@ class UbbittPremiumController extends Controller
                             'dashboard', 'find-header-data', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
-                            'find-calls', 'find-sales', 'find-marketing-kpis-data',
+                            'find-calls', 'download-calls-audios', 'find-sales', 'find-marketing-kpis-data',
                             'find-brief',
                             'save-brief'
                         ],
@@ -67,6 +72,7 @@ class UbbittPremiumController extends Controller
                     'find-marketing-daily-performance-data' => ['post'],
                     'find-marketing-segment-data' => ['post'],
                     'find-calls' => ['post'],
+                    'download-calls-audios' => ['get'],
                     'find-sales' => ['post'],
                     'find-marketing-kpis-data' => ['post'],
                     'find-brief' => ['post'],
@@ -215,13 +221,52 @@ class UbbittPremiumController extends Controller
 
     public function actionFindCalls()
     {
-        $searchParams = new SearchByDateForm();
+        $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionDownloadCallsAudios()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->get());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $callsModel = new WebHookCalls();
+        $calls = $callsModel->findAllByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term);
+
+        try {
+            $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+            if (!file_exists($outputPath)) {
+                mkdir($outputPath, 0777, true);
+            }
+            $fileName = FilenameHelper::createTimeStampedFileName('llamadas-audios.zip');
+            $zipArchive = new ZipArchive();
+            $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
+
+            foreach ($calls as $call) {
+                foreach ($call->callRecords as $callRecord) {
+                    $audioFilePath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $callRecord->name . '.mp3';
+                    if (file_exists($audioFilePath)) {
+                        $zipArchive->addFromString($callRecord->name . '.mp3', $audioFilePath);
+                    }
+                }
+            }
+            $zipArchive->close();
+            // Envía el archivo al navegador
+            Yii::$app->response->sendFile($outputPath . $fileName, $fileName)
+                ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                    // Elimina el archivo una vez enviado
+                    unlink($event->data);
+                }, $outputPath . $fileName);
+        } catch (Exception $exception) {
+            Yii::error('Ocurrió un problema al descargar los audios de las llamadas.');
+            Yii::error($exception);
+            throw new InternalErrorException('Ocurrió un problema al descargar los audios de las llamadas.', 500, $exception);
+        }
     }
 
     public function actionFindSales()

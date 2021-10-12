@@ -131,7 +131,7 @@ class WebHookCalls extends ActiveRecord
      * @param integer $id
      * @return array[] \app\models\db\webhook\WebHookCalls
      */
-    public function findByDate($phoneNumber, $startDate, $endDate, $page)
+    public function findByDate($phoneNumber, $startDate, $endDate, $term, $page)
     {
         $query = self::find()
             ->with('callRecords')
@@ -146,5 +146,40 @@ class WebHookCalls extends ActiveRecord
             'callsRecords' => $calls,
             'totalPages' => $pages->pageCount
         ];
+    }
+
+    /**
+     * Finds a Permission by its id
+     * @param integer $id
+     * @return \app\models\db\webhook\WebHookCalls[]
+     */
+    public function findByDateAndTerm($phoneNumber, $startDate, $endDate, $term, $page)
+    {
+        $query = self::find()
+            ->with('callRecords')
+            ->leftJoin('callpicker_records', 'callpicker_records.pk_callpicker_id = calls.pk_callpicker_id')
+            ->where(['and', ['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59'], ['like', 'callpicker_number', $phoneNumber], 'callpicker_records.callpicker_record_id IS NOT NULL'])
+            ->andWhere(['or', ['like', 'dialed_by', $term], ['like', 'dialed_number', $term]]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'page' => $page - 1, 'pageSize' => Yii::$app->params['itemsPerPage']]);
+        $calls = $query->offset($pages->offset)->limit($pages->limit)->all();
+        return [
+            'callsRecords' => $calls,
+            'totalPages' => $pages->pageCount
+        ];
+    }
+
+    /**
+     * Finds a Permission by its id
+     * @param integer $id
+     * @return \app\models\db\webhook\WebHookCalls[]
+     */
+    public function findAllByDateAndTerm($phoneNumber, $startDate, $endDate, $term)
+    {
+        return self::find()
+            ->with('callRecords')
+            ->leftJoin('callpicker_records', 'callpicker_records.pk_callpicker_id = calls.pk_callpicker_id')
+            ->where(['and', ['between', 'date', $startDate . ' 00:00:00', $endDate . ' 23:59:59'], ['like', 'callpicker_number', $phoneNumber], 'callpicker_records.callpicker_record_id IS NOT NULL'])
+            ->andWhere(['or', ['like', 'dialed_by', $term], ['like', 'dialed_number', $term]])->all();
     }
 }
