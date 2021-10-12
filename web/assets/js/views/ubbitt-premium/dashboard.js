@@ -1587,6 +1587,10 @@ function findCenterKpisData(start, end) {
     });
 }
 
+function onFilterCallsDatabase() {
+    callDatabaseCallback(startDate, endDate, null, 1);
+}
+
 function callDatabaseCallback(start, end, label, page = 1) {
     startDate = start;
     endDate = end;
@@ -1600,9 +1604,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term').val(),
+            'SearchByDateAndTermsForm[page]': page,
         },
         success: (response) => {
             $('#premium-calls-table tbody').html(null);
@@ -1640,13 +1645,13 @@ function createCallRecordRow(callRecord) {
         callRecord.call_id +
         `</th>
             <td>` +
-        callRecord.answered_by +
+        callRecord.dialed_by +
         `</td>
             <td>` +
-        callRecord.callpicker_number +
-        `</td>
-            <td>Mapfre</td>
-            <td>` +
+        callRecord.dialed_number +
+        `</td>` +
+        //     <td>Mapfre</td>
+        `<td>` +
         callRecord.date +
         `</td>
             <td>

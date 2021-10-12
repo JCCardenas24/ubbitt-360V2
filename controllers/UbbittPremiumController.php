@@ -19,6 +19,7 @@ use app\models\db\PremiumVehicleModel;
 use app\models\db\PremiumVehicleYear;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\PremiumBriefForm;
+use app\models\forms\SearchByDateAndTermsForm;
 use app\models\response\PremiumHeader;
 use app\models\forms\SearchByDateCampaignForm;
 use app\models\forms\SearchByDateForm;
@@ -215,11 +216,11 @@ class UbbittPremiumController extends Controller
 
     public function actionFindCalls()
     {
-        $searchParams = new SearchByDateForm();
+        $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
