@@ -1524,10 +1524,17 @@ function createCallRecordRow(callRecord) {
         callRecord.call_id +
         `</th>
             <td>` +
-        callRecord.answered_by +
+        callRecord.type +
         `</td>
             <td>` +
-        callRecord.caller_id +
+        (callRecord.type == 'inbound'
+            ? callRecord.answered_by
+            : callRecord.dialed_by) +
+        `</td>
+            <td>` +
+        (callRecord.type == 'inbound'
+            ? callRecord.caller_id
+            : callRecord.dialed_number) +
         `</td>` +
         // <td>Mapfre</td>
         `<td>` +
