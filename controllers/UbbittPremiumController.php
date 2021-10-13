@@ -221,12 +221,12 @@ class UbbittPremiumController extends Controller
 
     public function actionFindCalls()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
         $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
-        Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
 
@@ -243,7 +243,7 @@ class UbbittPremiumController extends Controller
             if (!file_exists($outputPath)) {
                 mkdir($outputPath, 0777, true);
             }
-            $fileName = FilenameHelper::createTimeStampedFileName('llamadas-audios.zip');
+            $fileName = FilenameHelper::createTimeStampedFileName('llamadas-audios-premium.zip');
             $zipArchive = new ZipArchive();
             $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
 
@@ -251,7 +251,7 @@ class UbbittPremiumController extends Controller
                 foreach ($call->callRecords as $callRecord) {
                     $audioFilePath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $callRecord->name . '.mp3';
                     if (file_exists($audioFilePath)) {
-                        $zipArchive->addFromString($callRecord->name . '.mp3', $audioFilePath);
+                        $zipArchive->addFromString($callRecord->name . '.mp3', file_get_contents($audioFilePath));
                     }
                 }
             }

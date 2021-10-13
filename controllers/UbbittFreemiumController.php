@@ -33,7 +33,7 @@ class UbbittFreemiumController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['dashboard', 'find-calls', 'find-sales', 'download-policies', 'find-summary-graph-data', 'find-call-center-kpis', 'find-summary-detail-data'],
+                        'actions' => ['dashboard', 'find-calls', 'download-calls-audios', 'find-sales', 'download-policies', 'find-summary-graph-data', 'find-call-center-kpis', 'find-summary-detail-data'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,6 +44,7 @@ class UbbittFreemiumController extends Controller
                 'actions' => [
                     'dashboard' => ['get', 'post'],
                     'find-calls' => ['post'],
+                    'download-calls-audios' => ['get'],
                     'find-sales' => ['post'],
                     'download-policies' => ['get'],
                     'find-summary-graph-data' => ['post'],
@@ -97,13 +98,52 @@ class UbbittFreemiumController extends Controller
 
     public function actionFindCalls()
     {
-        $searchParams = new SearchByDateForm();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $callsArray = $calls->findByDateAndTermInbound(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         return $callsArray;
+    }
+
+    public function actionDownloadCallsAudios()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->get());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $callsModel = new WebHookCalls();
+        $calls = $callsModel->findAllByDateAndTermInbound(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term);
+
+        try {
+            $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+            if (!file_exists($outputPath)) {
+                mkdir($outputPath, 0777, true);
+            }
+            $fileName = FilenameHelper::createTimeStampedFileName('llamadas-audios-freemium.zip');
+            $zipArchive = new ZipArchive();
+            $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
+
+            foreach ($calls as $call) {
+                foreach ($call->callRecords as $callRecord) {
+                    $audioFilePath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $callRecord->name . '.mp3';
+                    if (file_exists($audioFilePath)) {
+                        $zipArchive->addFromString($callRecord->name . '.mp3', file_get_contents($audioFilePath));
+                    }
+                }
+            }
+            $zipArchive->close();
+            // Envía el archivo al navegador
+            Yii::$app->response->sendFile($outputPath . $fileName, $fileName)
+                ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                    // Elimina el archivo una vez enviado
+                    unlink($event->data);
+                }, $outputPath . $fileName);
+        } catch (Exception $exception) {
+            Yii::error('Ocurrió un problema al descargar los audios de las llamadas.');
+            Yii::error($exception);
+            throw new InternalErrorException('Ocurrió un problema al descargar los audios de las llamadas.', 500, $exception);
+        }
     }
 
     public function actionFindSales()
