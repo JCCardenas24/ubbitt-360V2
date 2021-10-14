@@ -38,7 +38,14 @@ class UbbittBeyondController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis', 'find-collection-calls', 'download-collection-calls-audios', 'find-collection-sales', 'find-collection-summary-detail-data', 'renewal-dashboard', 'find-renewal-summary-graph-data', 'find-renewal-call-center-kpis', 'find-renewal-calls', 'find-renewal-sales', 'find-renewal-summary-detail-data', 'upload-database'],
+                        'actions' => [
+                            'collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis',
+                            'find-collection-calls', 'download-collection-calls-audios', 'find-collection-sales',
+                            'find-collection-summary-detail-data',
+                            'renewal-dashboard', 'find-renewal-summary-graph-data',
+                            'find-renewal-call-center-kpis', 'find-renewal-calls', 'download-renewal-calls-audios',
+                            'find-renewal-sales', 'find-renewal-summary-detail-data', 'upload-database'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -58,6 +65,7 @@ class UbbittBeyondController extends Controller
                     'find-renewal-summary-graph-data' => ['post'],
                     'find-renewal-call-center-kpis' => ['post'],
                     'find-renewal-calls' => ['post'],
+                    'download-renewal-calls-audios' => ['get'],
                     'find-renewal-sales' => ['post'],
                     'find-renewal-summary-detail-data' => ['post'],
                     'upload-database' => ['post'],
@@ -222,13 +230,21 @@ class UbbittBeyondController extends Controller
 
     public function actionFindRenewalCalls()
     {
-        $searchParams = new SearchByDateForm();
+        $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_beyond_renewal_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_renewal_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionDownloadRenewalCallsAudios()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->get());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_renewal_did'], 'llamadas-audios-beyond-renovacion.zip');
     }
 
     public function actionFindRenewalSales()

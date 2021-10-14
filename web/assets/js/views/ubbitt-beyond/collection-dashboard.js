@@ -886,7 +886,10 @@ function loadKpis(start, end) {
             $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
         },
         error: () => {
-            alert("Ocurrió un problema al consultar los KPI's de telefonía");
+            showAlert(
+                'error',
+                "Ocurrió un problema al consultar los KPI's de telefonía"
+            );
         },
         complete: function () {
             hidePreloader();
@@ -932,7 +935,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1062,7 +1068,10 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1117,7 +1126,10 @@ function reportsListCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de reportes');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de reportes'
+            );
         },
         complete: function () {
             hidePreloader();
