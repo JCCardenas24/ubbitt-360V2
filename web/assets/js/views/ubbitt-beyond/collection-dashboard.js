@@ -886,12 +886,19 @@ function loadKpis(start, end) {
             $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
         },
         error: () => {
-            alert("Ocurrió un problema al consultar los KPI's de telefonía");
+            showAlert(
+                'error',
+                "Ocurrió un problema al consultar los KPI's de telefonía"
+            );
         },
         complete: function () {
             hidePreloader();
         },
     });
+}
+
+function onFilterCallsDatabase() {
+    callDatabaseCallback(startDate, endDate, null, 1);
 }
 
 function callDatabaseCallback(start, end, label, page = 1) {
@@ -906,9 +913,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term').val(),
+            'SearchByDateAndTermsForm[page]': page,
         },
         success: (response) => {
             $('#ubbitt-beyond-collection-calls-table tbody').html(null);
@@ -927,7 +935,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -943,13 +954,13 @@ function createCallRecordRow(callRecord) {
         callRecord.call_id +
         `</th>
             <td>` +
-        callRecord.answered_by +
+        callRecord.dialed_by +
         `</td>
             <td>` +
-        callRecord.callpicker_number +
-        `</td>
-            <td>Mapfre</td>
-            <td>` +
+        callRecord.dialed_number +
+        `</td>` +
+        //     <td>Mapfre</td>
+        `<td>` +
         callRecord.date +
         `</td>
             <td>
@@ -970,6 +981,58 @@ function createCallRecordRow(callRecord) {
         </tr>
     `
     );
+}
+
+function onDownloadCalls(event) {
+    event.preventDefault();
+    showPreloader();
+    let headers = new Headers();
+    let fileName = '';
+    fetch(
+        '/ubbitt-beyond/download-collection-calls-audios?SearchByDateAndTermsForm[startDate]=' +
+            startDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[endDate]=' +
+            endDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[term]=' +
+            encodeURIComponent($('#search-term').val()),
+        {
+            headers,
+        }
+    )
+        .then((resp) => {
+            if (resp.status == 200) {
+                const header = resp.headers.get('Content-Disposition');
+                const parts = header.split(';');
+                fileName = parts[1].split('=')[1].replaceAll('"', '');
+                return resp.blob();
+            } else {
+                throw 'Hubo un problema al descargar los audios de las llamadas.';
+            }
+        })
+        .then((blob) => {
+            // IE doesn't allow using a blob object directly as link href
+            // instead it is necessary to use msSaveOrOpenBlob
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob);
+                return;
+            }
+
+            // For other browsers:
+            // Create a link pointing to the ObjectURL containing the blob.
+            const url = window.URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.click();
+            setTimeout(function () {
+                // For Firefox it is necessary to delay revoking the ObjectURL
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        })
+        .catch((error) => showAlert('error', error))
+        .finally(() => {
+            hidePreloader();
+        });
 }
 
 function callDatabaseSalesCallback(start, end, label, page = 1) {
@@ -1005,7 +1068,10 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de llamadas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1060,7 +1126,10 @@ function reportsListCallback(start, end, label, page = 1) {
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de reportes');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar el registro de reportes'
+            );
         },
         complete: function () {
             hidePreloader();

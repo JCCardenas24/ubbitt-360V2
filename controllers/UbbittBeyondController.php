@@ -12,8 +12,9 @@ use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateForm;
 use app\models\ReportFile;
 use app\models\DatabaseUpload;
+use app\models\forms\SearchByDateAndTermsForm;
 use app\models\User;
-
+use app\models\utils\FilenameHelper;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -21,6 +22,9 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use DateTime;
+use Exception;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
+use ZipArchive;
 
 class UbbittBeyondController extends Controller
 {
@@ -34,7 +38,14 @@ class UbbittBeyondController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis', 'find-collection-calls', 'find-collection-sales', 'find-collection-summary-detail-data', 'renewal-dashboard', 'find-renewal-summary-graph-data', 'find-renewal-call-center-kpis', 'find-renewal-calls', 'find-renewal-sales', 'find-renewal-summary-detail-data', 'upload-database'],
+                        'actions' => [
+                            'collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis',
+                            'find-collection-calls', 'download-collection-calls-audios', 'find-collection-sales',
+                            'find-collection-summary-detail-data',
+                            'renewal-dashboard', 'find-renewal-summary-graph-data',
+                            'find-renewal-call-center-kpis', 'find-renewal-calls', 'download-renewal-calls-audios',
+                            'find-renewal-sales', 'find-renewal-summary-detail-data', 'upload-database'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -47,12 +58,14 @@ class UbbittBeyondController extends Controller
                     'find-collection-summary-graph-data' => ['post'],
                     'find-collection-call-center-kpis' => ['post'],
                     'find-collection-calls' => ['post'],
+                    'download-collection-calls-audios' => ['get'],
                     'find-collection-sales' => ['post'],
                     'find-collection-summary-detail-data' => ['post'],
                     'renewal-dashboard' => ['get'],
                     'find-renewal-summary-graph-data' => ['post'],
                     'find-renewal-call-center-kpis' => ['post'],
                     'find-renewal-calls' => ['post'],
+                    'download-renewal-calls-audios' => ['get'],
                     'find-renewal-sales' => ['post'],
                     'find-renewal-summary-detail-data' => ['post'],
                     'upload-database' => ['post'],
@@ -110,13 +123,57 @@ class UbbittBeyondController extends Controller
 
     public function actionFindCollectionCalls()
     {
-        $searchParams = new SearchByDateForm();
+        $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_beyond_collection_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_collection_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionDownloadCollectionCallsAudios()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->get());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_collection_did'], 'llamadas-audios-beyond-cobranza.zip');
+    }
+
+    private function downloadAudios(SearchByDateAndTermsForm $searchParams, $did, $zipFileName)
+    {
+        $callsModel = new WebHookCalls();
+        $calls = $callsModel->findAllByDateAndTerm($did, $searchParams->startDate, $searchParams->endDate, $searchParams->term);
+
+        try {
+            $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+            if (!file_exists($outputPath)) {
+                mkdir($outputPath, 0777, true);
+            }
+            $fileName = FilenameHelper::createTimeStampedFileName($zipFileName);
+            $zipArchive = new ZipArchive();
+            $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
+
+            foreach ($calls as $call) {
+                foreach ($call->callRecords as $callRecord) {
+                    $audioFilePath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $callRecord->name . '.mp3';
+                    if (file_exists($audioFilePath)) {
+                        $zipArchive->addFromString($callRecord->name . '.mp3', file_get_contents($audioFilePath));
+                    }
+                }
+            }
+            $zipArchive->close();
+            // Envía el archivo al navegador
+            Yii::$app->response->sendFile($outputPath . $fileName, $fileName)
+                ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                    // Elimina el archivo una vez enviado
+                    unlink($event->data);
+                }, $outputPath . $fileName);
+        } catch (Exception $exception) {
+            Yii::error('Ocurrió un problema al descargar los audios de las llamadas.');
+            Yii::error($exception);
+            throw new InternalErrorException('Ocurrió un problema al descargar los audios de las llamadas.', 500, $exception);
+        }
     }
 
     public function actionFindCollectionSales()
@@ -173,13 +230,21 @@ class UbbittBeyondController extends Controller
 
     public function actionFindRenewalCalls()
     {
-        $searchParams = new SearchByDateForm();
+        $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDate(Yii::$app->params['ubbitt_beyond_renewal_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_renewal_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
+    }
+
+    public function actionDownloadRenewalCallsAudios()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->get());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_renewal_did'], 'llamadas-audios-beyond-renovacion.zip');
     }
 
     public function actionFindRenewalSales()
