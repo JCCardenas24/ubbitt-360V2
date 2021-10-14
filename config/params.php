@@ -6,7 +6,6 @@ return [
     'ubbitt_beyond_collection_did' => '5589571959',
     'ubbitt_beyond_renewal_did' => '5589505362',
     'ubbitt_premium_did' => '5512091777',
-    'email_sender' => 'no-reply@soyubbitt.com',
     'report_type_dict' => [
         "kpis" => "Detalles de KPI's",
         "advisor" => "Productividad de asesores",
