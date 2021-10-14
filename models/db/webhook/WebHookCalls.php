@@ -40,9 +40,9 @@ class WebHookCalls extends ActiveRecord
     public function rules()
     {
         return [
-            [['call_id', 'dialed_number', 'callpicker_number', 'caller_id', 'pk_callpicker_id'], 'integer'],
+            [['call_id', 'pk_callpicker_id'], 'integer'],
             [['duration',], 'double'],
-            [['status', 'type', 'dialed_by', 'answered_by',], 'string'],
+            [['status', 'type', 'dialed_by', 'answered_by', 'dialed_number', 'callpicker_number', 'caller_id'], 'string'],
             [['date',], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             [['records',], 'safe'],
         ];
