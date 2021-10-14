@@ -118,7 +118,7 @@ class UbbittBeyondController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
-    
+
     public function actionFindCollectionSales()
     {
         $data = [];
@@ -181,7 +181,7 @@ class UbbittBeyondController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
-    
+
     public function actionFindRenewalSales()
     {
         $data = [];
@@ -199,15 +199,16 @@ class UbbittBeyondController extends Controller
         return $data;
     }
 
-    public function actionUploadDatabase() {
+    public function actionUploadDatabase()
+    {
         if ($this->request->isPost) {
             $model = new DatabaseUpload();
-     
+
             if ($model->load($this->request->post())) {
                 $model->file = UploadedFile::getInstance($model, 'file');
-     
+
                 if ($model->validate()) {
-                    $filePath = "uploads/database_".$model->module_origin."_".$model->submodule_origin."_".time().".".$model->file->extension;
+                    $filePath = "uploads/database_" . $model->module_origin . "_" . $model->submodule_origin . "_" . time() . "." . $model->file->extension;
 
                     if ($model->file->saveAs($filePath)) {
                         $model->file_path = $filePath;
@@ -224,14 +225,14 @@ class UbbittBeyondController extends Controller
                         $email_addresses = explode(',', Yii::$app->params['email_address_database_to']);
 
                         Yii::$app
-                        ->mailer
-                        ->compose('database-upload', ['user' => $user])
-                        ->setFrom(Yii::$app->params['email_sender'])
-                        ->setTo($email_addresses)
-                        ->setSubject('Envío de Base de datos')
-                        ->attach($filePath)
-                        ->send(); 
-                        return $this->redirect(Yii::$app->request->referrer);                        
+                            ->mailer
+                            ->compose('database-upload', ['user' => $user])
+                            ->setFrom(Yii::$app->components['mailer']['transport']['username'])
+                            ->setTo($email_addresses)
+                            ->setSubject('Envío de Base de datos')
+                            ->attach($filePath)
+                            ->send();
+                        return $this->redirect(Yii::$app->request->referrer);
                     }
                 }
             }
