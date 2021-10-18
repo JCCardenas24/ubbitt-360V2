@@ -50,7 +50,7 @@ class UbbittPremiumController extends Controller
                             'dashboard', 'find-header-data', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
-                            'find-calls', 'download-calls-audios', 'find-sales', 'find-marketing-kpis-data',
+                            'find-calls', 'download-calls-audios', 'find-sales', 'download-policies', 'find-marketing-kpis-data',
                             'find-brief',
                             'save-brief'
                         ],
@@ -74,6 +74,7 @@ class UbbittPremiumController extends Controller
                     'find-calls' => ['post'],
                     'download-calls-audios' => ['get'],
                     'find-sales' => ['post'],
+                    'download-policies' => ['get'],
                     'find-marketing-kpis-data' => ['post'],
                     'find-brief' => ['post'],
                     'save-brief' => ['post'],
@@ -271,9 +272,83 @@ class UbbittPremiumController extends Controller
 
     public function actionFindSales()
     {
-        $data = [];
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $url = Yii::$app->params['sales_database_service_url_premium'] . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/' . Yii::$app->params['sales_database_service_premium_api_key'];
+        if (!empty($searchParams->term)) {
+            $url .= '/' . rawurlencode($searchParams->term);
+        }
+        $response = $this->getUrlContents($url);
+        $response = json_decode($response);
+        $data = [];
+        $data['totalPages'] = $response[1];
+        $data['salesRecords'] = $response[2];
         return $data;
+    }
+
+    function getUrlContents($url)
+    {
+        $userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        return curl_exec($ch);
+    }
+
+    function actionDownloadPolicies()
+    {
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->get());
+        $url = Yii::$app->params['sales_database_service_url_premium'] . $searchParams->startDate . '/' . $searchParams->endDate . '/0/' . Yii::$app->params['sales_database_service_premium_api_key'];
+        if (!empty($searchParams->term)) {
+            $url .= '/' . $searchParams->term;
+        }
+        $response = $this->getUrlContents($url);
+        $response = json_decode($response);
+        $policies = $response[0];
+        try {
+            $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+            if (!file_exists($outputPath)) {
+                mkdir($outputPath, 0777, true);
+            }
+            $fileName = FilenameHelper::createTimeStampedFileName('polizas.zip');
+            $zipArchive = new ZipArchive();
+            $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
+
+            foreach ($policies as $policy) {
+                $encodedUrl = urlencode($policy->recibo);
+                $fixedEncodedUrl = str_replace(['%2F', '%3A'], ['/', ':'], $encodedUrl);
+                $policyFile = $this->getUrlContents($fixedEncodedUrl);
+                if ($policyFile) {
+                    $zipArchive->addFromString(basename($policy->recibo), $policyFile);
+                }
+            }
+            $zipArchive->close();
+            if (file_exists($outputPath . $fileName)) {
+                // Envía el archivo al navegador
+                Yii::$app->response->sendFile($outputPath . $fileName, basename($fileName))
+                    ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                        // Elimina el archivo una vez enviado
+                        unlink($event->data);
+                    }, $outputPath . $fileName);
+            } else {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                Yii::$app->response->statusCode = 400;
+                return 'No se encontraron comprobantes para descargar.';
+            }
+        } catch (Exception $exception) {
+            Yii::error('Ocurrió un problema al descargar las pólizas.');
+            Yii::error($exception);
+            throw new InternalErrorException('Ocurrió un problema al descargar las pólizas.', 500, $exception);
+        }
     }
 
     public function actionFindMarketingKpisData()
