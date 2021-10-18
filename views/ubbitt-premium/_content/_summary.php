@@ -61,42 +61,42 @@
     <div class="col-4">
         <div class="balance_inversion_ventas_cobrado">
             <div class="card_ttls row ml-0 mr-0">
-                <div class="col-6 p-0 lr">
+                <div class="col-12 p-0 lr">
                     <h2>Actual</h2>
                 </div>
-                <div class="col-6 p-0 lf">
+                <!-- <div class="col-6 p-0 lf">
                     <h3>Forecast</h3>
-                </div>
+                </div> -->
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0">
-                <div class="col-6 lr">
+                <div class="col-12 lr">
                     <h2 id="actual-investment">$0</h2>
                 </div>
-                <div class="col-6 lf">
+                <!-- <div class="col-6 lf">
                     <h3 id="forecast-investment">$0</h3>
-                </div>
+                </div> -->
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Inversión</p>
                 </div>
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0">
-                <div class="col-6 lr">
+                <div class="col-12 lr">
                     <h2 id="actual-sales">$0</h2>
                 </div>
-                <div class="col-6 lf">
+                <!-- <div class="col-6 lf">
                     <h3 id="forecast-sales">$0</h3>
-                </div>
+                </div> -->
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Ventas</p>
                 </div>
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0 border_radius_bottom">
-                <div class="col-6 lr">
+                <div class="col-12 lr">
                     <h2 id="actual-collected">$0</h2>
                 </div>
-                <div class="col-6 lf">
+                <!-- <div class="col-6 lf">
                     <h3 id="forecast-collected">$0</h3>
-                </div>
+                </div> -->
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Cobrado</p>
                 </div>
@@ -105,10 +105,10 @@
     </div>
     <div class="col-8">
         <div class="radio_button_forecast_actual">
-            <input type="checkbox" value="false" name="selected_chart" id="pemp_yes" checked>
+            <input type="checkbox" value="false" name="selected_chart" id="pemp_yes" checked disabled>
             <label for="pemp_yes">Actual</label>
-            <input type="checkbox" value="true" name="selected_chart" id="pemp_no">
-            <label for="pemp_no">Forecast</label>
+            <!-- <input type="checkbox" value="true" name="selected_chart" id="pemp_no">
+            <label for="pemp_no">Forecast</label> -->
         </div>
         <div class="chart_actual">
             <div id="summary-graph" style="height:400px;"></div>
