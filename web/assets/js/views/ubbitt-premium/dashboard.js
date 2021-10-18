@@ -1619,7 +1619,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#premium-calls-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseCallback(start, end, '', page);
                 }
@@ -1762,7 +1762,7 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#premium-sales-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseSalesCallback(start, end, '', page);
                 }
