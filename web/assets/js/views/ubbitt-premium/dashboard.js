@@ -1830,11 +1830,7 @@ function createSalesRecordRow(salesRecord, moneyFormatter) {
         ) +
         `</td>
             <td>` +
-        (salesRecord.recibo === '-'
-            ? ''
-            : `<a href="` +
-              salesRecord.recibo +
-              `" download target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a>`) +
+        salesRecord.recibo +
         `</td>
         </tr>
     `
@@ -1903,7 +1899,10 @@ function onDownloadPolicies(event) {
                 throw 'Hubo un problema al descargar las pólizas.';
             }
         })
-        .catch((error) => showAlert('error', error));
+        .catch((error) => {
+            showAlert('error', error);
+            hidePreloader();
+        });
 }
 
 function onEnableBriefEdition() {

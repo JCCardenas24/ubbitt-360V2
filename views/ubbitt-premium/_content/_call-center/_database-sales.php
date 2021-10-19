@@ -33,7 +33,7 @@
                 <th scope="col">Fecha de venta</th>
                 <th scope="col">Fecha de cobro</th>
                 <th scope="col">Fecha de actividad</th>
-                <th scope="col">Comprobante</th>
+                <th scope="col">Ticket</th>
             </tr>
         </thead>
         <tbody>
