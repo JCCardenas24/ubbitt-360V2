@@ -40,11 +40,11 @@ class UbbittBeyondController extends Controller
                     [
                         'actions' => [
                             'collection-dashboard', 'find-collection-summary-graph-data', 'find-collection-call-center-kpis',
-                            'find-collection-calls', 'download-collection-calls-audios', 'find-collection-sales',
+                            'find-collection-calls', 'download-collection-calls-audios', 'find-collection-sales', 'download-collection-policies',
                             'find-collection-summary-detail-data',
                             'renewal-dashboard', 'find-renewal-summary-graph-data',
                             'find-renewal-call-center-kpis', 'find-renewal-calls', 'download-renewal-calls-audios',
-                            'find-renewal-sales', 'find-renewal-summary-detail-data', 'upload-database'
+                            'find-renewal-sales', 'download-renewal-policies', 'find-renewal-summary-detail-data', 'upload-database'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -178,9 +178,35 @@ class UbbittBeyondController extends Controller
 
     public function actionFindCollectionSales()
     {
-        $data = [];
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $url = Yii::$app->params['sales_database_service_url_beyond'] . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/' . Yii::$app->params['sales_database_service_beyond_api_key'];
+        if (!empty($searchParams->term)) {
+            $url .= '/' . rawurlencode($searchParams->term);
+        }
+        $response = $this->getUrlContents($url);
+        $response = json_decode($response);
+        $data = [];
+        $data['totalPages'] = $response[1];
+        $data['salesRecords'] = $response[2];
         return $data;
+    }
+
+    function getUrlContents($url)
+    {
+        $userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        return curl_exec($ch);
     }
 
     public function actionFindCollectionSummaryDetailData()

@@ -928,7 +928,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#ubbitt-beyond-collection-calls-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseCallback(start, end, '', page);
                 }
@@ -1071,7 +1071,7 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#beyond-collection-sales-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseSalesCallback(start, end, '', page);
                 }
@@ -1139,80 +1139,11 @@ function createSalesRecordRow(salesRecord, moneyFormatter) {
         ) +
         `</td>
             <td>` +
-        (salesRecord.recibo === '-'
-            ? ''
-            : `<a href="` +
-              salesRecord.recibo +
-              `" download target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a>`) +
+        salesRecord.recibo +
         `</td>
         </tr>
     `
     );
-}
-
-function onDownloadPolicies(event) {
-    event.preventDefault();
-    showPreloader();
-    let headers = new Headers();
-    let fileName = '';
-    fetch(
-        '/ubbitt-beyond/download-collection-policies?SearchByDateAndTermsForm[startDate]=' +
-            startDate.format('YYYY-MM-DD') +
-            '&SearchByDateAndTermsForm[endDate]=' +
-            endDate.format('YYYY-MM-DD') +
-            '&SearchByDateAndTermsForm[term]=' +
-            encodeURIComponent($('#search-term-sales').val()),
-        {
-            headers,
-        }
-    )
-        .then((resp) => {
-            if (resp.status == 200) {
-                const header = resp.headers.get('Content-Disposition');
-                const parts = header.split(';');
-                fileName = parts[1].split('=')[1].replaceAll('"', '');
-                return resp
-                    .blob()
-                    .then((blob) => {
-                        // IE doesn't allow using a blob object directly as link href
-                        // instead it is necessary to use msSaveOrOpenBlob
-                        if (
-                            window.navigator &&
-                            window.navigator.msSaveOrOpenBlob
-                        ) {
-                            window.navigator.msSaveOrOpenBlob(blob);
-                            return;
-                        }
-
-                        // For other browsers:
-                        // Create a link pointing to the ObjectURL containing the blob.
-                        const url = window.URL.createObjectURL(blob);
-                        var link = document.createElement('a');
-                        link.href = url;
-                        link.download = fileName;
-                        link.click();
-                        setTimeout(function () {
-                            // For Firefox it is necessary to delay revoking the ObjectURL
-                            window.URL.revokeObjectURL(url);
-                        }, 100);
-                    })
-                    .catch((error) => showAlert('error', error))
-                    .finally(() => {
-                        hidePreloader();
-                    });
-            } else if (resp.status == 400) {
-                resp.json()
-                    .then((jsonResp) => {
-                        showAlert('error', jsonResp);
-                    })
-                    .finally(() => {
-                        hidePreloader();
-                    });
-            } else {
-                throw 'Hubo un problema al descargar las pólizas.';
-            }
-        })
-        .catch((error) => showAlert('error', error));
 }
 
 function reportsListCallback(start, end, label, page = 1) {
@@ -1247,7 +1178,7 @@ function reportsListCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#beyond-collection-reports-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     reportsListCallback(start, end, '', page);
                 }
