@@ -928,7 +928,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#ubbitt-beyond-collection-calls-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseCallback(start, end, '', page);
                 }
@@ -1035,6 +1035,10 @@ function onDownloadCalls(event) {
         });
 }
 
+function onFilterSalesDatabase() {
+    callDatabaseSalesCallback(startDate, endDate, null, 1);
+}
+
 function callDatabaseSalesCallback(start, end, label, page = 1) {
     startDate = start;
     endDate = end;
@@ -1047,30 +1051,36 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term-sales').val(),
+            'SearchByDateAndTermsForm[page]': page,
         },
         success: (response) => {
-            $('#ubbitt-beyond-collection-sales-table tbody').html(null);
+            $('#beyond-collection-sales-table tbody').html(null);
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                maximumFractionDigits: 0,
+            });
             $.each(response.salesRecords, (index, callRecord) => {
-                $('#ubbitt-beyond-collection-sales-table tbody').append(
-                    createSalesRecordRow(callRecord)
+                $('#beyond-collection-sales-table tbody').append(
+                    createSalesRecordRow(callRecord, moneyFormatter)
                 );
             });
             updatePaginator(
-                '#ubbitt-beyond-collection-sales-paginator',
+                '#beyond-collection-sales-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
-                    callDatabaseCallback(start, end, '', page);
+                    callDatabaseSalesCallback(start, end, '', page);
                 }
             );
         },
         error: () => {
             showAlert(
                 'error',
-                'Ocurrió un problema al consultar el registro de llamadas'
+                'Ocurrió un problema al consultar la base de datos de ventas'
             );
         },
         complete: function () {
@@ -1079,12 +1089,61 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
     });
 }
 
-function createSalesRecordRow(salesRecord) {
-    return `
+function createSalesRecordRow(salesRecord, moneyFormatter) {
+    return (
+        `
         <tr>
-            <th scope="row" colspan="10"></td>
+            <th scope="row">` +
+        salesRecord.id +
+        `</th>
+            <td>` +
+        salesRecord.nombre_contacto +
+        `</td>
+            <td>` +
+        salesRecord.telefono_contacto +
+        `</td>
+            <td>` +
+        salesRecord.correo_contacto +
+        `</td>
+            <td>` +
+        salesRecord.producto +
+        `</td>
+            <td>` +
+        salesRecord.estatus_cobro +
+        `</td>
+            <td>` +
+        salesRecord.num_poliza +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.prima_total) +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.monto_pagado) +
+        `</td>
+            <td>` +
+        salesRecord.asignado +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_venta, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_cobro, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+        <td>` +
+        moment(salesRecord.fecha_actividad, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td>` +
+        salesRecord.recibo +
+        `</td>
         </tr>
-    `;
+    `
+    );
 }
 
 function reportsListCallback(start, end, label, page = 1) {
@@ -1119,7 +1178,7 @@ function reportsListCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#beyond-collection-reports-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     reportsListCallback(start, end, '', page);
                 }
