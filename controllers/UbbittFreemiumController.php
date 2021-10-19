@@ -194,11 +194,18 @@ class UbbittFreemiumController extends Controller
             }
             $zipArchive->close();
             // Envía el archivo al navegador
-            Yii::$app->response->sendFile($outputPath . $fileName, basename($fileName))
-                ->on(Response::EVENT_AFTER_SEND, function ($event) {
-                    // Elimina el archivo una vez enviado
-                    unlink($event->data);
-                }, $outputPath . $fileName);
+            if (file_exists($outputPath . $fileName)) {
+                // Envía el archivo al navegador
+                Yii::$app->response->sendFile($outputPath . $fileName, basename($fileName))
+                    ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                        // Elimina el archivo una vez enviado
+                        unlink($event->data);
+                    }, $outputPath . $fileName);
+            } else {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                Yii::$app->response->statusCode = 400;
+                return 'No se encontraron pólizas para descargar.';
+            }
         } catch (Exception $exception) {
             Yii::error('Ocurrió un problema al descargar las pólizas.');
             Yii::error($exception);

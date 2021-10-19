@@ -1739,33 +1739,49 @@ function onDownloadPolicies(event) {
                 const header = resp.headers.get('Content-Disposition');
                 const parts = header.split(';');
                 fileName = parts[1].split('=')[1].replaceAll('"', '');
-                return resp.blob();
+                return resp
+                    .blob()
+                    .then((blob) => {
+                        // IE doesn't allow using a blob object directly as link href
+                        // instead it is necessary to use msSaveOrOpenBlob
+                        if (
+                            window.navigator &&
+                            window.navigator.msSaveOrOpenBlob
+                        ) {
+                            window.navigator.msSaveOrOpenBlob(blob);
+                            return;
+                        }
+
+                        // For other browsers:
+                        // Create a link pointing to the ObjectURL containing the blob.
+                        const url = window.URL.createObjectURL(blob);
+                        var link = document.createElement('a');
+                        link.href = url;
+                        link.download = fileName;
+                        link.click();
+                        setTimeout(function () {
+                            // For Firefox it is necessary to delay revoking the ObjectURL
+                            window.URL.revokeObjectURL(url);
+                        }, 100);
+                    })
+                    .catch((error) => showAlert('error', error))
+                    .finally(() => {
+                        hidePreloader();
+                    });
+            } else if (resp.status == 400) {
+                resp.json()
+                    .then((jsonResp) => {
+                        showAlert('error', jsonResp);
+                    })
+                    .finally(() => {
+                        hidePreloader();
+                    });
             } else {
                 throw 'Hubo un problema al descargar las pólizas.';
             }
         })
-        .then((blob) => {
-            // IE doesn't allow using a blob object directly as link href
-            // instead it is necessary to use msSaveOrOpenBlob
-            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveOrOpenBlob(blob);
-                return;
-            }
-
-            // For other browsers:
-            // Create a link pointing to the ObjectURL containing the blob.
-            const url = window.URL.createObjectURL(blob);
-            var link = document.createElement('a');
-            link.href = url;
-            link.download = fileName;
-            link.click();
-            setTimeout(function () {
-                // For Firefox it is necessary to delay revoking the ObjectURL
-                window.URL.revokeObjectURL(url);
-            }, 100);
-        })
-        .catch((error) => showAlert('error', error))
-        .finally(() => {
+        .catch((error) => {
+            showAlert('error', error);
             hidePreloader();
         });
 }
