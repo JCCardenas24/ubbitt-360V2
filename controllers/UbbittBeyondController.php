@@ -275,8 +275,19 @@ class UbbittBeyondController extends Controller
 
     public function actionFindRenewalSales()
     {
-        $data = [];
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $searchParams = new SearchByDateAndTermsForm();
+        $searchParams->load(Yii::$app->request->post());
+        $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
+        $url = Yii::$app->params['sales_database_service_url_beyond'] . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/' . Yii::$app->params['sales_database_service_beyond_api_key'];
+        if (!empty($searchParams->term)) {
+            $url .= '/' . rawurlencode($searchParams->term);
+        }
+        $response = $this->getUrlContents($url);
+        $response = json_decode($response);
+        $data = [];
+        $data['totalPages'] = $response[1];
+        $data['salesRecords'] = $response[2];
         return $data;
     }
 
