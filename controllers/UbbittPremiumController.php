@@ -316,7 +316,7 @@ class UbbittPremiumController extends Controller
         }
         $response = $this->getUrlContents($url);
         $response = json_decode($response);
-        $policies = $response[0];
+        $sales = $response[0];
         try {
             $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
             if (!file_exists($outputPath)) {
@@ -354,35 +354,35 @@ class UbbittPremiumController extends Controller
             $sheet->setCellValue('N1', 'Ticket');
             $sheet->getColumnDimension('N')->setAutoSize(true);
             $row = 2;
-            foreach ($policies as $policy) {
-                $sheet->setCellValue('A' . $row, $policy->id);
+            foreach ($sales as $sale) {
+                $sheet->setCellValue('A' . $row, $sale->id);
                 $sheet->getStyle('A' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_NUMBER);
-                $sheet->setCellValue('B' . $row, $policy->nombre_contacto);
-                $sheet->setCellValue('C' . $row, $policy->telefono_contacto);
-                $sheet->setCellValue('D' . $row, $policy->correo_contacto);
-                $sheet->setCellValue('E' . $row, $policy->producto);
-                $sheet->setCellValue('F' . $row, $policy->estatus_cobro);
-                $sheet->setCellValue('G' . $row, $policy->num_poliza);
+                $sheet->setCellValue('B' . $row, $sale->nombre_contacto);
+                $sheet->setCellValue('C' . $row, $sale->telefono_contacto);
+                $sheet->setCellValue('D' . $row, $sale->correo_contacto);
+                $sheet->setCellValue('E' . $row, $sale->producto);
+                $sheet->setCellValue('F' . $row, $sale->estatus_cobro);
+                $sheet->setCellValue('G' . $row, $sale->num_poliza);
                 $sheet->getStyle('G' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_NUMBER);
-                $sheet->setCellValue('H' . $row, $policy->prima_total);
+                $sheet->setCellValue('H' . $row, $sale->prima_total);
                 $sheet->getStyle('H' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
-                $sheet->setCellValue('I' . $row, $policy->monto_pagado);
+                $sheet->setCellValue('I' . $row, $sale->monto_pagado);
                 $sheet->getStyle('I' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
-                $sheet->setCellValue('J' . $row, $policy->asignado);
-                $sheet->setCellValue('K' . $row, date('d/m/Y', strtotime($policy->fecha_venta)));
+                $sheet->setCellValue('J' . $row, $sale->asignado);
+                $sheet->setCellValue('K' . $row, date('d/m/Y', strtotime($sale->fecha_venta)));
                 $sheet->getStyle('K' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
-                $sheet->setCellValue('L' . $row, date('d/m/Y', strtotime($policy->fecha_cobro)));
+                $sheet->setCellValue('L' . $row, date('d/m/Y', strtotime($sale->fecha_cobro)));
                 $sheet->getStyle('L' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
-                $sheet->setCellValue('M' . $row, date('d/m/Y', strtotime($policy->fecha_actividad)));
+                $sheet->setCellValue('M' . $row, date('d/m/Y', strtotime($sale->fecha_actividad)));
                 $sheet->getStyle('M' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
-                $sheet->setCellValue('N' . $row, $policy->recibo);
+                $sheet->setCellValue('N' . $row, $sale->recibo);
                 $row++;
             }
             $writer = new Xlsx($spreadsheet);
