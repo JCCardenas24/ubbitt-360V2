@@ -1822,7 +1822,7 @@ function loadKpis(start, end) {
             $('#kpi-average-time-in-answering-call').text(
                 kpis.average_time_in_answering_call + ' seg'
             );
-            $('#kpi-speaking-time').text(kpis.speaking_time + ' seg');
+            $('#kpi-speaking-time').text(kpis.speaking_time + ' hr');
         },
         error: () => {
             showAlert(

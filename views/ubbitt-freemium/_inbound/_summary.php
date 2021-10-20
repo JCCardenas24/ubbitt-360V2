@@ -30,6 +30,10 @@
         <div class="row ml-0 mr-0">
             <div class="col-4">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="<b>Número de llamadas ofrecidas/Number of calls offered.</b> <br> Es el número de llamadas entrantes al DID asignado para campaña ">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
                             <p class="m-0">NCO</p> <br>
@@ -43,9 +47,13 @@
             </div>
             <div class="col-4">
                 <div class="card bg-c-orange">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Número de llamadas contestadas con motivo de compra.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
-                            <p class="m-0">Llamadas <br>Motivo de<br>venta</p>
+                            <h5>Total Venta</h5>
                         </div>
                         <div class="col-6 p-0 text-center">
                             <small class="m-0" id="sale-reason-det" style="font-size: 25px;">0</small>
@@ -55,9 +63,13 @@
             </div>
             <div class="col-4">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Número de llamadas contestadas con motivo de atención a clientes">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <div class="d-flex he-100 justify-content-center align-items-center">
                         <div class="col-6 p-0 text-center">
-                            <p class="m-0">Llamadas <br>Atención a clientes</p>
+                            <h5>Llamadas atención <br> a cliente</h5>
                         </div>
                         <div class="col-6 p-0 text-center">
                             <small class="m-0" id="cust-serv-calls-det">0</small>
@@ -71,6 +83,10 @@
         <div class="row ml-0 mr-0">
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Número de pólizas emitidas totales.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Total <br>
                         de ventas</p>
                     <small id="total-sales">0</small>
@@ -78,6 +94,10 @@
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Monto total de la prima neta emitida">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Monto total <br>
                         vendido</p>
                     <small id="sales-total-amount">$0</small>
@@ -85,12 +105,20 @@
             </div>
             <div class="col-2">
                 <div class="card">
-                    <p class="m-0">% conversión</p>
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="% Conversión = (Total de ventas / total de llamadas).">
+                        <i class="ri-information-fill"></i>
+                    </a>
+                    <p class="m-0">% conversión <br> (Llamadas de ventas) </p>
                     <small id="conversion-percentage">0%</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Número de pólizas emitidas en el período seleccionado.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Total de <br>
                         emisiones</p>
                     <small id="emissions-total">0</small>
@@ -98,12 +126,20 @@
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Conversión de cobro: Total de pólizas cobradas / total de pólizas emitidas.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">% de cobranza</p>
                     <small id="collection-percentage">0%</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Número de pólizas cobradas en el período seleccionado.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Total de <br>
                         cobros</p>
                     <small id="total-collections">0</small>
