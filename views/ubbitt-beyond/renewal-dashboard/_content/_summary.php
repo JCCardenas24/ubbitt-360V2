@@ -140,26 +140,46 @@
         <div class="row ml-0 mr-0">
             <div class="col-2 offset-1 pl-0">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Registros cobrados de manera exitosa.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Total <br>cobrados</p><small id="total-collected">0</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Llamadas conectadas / Registros pagados">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">%<br>conversión</p><small id="conversion-percentage">0%</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Monto neto cobrado total de los registros exitosos.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Monto <br>cobrado</p><small id="collected-amount">$0</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Registros con tipificación en seguimiento ">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Registros en <br>seguimiento</p><small id="on-track-registries">0</small>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card">
+                    <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                        title="Es el monto del recibo de pago neto por cobrar.">
+                        <i class="ri-information-fill"></i>
+                    </a>
                     <p class="m-0">Monto <br>pendiente</p><small id="pending-amount">$0</small>
                 </div>
             </div>
