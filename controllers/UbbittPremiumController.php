@@ -25,6 +25,9 @@ use app\models\forms\SearchByDateCampaignForm;
 use app\models\forms\SearchByDateForm;
 use app\models\utils\FilenameHelper;
 use Exception;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Yii;
 use yii\filters\AccessControl;
@@ -50,7 +53,7 @@ class UbbittPremiumController extends Controller
                             'dashboard', 'find-header-data', 'find-forecast-data', 'find-summary-graph-data', 'find-leads-calls-graph-data',
                             'find-summary-inputs-data', 'find-marketing-general-data',
                             'find-marketing-media-data', 'find-marketing-daily-performance-data', 'find-marketing-segment-data',
-                            'find-calls', 'download-calls-audios', 'find-sales', 'download-policies', 'find-marketing-kpis-data',
+                            'find-calls', 'download-calls-audios', 'find-sales', 'download-sales-report', 'find-marketing-kpis-data',
                             'find-brief',
                             'save-brief'
                         ],
@@ -74,7 +77,7 @@ class UbbittPremiumController extends Controller
                     'find-calls' => ['post'],
                     'download-calls-audios' => ['get'],
                     'find-sales' => ['post'],
-                    'download-policies' => ['get'],
+                    'download-sales-report' => ['get'],
                     'find-marketing-kpis-data' => ['post'],
                     'find-brief' => ['post'],
                     'save-brief' => ['post'],
@@ -303,7 +306,7 @@ class UbbittPremiumController extends Controller
         return curl_exec($ch);
     }
 
-    function actionDownloadPolicies()
+    function actionDownloadSalesReport()
     {
         $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->get());
@@ -313,41 +316,87 @@ class UbbittPremiumController extends Controller
         }
         $response = $this->getUrlContents($url);
         $response = json_decode($response);
-        $policies = $response[0];
+        $sales = $response[0];
         try {
             $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
             if (!file_exists($outputPath)) {
                 mkdir($outputPath, 0777, true);
             }
-            $fileName = FilenameHelper::createTimeStampedFileName('polizas.zip');
-            $zipArchive = new ZipArchive();
-            $zipArchive->open($outputPath . $fileName, ZipArchive::CREATE);
-
-            foreach ($policies as $policy) {
-                $encodedUrl = urlencode($policy->recibo);
-                $fixedEncodedUrl = str_replace(['%2F', '%3A'], ['/', ':'], $encodedUrl);
-                $policyFile = $this->getUrlContents($fixedEncodedUrl);
-                if ($policyFile) {
-                    $zipArchive->addFromString(basename($policy->recibo), $policyFile);
-                }
+            $fileName = FilenameHelper::createTimeStampedFileName('ventas-premium.xlsx');
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setCellValue('A1', 'ID');
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->setCellValue('B1', 'Nombre');
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->setCellValue('C1', 'Teléfono');
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->setCellValue('D1', 'Correo electrónico');
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->setCellValue('E1', 'Producto');
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->setCellValue('F1', 'Estatus de cobro');
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->setCellValue('G1', 'No. de Póliza');
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->setCellValue('H1', 'Prima total');
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->setCellValue('I1', 'Monto Pagado');
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+            $sheet->setCellValue('J1', 'Asesor Asignado');
+            $sheet->getColumnDimension('J')->setAutoSize(true);
+            $sheet->setCellValue('K1', 'Fecha de venta');
+            $sheet->getColumnDimension('K')->setAutoSize(true);
+            $sheet->setCellValue('L1', 'Fecha de cobro');
+            $sheet->getColumnDimension('L')->setAutoSize(true);
+            $sheet->setCellValue('M1', 'Fecha de actividad');
+            $sheet->getColumnDimension('M')->setAutoSize(true);
+            $sheet->setCellValue('N1', 'Ticket');
+            $sheet->getColumnDimension('N')->setAutoSize(true);
+            $row = 2;
+            foreach ($sales as $sale) {
+                $sheet->setCellValue('A' . $row, $sale->id);
+                $sheet->getStyle('A' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_NUMBER);
+                $sheet->setCellValue('B' . $row, $sale->nombre_contacto);
+                $sheet->setCellValue('C' . $row, $sale->telefono_contacto);
+                $sheet->setCellValue('D' . $row, $sale->correo_contacto);
+                $sheet->setCellValue('E' . $row, $sale->producto);
+                $sheet->setCellValue('F' . $row, $sale->estatus_cobro);
+                $sheet->setCellValue('G' . $row, $sale->num_poliza);
+                $sheet->getStyle('G' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_NUMBER);
+                $sheet->setCellValue('H' . $row, $sale->prima_total);
+                $sheet->getStyle('H' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+                $sheet->setCellValue('I' . $row, $sale->monto_pagado);
+                $sheet->getStyle('I' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+                $sheet->setCellValue('J' . $row, $sale->asignado);
+                $sheet->setCellValue('K' . $row, date('d/m/Y', strtotime($sale->fecha_venta)));
+                $sheet->getStyle('K' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
+                $sheet->setCellValue('L' . $row, date('d/m/Y', strtotime($sale->fecha_cobro)));
+                $sheet->getStyle('L' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
+                $sheet->setCellValue('M' . $row, date('d/m/Y', strtotime($sale->fecha_actividad)));
+                $sheet->getStyle('M' . $row)->getNumberFormat()
+                    ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
+                $sheet->setCellValue('N' . $row, $sale->recibo);
+                $row++;
             }
-            $zipArchive->close();
-            if (file_exists($outputPath . $fileName)) {
-                // Envía el archivo al navegador
-                Yii::$app->response->sendFile($outputPath . $fileName, basename($fileName))
-                    ->on(Response::EVENT_AFTER_SEND, function ($event) {
-                        // Elimina el archivo una vez enviado
-                        unlink($event->data);
-                    }, $outputPath . $fileName);
-            } else {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                Yii::$app->response->statusCode = 400;
-                return 'No se encontraron comprobantes para descargar.';
-            }
+            $writer = new Xlsx($spreadsheet);
+            $writer->save($outputPath . $fileName);
+            // Envía el archivo al navegador
+            Yii::$app->response->sendFile($outputPath . $fileName, basename($fileName))
+                ->on(Response::EVENT_AFTER_SEND, function ($event) {
+                    // Elimina el archivo una vez enviado
+                    unlink($event->data);
+                }, $outputPath . $fileName);
         } catch (Exception $exception) {
-            Yii::error('Ocurrió un problema al descargar las pólizas.');
+            Yii::error('Ocurrió un problema al descargar el reporte de ventas.');
             Yii::error($exception);
-            throw new InternalErrorException('Ocurrió un problema al descargar las pólizas.', 500, $exception);
+            throw new InternalErrorException('Ocurrió un problema al descargar el reporte de ventas.', 500, $exception);
         }
     }
 

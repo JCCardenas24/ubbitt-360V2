@@ -10,7 +10,7 @@
                 <th scope="col">Estatus de cobro</th>
                 <th scope="col">No. de Póliza</th>
                 <th scope="col">Prima total</th>
-                <th scope="col">Montal Pagado</th>
+                <th scope="col">Monto Pagado</th>
                 <th scope="col">Asesor Asignado</th>
                 <th scope="col">Fecha de venta</th>
                 <th scope="col">Fecha de cobro</th>
