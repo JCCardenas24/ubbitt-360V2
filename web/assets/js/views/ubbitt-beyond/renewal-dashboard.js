@@ -1140,6 +1140,74 @@ function createSalesRecordRow(salesRecord, moneyFormatter) {
     );
 }
 
+function onDownloadSalesReport(event) {
+    event.preventDefault();
+    showPreloader();
+    let headers = new Headers();
+    let fileName = '';
+    fetch(
+        '/ubbitt-beyond/download-renewal-sales-report?SearchByDateAndTermsForm[startDate]=' +
+            startDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[endDate]=' +
+            endDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[term]=' +
+            encodeURIComponent($('#search-term').val()),
+        {
+            headers,
+        }
+    )
+        .then((resp) => {
+            if (resp.status == 200) {
+                const header = resp.headers.get('Content-Disposition');
+                const parts = header.split(';');
+                fileName = parts[1].split('=')[1].replaceAll('"', '');
+                return resp
+                    .blob()
+                    .then((blob) => {
+                        // IE doesn't allow using a blob object directly as link href
+                        // instead it is necessary to use msSaveOrOpenBlob
+                        if (
+                            window.navigator &&
+                            window.navigator.msSaveOrOpenBlob
+                        ) {
+                            window.navigator.msSaveOrOpenBlob(blob);
+                            return;
+                        }
+
+                        // For other browsers:
+                        // Create a link pointing to the ObjectURL containing the blob.
+                        const url = window.URL.createObjectURL(blob);
+                        var link = document.createElement('a');
+                        link.href = url;
+                        link.download = fileName;
+                        link.click();
+                        setTimeout(function () {
+                            // For Firefox it is necessary to delay revoking the ObjectURL
+                            window.URL.revokeObjectURL(url);
+                        }, 100);
+                    })
+                    .catch((error) => showAlert('error', error))
+                    .finally(() => {
+                        hidePreloader();
+                    });
+            } else if (resp.status == 400) {
+                resp.json()
+                    .then((jsonResp) => {
+                        showAlert('error', jsonResp);
+                    })
+                    .finally(() => {
+                        hidePreloader();
+                    });
+            } else {
+                throw 'Hubo un problema al descargar el reporte.';
+            }
+        })
+        .catch((error) => {
+            showAlert('error', error);
+            hidePreloader();
+        });
+}
+
 function reportsListCallback(start, end, label, page = 1) {
     startDate = start;
     endDate = end;

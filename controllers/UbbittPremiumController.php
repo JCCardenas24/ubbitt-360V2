@@ -341,7 +341,7 @@ class UbbittPremiumController extends Controller
             $sheet->getColumnDimension('G')->setAutoSize(true);
             $sheet->setCellValue('H1', 'Prima total');
             $sheet->getColumnDimension('H')->setAutoSize(true);
-            $sheet->setCellValue('I1', 'Montal Pagado');
+            $sheet->setCellValue('I1', 'Monto Pagado');
             $sheet->getColumnDimension('I')->setAutoSize(true);
             $sheet->setCellValue('J1', 'Asesor Asignado');
             $sheet->getColumnDimension('J')->setAutoSize(true);

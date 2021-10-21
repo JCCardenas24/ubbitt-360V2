@@ -12,6 +12,8 @@
         <span class="text-date"></span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
     </div>
     <!-- <a href="#" class="pdf_button mr-5"><i class="icon-download_xls"></i></a> -->
+    <a href="#" class="pdf_button" onclick="onDownloadSalesReport(event)"><i class="fa fa-download"
+            aria-hidden="true"></i></a>
 </div>
 <br>
 <?= $this->render('_database-sales/_table') ?>
