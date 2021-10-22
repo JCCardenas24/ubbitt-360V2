@@ -11,21 +11,15 @@ function updatePaginator(paginatorId, page, totalPages, callback) {
         minLowerPage = page - 5 > 0 ? page - (5 - (totalPages - page)) : 1;
     }
 
-    let previousButton =
-        `
-    <li class="page-item ` +
-        getButtonDisableClass(page, 1) +
-        `">
+    let previousButton = `
+    <li class="page-item">
         <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
     </li>`;
     previousButton = $(previousButton).on('click', () => {
         callback(page - 1);
     });
-    let nextButton =
-        `
-    <li class="page-item ` +
-        getButtonDisableClass(page, totalPages) +
-        `">
+    let nextButton = `
+    <li class="page-item">
         <a class="page-link " href="#">Siguiente</a>
     </li>`;
     nextButton = $(nextButton).on('click', () => {
@@ -53,15 +47,11 @@ function updatePaginator(paginatorId, page, totalPages, callback) {
     paginator.append(nextButton);
 }
 
-function getButtonDisableClass(currentPage, referencePage) {
-    return currentPage == referencePage ? 'disabled' : '';
-}
-
 function createPageItem(pageNumber, currentPage, callback) {
     let pageItem =
         `
     <li class="page-item ` +
-        getButtonDisableClass(pageNumber, currentPage) +
+        getPageButtonDisableClass(pageNumber, currentPage) +
         `">
         <a class="page-link" href="#">` +
         pageNumber +
@@ -75,6 +65,10 @@ function createPageItem(pageNumber, currentPage, callback) {
         });
     }
     return pageItem;
+}
+
+function getPageButtonDisableClass(currentPage, referencePage) {
+    return currentPage == referencePage ? 'active' : '';
 }
 
 function createPageItems(paginator, minPage, maxPage, currentPage, callback) {

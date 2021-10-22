@@ -15,42 +15,70 @@
 <div class="row ml-0 mr-0 row_balance_resumen">
     <div class="col">
         <div class="card dark-gray">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Es el monto de dinero invertido durante el periodo acordado.">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>Inversión Ubbitt</p>
             <h5 id="ubbitt-investment">$0</h5>
         </div>
     </div>
     <div class="col">
         <div class="card dark-gray">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Es el monto de dinero gastado en publicidad.">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>Presupuesto gastado</p>
             <h5 id="spent-budget">$0</h5>
         </div>
     </div>
     <!-- <div class="col">
         <div class="card gray">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="<b>Retorno de inversión</b> <br> Monto inversiones totales <br> Inversión/inversión">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>ROI</p>
             <h5 id="roi">$0</h5>
         </div>
     </div> -->
     <div class="col">
         <div class="card gray">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="<b>Retorno de inversión</b> <br> Monto de ventas totales <br> Inversión/inversión * 100">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>ROI</p>
             <h5 id="roi-percentage">0%</h5>
         </div>
     </div>
     <div class="col">
         <div class="card orange">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Costo por lead">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>CPL</p>
             <h5 id="cpl">$0</h5>
         </div>
     </div>
     <!-- <div class="col">
         <div class="card yellow">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left"
+                title="Inversión / Monto de ventas">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>CPA</p>
             <h5 id="cpa">$0</h5>
         </div>
     </div> -->
     <div class="col">
         <div class="card yellow">
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left"
+                title="Inversión / Monto de ventas (porcentaje)">
+                <i class="ri-information-fill"></i>
+            </a>
             <p>CPA</p>
             <h5 id="cpa-percentage">0%</h5>
         </div>
@@ -61,42 +89,42 @@
     <div class="col-4">
         <div class="balance_inversion_ventas_cobrado">
             <div class="card_ttls row ml-0 mr-0">
-                <div class="col-6 p-0 lr">
+                <div class="col-12 p-0 lr">
                     <h2>Actual</h2>
                 </div>
-                <div class="col-6 p-0 lf">
+                <!-- <div class="col-6 p-0 lf">
                     <h3>Forecast</h3>
-                </div>
+                </div> -->
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0">
-                <div class="col-6 lr">
+                <div class="col-12 lr">
                     <h2 id="actual-investment">$0</h2>
                 </div>
-                <div class="col-6 lf">
+                <!-- <div class="col-6 lf">
                     <h3 id="forecast-investment">$0</h3>
-                </div>
+                </div> -->
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Inversión</p>
                 </div>
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0">
-                <div class="col-6 lr">
+                <div class="col-12 lr">
                     <h2 id="actual-sales">$0</h2>
                 </div>
-                <div class="col-6 lf">
+                <!-- <div class="col-6 lf">
                     <h3 id="forecast-sales">$0</h3>
-                </div>
+                </div> -->
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Ventas</p>
                 </div>
             </div>
             <div class="row balance_info_forecast_actual ml-0 mr-0 border_radius_bottom">
-                <div class="col-6 lr">
+                <div class="col-12 lr">
                     <h2 id="actual-collected">$0</h2>
                 </div>
-                <div class="col-6 lf">
+                <!-- <div class="col-6 lf">
                     <h3 id="forecast-collected">$0</h3>
-                </div>
+                </div> -->
                 <div class="ttl_wrapper_forecast_actual">
                     <p>Cobrado</p>
                 </div>
@@ -105,10 +133,10 @@
     </div>
     <div class="col-8">
         <div class="radio_button_forecast_actual">
-            <input type="checkbox" value="false" name="selected_chart" id="pemp_yes" checked>
+            <input type="checkbox" value="false" name="selected_chart" id="pemp_yes" checked disabled>
             <label for="pemp_yes">Actual</label>
-            <input type="checkbox" value="true" name="selected_chart" id="pemp_no">
-            <label for="pemp_no">Forecast</label>
+            <!-- <input type="checkbox" value="true" name="selected_chart" id="pemp_no">
+            <label for="pemp_no">Forecast</label> -->
         </div>
         <div class="chart_actual">
             <div id="summary-graph" style="height:400px;"></div>
@@ -119,7 +147,10 @@
 <div class="row ml-0 mr-0 mt-30 mb-30">
     <div class="col">
         <div class="gray_gradient_card">
-
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Clientes potenciales generados en el período de tiempo seleccionado.">
+                <i class="ri-information-fill"></i>
+            </a>
             <i class="ri-arrow-up-line"></i>
             <div>
                 <small>LEADS</small>
@@ -130,7 +161,10 @@
     </div>
     <div class="col">
         <div class="gray_gradient_card">
-
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Número de llamadas realizadas y recibidas al DID asignado  a la campaña.">
+                <i class="ri-information-fill"></i>
+            </a>
             <i class="ri-arrow-up-line"></i>
             <div>
                 <small>TOTAL LLAMADAS</small>
@@ -141,7 +175,10 @@
     </div>
     <div class="col">
         <div class="gray_gradient_card">
-
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Es el número total de pólizas emitidas.">
+                <i class="ri-information-fill"></i>
+            </a>
             <i class="ri-arrow-up-line"></i>
             <div>
                 <small>TOTAL VENTAS</small>
@@ -152,7 +189,10 @@
     </div>
     <div class="col">
         <div class="gray_gradient_card">
-
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left"
+                title="Total de cobros / Total de leads">
+                <i class="ri-information-fill"></i>
+            </a>
             <i class="ri-arrow-up-line"></i>
             <div>
                 <small>CONVERSIÓN</small>
@@ -163,7 +203,10 @@
     </div>
     <div class="col">
         <div class="gray_gradient_card">
-
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                title="Número de pólizas cobradas en el período seleccionado.">
+                <i class="ri-information-fill"></i>
+            </a>
             <i class="ri-arrow-up-line"></i>
             <div>
                 <small>TOTAL COBROS</small>
@@ -174,7 +217,10 @@
     </div>
     <div class="col">
         <div class="gray_gradient_card">
-
+            <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left"
+                title="Total de cobros / Total de ventas">
+                <i class="ri-information-fill"></i>
+            </a>
             <i class="ri-arrow-up-line"></i>
             <div>
                 <small>% DE COBRANZA</small>

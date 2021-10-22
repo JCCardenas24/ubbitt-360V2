@@ -53,6 +53,10 @@
     <div class="row ml-0 mr-0 row_conectores">
         <div class="wrapper_conector">
             <div class="card_conector">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="La tasa de clics <br> (clics ÷ impresiones= CTR)">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>CTR
                     <p>
@@ -63,6 +67,10 @@
         </div>
         <div class="wrapper_conector">
             <div class="card_conector">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="El porcentaje de rebote mide las visitas en las que el usuario ha abandonado el micrositio = (el número de vistas / el número de clicks)">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Rebote
                     <p>
@@ -73,6 +81,10 @@
         </div>
         <div class="wrapper_conector">
             <div class="card_conector">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Leads/Vistas">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Conversión
                     <p>
@@ -83,6 +95,10 @@
         </div>
         <div class="wrapper_conector">
             <div class="card_conector">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Conectados/Leads">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Conversión
                     <p>
@@ -93,6 +109,10 @@
         </div>
         <div class="wrapper_conector mr-0">
             <div class="card_conector">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Ventas/Contactados">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Conversión
                     <p>
@@ -106,6 +126,10 @@
     <div class="row ml-0 mr-0 row_triangles">
         <div class="col w_16_6">
             <div class="card_yellow">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Son la métrica que refleja el número de veces que se muestra un contenido.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Impresiones</p>
                     <h1 id="marketing-impressions">0</h1>
@@ -115,6 +139,10 @@
         </div>
         <div class="col w_16_6">
             <div class="card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="El clics  determina la interacción del usuario con el contenido.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Clics</p>
                     <h1 id="marketing-clicks">0</h1>
@@ -124,6 +152,10 @@
         </div>
         <div class="col w_16_6">
             <div class="card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Una visita es el número de veces que un visitante único entra al micrositio.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Visitas</p>
                     <h1 id="marketing-visits">0</h1>
@@ -133,6 +165,10 @@
         </div>
         <div class="col w_16_6">
             <div class="card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Clientes potenciales generados en el período de tiempo seleccionado.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Leads</p>
                     <h1 id="marketing-leads">0</h1>
@@ -142,6 +178,10 @@
         </div>
         <div class="col w_16_6">
             <div class="card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Son los clientes potenciales que sus datos permite contactación.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Contactación</p>
                     <h1 id="marketing-contacting">0</h1>
@@ -151,6 +191,10 @@
         </div>
         <div class="col w_16_6">
             <div class="card_orange">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Número de pólizas emitidas en el período seleccionado.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>Ventas</p>
                     <h1 id="marketing-sales">0</h1>
@@ -162,6 +206,10 @@
     <div class="row ml-0 mr-0 row_bottom_cards">
         <div class="col p-0">
             <div class="card_bottom bottom_card_yellow">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Costo por cada mil impresiones.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>CPM</p>
                     <h1 id="marketing-cpm">$0</h1>
@@ -170,6 +218,10 @@
         </div>
         <div class="col p-0">
             <div class="card_bottom bottom_card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="Costo por clic  es la cantidad que gasta cada vez que un usuario hace clic en un anuncio.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>CPC</p>
                     <h1 id="marketing-cpc">$0</h1>
@@ -186,6 +238,10 @@
         </div>
         <div class="col p-0">
             <div class="card_bottom bottom_card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="<b>Costo por lead  promedio:</b> <br>Presupuesto total / Número total de leads = CPL.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>CPL</p>
                     <h1 id="marketing-cpl">$0</h1>
@@ -194,6 +250,10 @@
         </div>
         <div class="col p-0">
             <div class="card_bottom bottom_card_gray">
+                <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
+                    title="<b>Costo por lead  promedio contactado:</b> <br> Presupuesto total / Número total de leads contactables = CPL.">
+                    <i class="ri-information-fill"></i>
+                </a>
                 <div>
                     <p>CPL Contactados</p>
                     <h1 id="marketing-cpl-contacted">$0</h1>

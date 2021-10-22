@@ -186,7 +186,6 @@
     .toast {
         min-width: 100%;
         height: 55px;
-        background: #4ebf6c;
         display: flex;
         justify-content: flex-start;
         align-items: center;
@@ -196,5 +195,11 @@
             text-align: left;
             color: #fff;
         }
+    }
+    .success {
+        background: #4ebf6c;
+    }
+    .warning {
+        background: #FF5757;
     }
 }
