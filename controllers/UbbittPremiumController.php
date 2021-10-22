@@ -373,10 +373,10 @@ class UbbittPremiumController extends Controller
                 $sheet->getStyle('I' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
                 $sheet->setCellValue('J' . $row, $sale->asignado);
-                $sheet->setCellValue('K' . $row, date('d/m/Y', strtotime($sale->fecha_venta)));
+                $sheet->setCellValue('K' . $row, isset($sale->fecha_venta) && $sale->fecha_venta != null && $sale->fecha_venta != '-' ? date('d/m/Y', strtotime($sale->fecha_venta)) : '-');
                 $sheet->getStyle('K' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
-                $sheet->setCellValue('L' . $row, date('d/m/Y', strtotime($sale->fecha_cobro)));
+                $sheet->setCellValue('L' . $row, isset($sale->fecha_cobro) && $sale->fecha_cobro != null && $sale->fecha_cobro != '-' ? date('d/m/Y', strtotime($sale->fecha_cobro)) : '-');
                 $sheet->getStyle('L' . $row)->getNumberFormat()
                     ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
                 $sheet->setCellValue('M' . $row, date('d/m/Y', strtotime($sale->fecha_actividad)));

@@ -1815,14 +1815,22 @@ function createSalesRecordRow(salesRecord, moneyFormatter) {
         salesRecord.asignado +
         `</td>
             <td>` +
-        moment(salesRecord.fecha_venta, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
-            'DD/MM/YYYY h:mm A'
-        ) +
+        (salesRecord.fecha_venta != undefined && salesRecord.fecha_venta != '-'
+            ? moment(salesRecord.fecha_venta, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+                  'DD/MM/YYYY h:mm A'
+              )
+            : salesRecord.fecha_venta == undefined
+            ? '-'
+            : salesRecord.fecha_venta) +
         `</td>
             <td>` +
-        moment(salesRecord.fecha_cobro, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
-            'DD/MM/YYYY h:mm A'
-        ) +
+        (salesRecord.fecha_cobro != undefined && salesRecord.fecha_cobro != '-'
+            ? moment(salesRecord.fecha_cobro, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+                  'DD/MM/YYYY h:mm A'
+              )
+            : salesRecord.fecha_cobro == undefined
+            ? '-'
+            : salesRecord.fecha_cobro) +
         `</td>
         <td>` +
         moment(salesRecord.fecha_actividad, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
