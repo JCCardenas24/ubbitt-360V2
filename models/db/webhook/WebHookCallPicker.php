@@ -60,7 +60,7 @@ class WebHookCallPicker extends ActiveRecord
     /**
      * Finds callpicker records from a given Id
      * @param integer $id Exclusive id
-     * @return array[] \app\models\db\webhook\WebHookCalPicker
+     * @return \app\models\db\webhook\WebHookCalPicker[]
      */
     public function findFromId($id, $limit)
     {

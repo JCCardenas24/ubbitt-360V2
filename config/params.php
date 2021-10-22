@@ -6,7 +6,6 @@ return [
     'ubbitt_beyond_collection_did' => '5589571959',
     'ubbitt_beyond_renewal_did' => '5589505362',
     'ubbitt_premium_did' => '5512091777',
-    'email_sender' => 'no-reply@soyubbitt.com',
     'report_type_dict' => [
         "kpis" => "Detalles de KPI's",
         "advisor" => "Productividad de asesores",
@@ -22,5 +21,11 @@ return [
         "renewal" => "Renovación",
     ],
     'reset_password_token_expires' => 60,
-    'email_address_database_to' => 'juancarlos.cardenas@ubbitt.com'
+    'email_address_database_to' => 'juancarlos.cardenas@ubbitt.com',
+    'sales_database_service_url' => 'http://qa.ubbitt.com:8081/consultsapp/report_new_sale/',
+    'sales_database_service_api_key' => '0eb422ebc0760f6a22c3c24125aa5f9b',
+    'sales_database_service_url_premium' => 'http://qa.ubbitt.com:8081/consultsapp/report_deals_vn/',
+    'sales_database_service_premium_api_key' => '0eb422ebc0760f6a22c3c24125aa5f9b',
+    'sales_database_service_url_beyond' => 'http://qa.ubbitt.com:8081/consultsapp/report_deals_cr/',
+    'sales_database_service_beyond_api_key' => '0eb422ebc0760f6a22c3c24125aa5f9b',
 ];

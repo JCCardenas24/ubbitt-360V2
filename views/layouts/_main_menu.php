@@ -89,7 +89,7 @@ use yii\helpers\Url;
                         <i class="fa fa-angle-right pull-right"></i>
                     </span>
                 </a>
-                <ul class="treeview-menu" style="display: block;">
+                <ul class="treeview-menu">
                     <?php
                         $userInfo = Yii::$app->session->get("userInfo");
                         $campaignModel = new Campaign();

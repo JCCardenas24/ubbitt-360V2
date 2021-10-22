@@ -2,9 +2,10 @@
     <thead>
         <tr>
             <th scope="col">ID</th>
+            <th scope="col">Tipo</th>
             <th scope="col">Asignación</th>
             <th scope="col">Teléfono</th>
-            <th scope="col">Cuenta asignada</th>
+            <!-- <th scope="col">Cuenta asignada</th> -->
             <th scope="col">Fecha</th>
             <th scope="col">Acciones</th>
         </tr>
