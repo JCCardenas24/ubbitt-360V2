@@ -356,16 +356,16 @@
                             class="progress-bar magenta" role="progressbar" style="width: 0%" aria-valuenow="0"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="d-flex mb-5">
+                    <!-- <div class="d-flex mb-5">
                         <div class="d-flex justify-content-center align-items-center">
                             <h4 class="mb-0">No contesta</h4>
-                            <!-- <span class="ml-5 mr-5"><b>|</b></span>
+                            <span class="ml-5 mr-5"><b>|</b></span>
                             <span
                                 class="ttl_detalle href_bd_cobra">Ver
-                                detalle</span> -->
+                                detalle</span>
                         </div><span class="ttl_number"
                             id="by-management-out-of-management-registries-does-not-answer">0</span>
-                    </div>
+                    </div> -->
                     <div class="progress">
                         <div id="by-management-out-of-management-registries-does-not-answer-percentage"
                             class="progress-bar magenta" role="progressbar" style="width: 0%" aria-valuenow="0"
