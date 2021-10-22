@@ -306,9 +306,6 @@ function findForecastData(start, end, moneyFormatter) {
                 'Ocurrió un problema al recuperar la información del Forecast'
             );
         },
-        complete: () => {
-            hidePreloader();
-        },
     });
 }
 
@@ -683,9 +680,6 @@ function findSummaryInputs(start, end, moneyFormatter) {
                 'error',
                 'Ocurrió un problema al recuperar la información de los datos del resumen'
             );
-        },
-        complete: () => {
-            hidePreloader();
         },
     });
 }
