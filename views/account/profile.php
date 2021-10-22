@@ -17,11 +17,12 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                     <h4><?= $userInfo->name ?></h4>
                 </div>
                 <hr>
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label for="exampleFormControlInput1">Email</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="<?= $email ?>"
-                        readonly>
-                </div> -->
+                    <input type="email" class="form-control" id="email" placeholder="<?= $email ?>" readonly>
+                </div>
+                <a type="button" class="" data-toggle="modal" data-target="#modal_cambiar_email"><small>Cambiar
+                        email</small></a>
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Contraseña</label>
                     <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="*******"
@@ -104,6 +105,27 @@ $this->registerJsFile('@web/assets/js/views/account/profile.js', ['position' => 
                         <div class="d-flex btns_wrappers">
                             <a class="cancel_btn" data-dismiss="modal">Cancelar</a>
                             <a class="btn_continuar" id="btn-change-password">Continuar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Email-->
+        <div class="modal modal_cambiar_contrasena fade" id="modal_cambiar_email" tabindex="-1"
+            aria-labelledby="modal_cambiar_emailLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="height: 450px;">
+                    <div class="modal-body">
+                        <img class="alert_svg" src="<?= Yii::getAlias('@web') ?>/assets/images/alert_icon.svg" alt="">
+                        <h5>Cambiar Email</h5>
+                        <p>Para continuar con tu solicitud, por favor ingresa los siguientes datos.</p>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Email nuevo</label>
+                            <input type="text" class="form-control" id="new-email" value="<?= $email ?>">
+                        </div>
+                        <div class="d-flex btns_wrappers">
+                            <a class="cancel_btn" data-dismiss="modal">Cancelar</a>
+                            <a class="btn_continuar" id="btn-change-email">Continuar</a>
                         </div>
                     </div>
                 </div>
