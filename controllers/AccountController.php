@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\db\UserInfo;
+use app\models\forms\ChangeEmail;
 use app\models\forms\ChangePassword;
 use app\models\User;
 use Yii;
@@ -24,7 +25,7 @@ class AccountController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['profile', 'update-password'],
+                        'actions' => ['profile', 'update-password', 'update-email'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -35,6 +36,7 @@ class AccountController extends Controller
                 'actions' => [
                     'profile' => ['get'],
                     'update-password' => ['post'],
+                    'update-email' => ['post'],
                 ],
             ],
         ];
@@ -82,5 +84,16 @@ class AccountController extends Controller
         } else {
             throw new BadRequestHttpException('La contraseña actual es incorrecta');
         }
+    }
+
+    public function actionUpdateEmail()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $changeEmailRequest = new ChangeEmail();
+        $changeEmailRequest->load(Yii::$app->request->post());
+        $username = Yii::$app->session->get("userIdentity")->username;
+        $user = User::findByUsername($username);
+        $user->email = $changeEmailRequest->newEmail;
+        $user->save();
     }
 }

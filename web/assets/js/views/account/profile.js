@@ -5,6 +5,10 @@ $(function () {
         $('#new-password-confirm').val(null);
     });
     $('#btn-change-password').on('click', onChangePassword);
+    $('#modal_cambiar_email').on('hidden.bs.modal', () => {
+        $('#new-email').val($('#new-email').val());
+    });
+    $('#btn-change-email').on('click', onChangeEmail);
 });
 
 function onChangePassword() {
@@ -49,4 +53,39 @@ function changePassword(currentPassword, newPassword) {
             hidePreloader();
         },
     });
+}
+
+function onChangeEmail() {
+    let newEmail = $('#new-email').val();
+    if (newEmail != undefined && newEmail != '') {
+        showPreloader();
+        $.ajax({
+            url: '/account/update-email',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'ChangeEmail[newEmail]': newEmail,
+            },
+            success: (response) => {
+                $('#modal_cambiar_email').modal('hide');
+                $('#email').val(newEmail);
+                showAlert('success', '¡Tu email se ha actualizado con éxito!');
+            },
+            error: (jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status == 400) {
+                    showAlert('error', jqXHR.responseJSON.message);
+                } else {
+                    showAlert(
+                        'error',
+                        'Ocurrió un problema al actualizar tu email.'
+                    );
+                }
+            },
+            complete: function () {
+                hidePreloader();
+            },
+        });
+    } else {
+        showAlert('error', 'El email no puede estar vacío.');
+    }
 }
