@@ -1,0 +1,28 @@
+.balance_campaign_data {
+    width: 453px;
+    height: 100%;
+    background: #e6e4e4;
+    position: absolute;
+    right: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 13px;
+    p {
+        font-weight: 600;
+        font-size: 13px;
+        color: #4d4d4d;
+        margin-bottom: 0;
+    }
+    span {
+        font-size: 13px;
+        color: #4d4d4d;
+    }
+    small {
+        font-size: 13px;
+        color: #4d4d4d;
+    }
+}
+
+.campaigns-1-options-tab {
+    position: relative;
+}

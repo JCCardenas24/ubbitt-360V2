@@ -64,7 +64,7 @@ class PasswordReset extends \yii\db\ActiveRecord
         return Yii::$app
             ->mailer
             ->compose('forgot-password', ['user' => $user, 'token' => $this->token])
-            ->setFrom(Yii::$app->params['email_sender'])
+            ->setFrom(Yii::$app->components['mailer']['transport']['username'])
             ->setTo($this->email)
             ->setSubject('Restauración de contraseña en ' . Yii::$app->name)
             ->send();

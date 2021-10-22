@@ -34,7 +34,7 @@ class ImportCallPickerCallsBusiness
                     $callData = json_decode($call->string);
                     Yii::info('CALL ID: ' . $call->id, __METHOD__);
                     Yii::info('TYPE: ' . $callData->call_type, __METHOD__);
-                    if ('525588547978' == $callData->callpicker_number || '525589571959' == $callData->callpicker_number || '525589505362' == $callData->callpicker_number) {
+                    if ('525588547978' == $callData->callpicker_number || '525589571959' == $callData->callpicker_number || '525589505362' == $callData->callpicker_number || '525512091777' == $callData->callpicker_number) {
                         if ('Ansuz Oscar Vilchis' != trim($callData->answered_by)) {
                             Yii::info('Getting records for: ' . $call->id, __METHOD__);
                             $recordsNumber = count($callData->record_keys) > 0 ? count($callData->record_keys) > 0 : (isset($callData->records) ? count($callData->records) > 0 : 0);
@@ -182,6 +182,7 @@ class ImportCallPickerCallsBusiness
         $callDataModel->dialed_by = $callData->dialed_by;
         $callDataModel->answered_by = $callData->answered_by;
         $callDataModel->dialed_number = $callData->dialed_number;
+        $callDataModel->caller_id = $callData->caller_id;
         $callDataModel->callpicker_number = $callData->callpicker_number;
         $callDataModel->date = $callData->date;
         $callDataModel->duration = $callData->duration;

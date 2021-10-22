@@ -2,6 +2,11 @@ let startDate = null;
 let endDate = null;
 let summaryGraphData = [];
 const urlSearchParams = new URLSearchParams(window.location.search);
+let productAveragePrice = null;
+let productFirstPaymentAveragePrice = null;
+let investment = null;
+let expectedBiddingPerLead = null;
+let expectedTotalSales = null;
 $(() => {
     startDate = moment().subtract(1, 'months').startOf('month');
     endDate = moment().subtract(1, 'months').endOf('month');
@@ -37,7 +42,90 @@ $(() => {
     $('#pemp_no').on('change', () => {
         updateSummaryGraphChart(summaryGraphData);
     });
+
+    productAveragePrice = new AutoNumeric(
+        '#product-average-price'
+    ).northAmerican();
+    $('#dec-product-average-price').on('click', () => {
+        dec(productAveragePrice, 10);
+    });
+    $('#inc-product-average-price').on('click', () => {
+        inc(productAveragePrice, 10);
+    });
+
+    productFirstPaymentAveragePrice = new AutoNumeric(
+        '#product-first-payment-average-price'
+    ).northAmerican();
+    $('#dec-product-first-payment-average-price').on('click', () => {
+        dec(productFirstPaymentAveragePrice, 10);
+    });
+    $('#inc-product-first-payment-average-price').on('click', () => {
+        inc(productFirstPaymentAveragePrice, 10);
+    });
+
+    investment = new AutoNumeric('#investment').northAmerican();
+    $('#dec-investment').on('click', () => {
+        dec(investment, 1000, 350000);
+    });
+    $('#inc-investment').on('click', () => {
+        inc(investment, 1000, 350000);
+    });
+
+    expectedBiddingPerLead = new AutoNumeric(
+        '#expected-bidding-per-lead'
+    ).northAmerican();
+    $('#dec-expected-bidding-per-lead').on('click', () => {
+        dec(expectedBiddingPerLead, 10);
+    });
+    $('#inc-expected-bidding-per-lead').on('click', () => {
+        inc(expectedBiddingPerLead, 10);
+    });
+
+    expectedTotalSales = new AutoNumeric('#expected-total-sales', {
+        currencySymbol: '',
+        decimalPlaces: 0,
+        allowDecimalPadding: false,
+        minimumValue: 0,
+    });
+    $('#dec-expected-total-sales').on('click', () => {
+        dec(expectedTotalSales, 50);
+    });
+    $('#inc-expected-total-sales').on('click', () => {
+        inc(expectedTotalSales, 50);
+    });
+
+    // Single range Input
+    $('input[class~="singlerange"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: parseInt(moment().format('YYYY')),
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: 'Aplicar',
+            cancelLabel: 'Cancelar',
+        },
+    });
 });
+
+function inc(element, increment, min = 0) {
+    let elementValue = element.getNumericString();
+    if (elementValue === '') {
+        elementValue = min;
+    }
+    element.set(parseFloat(elementValue) + parseInt(increment));
+}
+
+function dec(element, decrement, min = 0) {
+    let elementValue = element.getNumericString();
+    if (elementValue === '') {
+        elementValue = 0;
+    }
+    let value = parseFloat(elementValue) - parseInt(decrement);
+    if (value < min) {
+        value = min;
+    }
+    element.set(value);
+}
 
 $('[id^=brief-campaign][id$=tab]').on('shown.bs.tab', function (event) {
     findBriefData();
@@ -123,7 +211,7 @@ function resetDatePickers() {
     );
     $('.range-pick#premium-sales-database-date-range').daterangepicker(
         dateRangePickerConfig,
-        callDatabaseCallback
+        callDatabaseSalesCallback
     );
 }
 
@@ -159,9 +247,6 @@ function findHeaderData(start, end) {
                 'Ocurrió un problema al recuperar la información del header'
             );
         },
-        // complete: () => {
-        //     hidePreloader();
-        // },
     });
 }
 
@@ -1502,6 +1587,10 @@ function findCenterKpisData(start, end) {
     });
 }
 
+function onFilterCallsDatabase() {
+    callDatabaseCallback(startDate, endDate, null, 1);
+}
+
 function callDatabaseCallback(start, end, label, page = 1) {
     startDate = start;
     endDate = end;
@@ -1515,9 +1604,10 @@ function callDatabaseCallback(start, end, label, page = 1) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term').val(),
+            'SearchByDateAndTermsForm[page]': page,
         },
         success: (response) => {
             $('#premium-calls-table tbody').html(null);
@@ -1529,7 +1619,7 @@ function callDatabaseCallback(start, end, label, page = 1) {
             updatePaginator(
                 '#premium-calls-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseCallback(start, end, '', page);
                 }
@@ -1555,13 +1645,13 @@ function createCallRecordRow(callRecord) {
         callRecord.call_id +
         `</th>
             <td>` +
-        callRecord.answered_by +
+        callRecord.dialed_by +
         `</td>
             <td>` +
-        callRecord.callpicker_number +
-        `</td>
-            <td>GS</td>
-            <td>` +
+        callRecord.dialed_number +
+        `</td>` +
+        //     <td>Mapfre</td>
+        `<td>` +
         callRecord.date +
         `</td>
             <td>
@@ -1584,6 +1674,62 @@ function createCallRecordRow(callRecord) {
     );
 }
 
+function onDownloadCalls(event) {
+    event.preventDefault();
+    showPreloader();
+    let headers = new Headers();
+    let fileName = '';
+    fetch(
+        '/ubbitt-premium/download-calls-audios?SearchByDateAndTermsForm[startDate]=' +
+            startDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[endDate]=' +
+            endDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[term]=' +
+            encodeURIComponent($('#search-term').val()),
+        {
+            headers,
+        }
+    )
+        .then((resp) => {
+            if (resp.status == 200) {
+                const header = resp.headers.get('Content-Disposition');
+                const parts = header.split(';');
+                fileName = parts[1].split('=')[1].replaceAll('"', '');
+                return resp.blob();
+            } else {
+                throw 'Hubo un problema al descargar los audios de las llamadas.';
+            }
+        })
+        .then((blob) => {
+            // IE doesn't allow using a blob object directly as link href
+            // instead it is necessary to use msSaveOrOpenBlob
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob);
+                return;
+            }
+
+            // For other browsers:
+            // Create a link pointing to the ObjectURL containing the blob.
+            const url = window.URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.click();
+            setTimeout(function () {
+                // For Firefox it is necessary to delay revoking the ObjectURL
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        })
+        .catch((error) => showAlert('error', error))
+        .finally(() => {
+            hidePreloader();
+        });
+}
+
+function onFilterSalesDatabase() {
+    callDatabaseSalesCallback(startDate, endDate, null, 1);
+}
+
 function callDatabaseSalesCallback(start, end, label, page = 1) {
     startDate = start;
     endDate = end;
@@ -1596,28 +1742,37 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
         type: 'POST',
         dataType: 'json',
         data: {
-            'SearchByDateForm[startDate]': start.format('YYYY-MM-DD'),
-            'SearchByDateForm[endDate]': end.format('YYYY-MM-DD'),
-            'SearchByDateForm[page]': page,
+            'SearchByDateAndTermsForm[startDate]': start.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[endDate]': end.format('YYYY-MM-DD'),
+            'SearchByDateAndTermsForm[term]': $('#search-term-sales').val(),
+            'SearchByDateAndTermsForm[page]': page,
         },
         success: (response) => {
             $('#premium-sales-table tbody').html(null);
+            var moneyFormatter = new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                maximumFractionDigits: 0,
+            });
             $.each(response.salesRecords, (index, callRecord) => {
                 $('#premium-sales-table tbody').append(
-                    createSalesRecordRow(callRecord)
+                    createSalesRecordRow(callRecord, moneyFormatter)
                 );
             });
             updatePaginator(
                 '#premium-sales-paginator',
                 page,
-                parseInt(response.totalPages),
+                Number(response.totalPages),
                 (page) => {
                     callDatabaseSalesCallback(start, end, '', page);
                 }
             );
         },
         error: () => {
-            alert('Ocurrió un problema al consultar el registro de llamadas');
+            showAlert(
+                'error',
+                'Ocurrió un problema al consultar la base de datos de ventas'
+            );
         },
         complete: function () {
             hidePreloader();
@@ -1625,16 +1780,134 @@ function callDatabaseSalesCallback(start, end, label, page = 1) {
     });
 }
 
-function createSalesRecordRow(salesRecord) {
-    return `
+function createSalesRecordRow(salesRecord, moneyFormatter) {
+    return (
+        `
         <tr>
-            <th scope="row" colspan="10"></td>
+            <th scope="row">` +
+        salesRecord.id +
+        `</th>
+            <td>` +
+        salesRecord.nombre_contacto +
+        `</td>
+            <td>` +
+        salesRecord.telefono_contacto +
+        `</td>
+            <td>` +
+        salesRecord.correo_contacto +
+        `</td>
+            <td>` +
+        salesRecord.producto +
+        `</td>
+            <td>` +
+        salesRecord.estatus_cobro +
+        `</td>
+            <td>` +
+        salesRecord.num_poliza +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.prima_total) +
+        `</td>
+            <td>` +
+        moneyFormatter.format(salesRecord.monto_pagado) +
+        `</td>
+            <td>` +
+        salesRecord.asignado +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_venta, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td>` +
+        moment(salesRecord.fecha_cobro, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+        <td>` +
+        moment(salesRecord.fecha_actividad, 'YYYY-MM-DDTHH:mm:ss.SSS').format(
+            'DD/MM/YYYY h:mm A'
+        ) +
+        `</td>
+            <td>` +
+        salesRecord.recibo +
+        `</td>
         </tr>
-    `;
+    `
+    );
+}
+
+function onDownloadSalesReport(event) {
+    event.preventDefault();
+    showPreloader();
+    let headers = new Headers();
+    let fileName = '';
+    fetch(
+        '/ubbitt-premium/download-sales-report?SearchByDateAndTermsForm[startDate]=' +
+            startDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[endDate]=' +
+            endDate.format('YYYY-MM-DD') +
+            '&SearchByDateAndTermsForm[term]=' +
+            encodeURIComponent($('#search-term').val()),
+        {
+            headers,
+        }
+    )
+        .then((resp) => {
+            if (resp.status == 200) {
+                const header = resp.headers.get('Content-Disposition');
+                const parts = header.split(';');
+                fileName = parts[1].split('=')[1].replaceAll('"', '');
+                return resp
+                    .blob()
+                    .then((blob) => {
+                        // IE doesn't allow using a blob object directly as link href
+                        // instead it is necessary to use msSaveOrOpenBlob
+                        if (
+                            window.navigator &&
+                            window.navigator.msSaveOrOpenBlob
+                        ) {
+                            window.navigator.msSaveOrOpenBlob(blob);
+                            return;
+                        }
+
+                        // For other browsers:
+                        // Create a link pointing to the ObjectURL containing the blob.
+                        const url = window.URL.createObjectURL(blob);
+                        var link = document.createElement('a');
+                        link.href = url;
+                        link.download = fileName;
+                        link.click();
+                        setTimeout(function () {
+                            // For Firefox it is necessary to delay revoking the ObjectURL
+                            window.URL.revokeObjectURL(url);
+                        }, 100);
+                    })
+                    .catch((error) => showAlert('error', error))
+                    .finally(() => {
+                        hidePreloader();
+                    });
+            } else if (resp.status == 400) {
+                resp.json()
+                    .then((jsonResp) => {
+                        showAlert('error', jsonResp);
+                    })
+                    .finally(() => {
+                        hidePreloader();
+                    });
+            } else {
+                throw 'Hubo un problema al descargar el reporte.';
+            }
+        })
+        .catch((error) => {
+            showAlert('error', error);
+            hidePreloader();
+        });
 }
 
 function onEnableBriefEdition() {
     $('#premium-brief-campaign').find('input').prop('disabled', false);
+    $('#premium-brief-campaign').find('button').prop('disabled', false);
     $('#btn-edit-brief').hide();
     $('#btn-cancel-edit-brief').show();
     $('#btn-save-brief').show();
@@ -1642,6 +1915,7 @@ function onEnableBriefEdition() {
 
 function onCancelBriefEdition() {
     $('#premium-brief-campaign').find('input').prop('disabled', true);
+    $('#premium-brief-campaign').find('button').prop('disabled', true);
     $('#btn-edit-brief').show();
     $('#btn-cancel-edit-brief').hide();
     $('#btn-save-brief').hide();
@@ -1667,8 +1941,8 @@ function findBriefData() {
                 $('#product-description').val(data.productDescription);
                 $('#product-insights').val(data.productInsights);
                 $('#product-added-value').val(data.productAddedValue);
-                $('#product-average-price').val(data.productAveragePrice);
-                $('#product-first-payment-average-price').val(
+                productAveragePrice.set(data.productAveragePrice);
+                productFirstPaymentAveragePrice.set(
                     data.productFirstPaymentAveragePrice
                 );
                 $('#payment-frequency-yearly').prop(
@@ -1708,13 +1982,11 @@ function findBriefData() {
                     'checked',
                     data.paymentMethodWireTransfer
                 );
-                $('#investment').val(data.investment);
+                investment.set(data.investment);
                 $('#start-date').val(data.startDate);
                 $('#end-date').val(data.endDate);
-                $('#expected-bidding-per-lead').val(
-                    data.expectedBiddingPerLead
-                );
-                $('#expected-total-sales').val(data.expectedTotalSales);
+                expectedBiddingPerLead.set(data.expectedBiddingPerLead);
+                expectedTotalSales.set(data.expectedTotalSales);
             }
         },
         error: () => {
@@ -1748,12 +2020,10 @@ function onSaveBrief() {
             'PremiumBriefForm[productAddedValue]': $(
                 '#product-added-value'
             ).val(),
-            'PremiumBriefForm[productAveragePrice]': $(
-                '#product-average-price'
-            ).val(),
-            'PremiumBriefForm[productFirstPaymentAveragePrice]': $(
-                '#product-first-payment-average-price'
-            ).val(),
+            'PremiumBriefForm[productAveragePrice]':
+                productAveragePrice.getNumericString(),
+            'PremiumBriefForm[productFirstPaymentAveragePrice]':
+                productFirstPaymentAveragePrice.getNumericString(),
             'PremiumBriefForm[paymentFrequencyYearly]': $(
                 '#payment-frequency-yearly'
             ).is(':checked')
@@ -1804,15 +2074,13 @@ function onSaveBrief() {
             ).is(':checked')
                 ? 1
                 : 0,
-            'PremiumBriefForm[investment]': $('#investment').val(),
+            'PremiumBriefForm[investment]': investment.getNumericString(),
             'PremiumBriefForm[startDate]': $('#start-date').val(),
             'PremiumBriefForm[endDate]': $('#end-date').val(),
-            'PremiumBriefForm[expectedBiddingPerLead]': $(
-                '#expected-bidding-per-lead'
-            ).val(),
-            'PremiumBriefForm[expectedTotalSales]': $(
-                '#expected-total-sales'
-            ).val(),
+            'PremiumBriefForm[expectedBiddingPerLead]':
+                expectedBiddingPerLead.getNumericString(),
+            'PremiumBriefForm[expectedTotalSales]':
+                expectedTotalSales.getNumericString(),
         },
         success: (response) => {
             showAlert('success', 'El Brief se actualizó correctamente');

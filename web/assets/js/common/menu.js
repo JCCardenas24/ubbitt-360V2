@@ -9,12 +9,15 @@ $('.level-three .nav-link').on('shown.bs.tab', function (event) {
 
 //href nav tabs
 // Javascript to enable link to tab
-$(function () {
-    let tabId = location.hash.replace(/^#/, ''); // ^ means starting, meaning only match the first hash
 
-    if (tabId) {
-        $('#' + tabId).tab('show');
-    }
+$(() => {
+    setTimeout(() => {
+        let tabId = location.hash.replace(/^#/, ''); // ^ means starting, meaning only match the first hash
+
+        if (tabId) {
+            $('#' + tabId).tab('show');
+        }
+    }, 500);
 });
 
 $('.side-menu-link-redirect').click(function (e) {
