@@ -32,6 +32,21 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
+        $user = (string) $token->getClaim('user');
+
+        $identity = null;
+
+        if ($user == 'backend') {
+            $identity = new User();
+            $identity->username = $user;
+        } else {
+            self::find()
+                ->limit(1)
+                ->andWhere(['username' => $user])
+                ->one();
+        }
+
+        return $identity;
     }
 
     /**
