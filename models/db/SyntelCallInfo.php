@@ -2,6 +2,7 @@
 
 namespace app\models\db;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -127,5 +128,42 @@ class SyntelCallInfo extends ActiveRecord
     public function findById($id)
     {
         return self::findOne($id);
+    }
+
+    public function countAllByCallPickerNumberAndDate($callPickerNumber, $startDate, $endDate)
+    {
+        return $this->find()->where(['like', 'callpicker_number', $callPickerNumber])
+            ->andWhere(['between', 'CAST(call_start AS DATE)', $startDate, $endDate])
+            ->count();
+    }
+
+    public function countAllAnsweredByCallPickerNumberAndDate($callPickerNumber, $startDate, $endDate)
+    {
+        return $this->find()->where(['like', 'callpicker_number', $callPickerNumber])
+            ->andWhere(['between', 'CAST(call_start AS DATE)', $startDate, $endDate])
+            ->andWhere(['not', ['call_start' => null]])
+            ->count();
+    }
+
+    public function countByCallPickerNumberAndDateAndType($callPickerNumber, $startDate, $endDate, $type)
+    {
+        return $this->find()->where(['like', 'callpicker_number', $callPickerNumber])
+            ->andWhere(['call_type' => $type])
+            ->andWhere(['between', 'CAST(call_start AS DATE)', $startDate, $endDate])
+            ->count();
+    }
+
+    public function countCallsByCallPickerNumberAndDates($callPickerNumber, $startDate, $endDate)
+    {
+        return Yii::$app->db->createCommand('
+            SELECT CAST(call_start AS DATE) AS `date`, COUNT(call_start) AS calls
+            FROM syntel_call_info
+            WHERE CAST(call_start AS DATE) BETWEEN :startDate AND :endDate
+                AND callpicker_number = :callPickerNumber
+            GROUP BY CAST(call_start AS DATE)', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'callPickerNumber' => $callPickerNumber,
+        ])->queryAll();
     }
 }

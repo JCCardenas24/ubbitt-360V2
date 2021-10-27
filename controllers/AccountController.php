@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\db\SyntelCallInfo;
 use app\models\db\UserInfo;
 use app\models\forms\ChangeEmail;
 use app\models\forms\ChangePassword;
@@ -95,5 +96,28 @@ class AccountController extends Controller
         $user = User::findByUsername($username);
         $user->email = $changeEmailRequest->newEmail;
         $user->save();
+    }
+
+    /**
+     * Creates a new JWT token
+     *
+     *
+     * @return Jwt
+     */
+    private function createToken()
+    {
+        /** @var Jwt $jwt */
+        $jwt = Yii::$app->jwt;
+        $signer = $jwt->getSigner('HS256');
+        $key = $jwt->getKey();
+        $time = time();
+        return $jwt->getBuilder()
+            ->issuedBy('http://ubbitt360.com') // Configures the issuer (iss claim)
+            ->permittedFor('*') // Configures the audience (aud claim)
+            ->identifiedBy('5c6fg4aad3d', true) // Configures the id (jti claim), replicating as a header item
+            ->issuedAt($time) // Configures the time that the token was issue (iat claim)
+            //->expiresAt($time + 15552000) // Configures the expiration time of the token (exp claim), the default time is 6 months
+            ->withClaim('user', "backend") // Configures a new claim, called "clientId"}
+            ->getToken($signer, $key); // Retrieves the generated token
     }
 }

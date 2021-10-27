@@ -6,6 +6,7 @@ use app\models\db\Campaign;
 use app\models\db\FreemiumCallCenterKpi;
 use app\models\db\FreemiumSummaryDetail;
 use app\models\db\FreemiumSummaryGraph;
+use app\models\db\SyntelCallInfo;
 use app\models\db\UserInfo;
 use app\models\db\webhook\WebHookCalls;
 use app\models\forms\SearchByDateAndTermsForm;
@@ -16,6 +17,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use app\models\ReportFile;
+use app\models\utils\DateHelper;
 use app\models\utils\FilenameHelper;
 use Exception;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
@@ -152,7 +154,7 @@ class UbbittFreemiumController extends Controller
         $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
-        $url = Yii::$app->params['sales_database_service_url'] . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/0eb422ebc0760f6a22c3c24125aa5f9b';
+        $url = Yii::$app->params['sales_database_service_url'] . $searchParams->startDate . '/' . $searchParams->endDate . '/' . $searchParams->page . '/' . Yii::$app->params['sales_database_service_api_key'];
         if (!empty($searchParams->term)) {
             $url .= '/' . rawurlencode($searchParams->term);
         }
@@ -230,31 +232,53 @@ class UbbittFreemiumController extends Controller
 
     public function actionFindSummaryGraphData()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $searchParams = new SearchByDateForm();
         $searchParams->load(Yii::$app->request->post());
         $summaryGraphModel = new FreemiumSummaryGraph();
         $data = $summaryGraphModel->findByDates($searchParams->startDate, $searchParams->endDate);
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $syntelCallInfoModel = new SyntelCallInfo();
+        $callsCounts = $syntelCallInfoModel->countCallsByCallPickerNumberAndDates(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate);
+        foreach ($data as &$row) {
+            $row['calls'] = $this->findCallsCountByDate($callsCounts, DateHelper::ddMmYyyyToDatabase($row['date']));
+        }
         return $data;
+    }
+
+    private function findCallsCountByDate($callsCounts, $date)
+    {
+        foreach ($callsCounts as $callCount) {
+            if ($callCount['date'] == $date) {
+                return intval($callCount['calls']);
+            }
+        }
+        return 0;
     }
 
     public function actionFindCallCenterKpis()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $searchParams = new SearchByDateForm();
         $searchParams->load(Yii::$app->request->post());
         $model = new FreemiumCallCenterKpi();
         $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $syntelCallInfoModel = new SyntelCallInfo();
+        $data['inbound_calls'] = $syntelCallInfoModel->countByCallPickerNumberAndDateAndType(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'inbound');
+        $data['outbound_calls'] = $syntelCallInfoModel->countByCallPickerNumberAndDateAndType(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'outbound');
+        $data['answered_calls'] = $syntelCallInfoModel->countAllAnsweredByCallPickerNumberAndDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'outbound');
         return $data;
     }
 
     public function actionFindSummaryDetailData()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $searchParams = new SearchByDateForm();
         $searchParams->load(Yii::$app->request->post());
         $model = new FreemiumSummaryDetail();
         $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $syntelCallInfoModel = new SyntelCallInfo();
+        $callsCount = $syntelCallInfoModel->countAllByCallPickerNumberAndDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate);
+        $data['nco_total_calls'] = $callsCount;
         return $data;
     }
 }
