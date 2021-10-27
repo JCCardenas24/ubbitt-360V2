@@ -34,7 +34,7 @@ class SyntelCallInfo extends ActiveRecord
     {
         return [
             [['pk_call', 'call_type', 'call_purpose', 'call_purpose'], 'required'],
-            [['call_start', 'call_end',], 'datetime', 'format' => 'php:Y-m-d H:i'],
+            [['call_start', 'call_end',], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             [['tracker_name', 'step_name', 'callpicker_number'], 'string'],
         ];
     }
