@@ -16,6 +16,10 @@ use yii\db\ActiveRecord;
  * @property string $trackerName
  * @property string $stepName
  * @property string $callpickerNumber
+ * @property string $salesStatus
+ * @property string $collectedStatus
+ * @property double $amount
+ * @property integer $fkLead
  *
  */
 class SyntelCallInfo extends ActiveRecord
@@ -36,7 +40,9 @@ class SyntelCallInfo extends ActiveRecord
         return [
             [['pk_call', 'call_type', 'call_purpose', 'call_purpose'], 'required'],
             [['call_start', 'call_end',], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
-            [['tracker_name', 'step_name', 'callpicker_number'], 'string'],
+            [['tracker_name', 'step_name', 'callpicker_number', 'sales_status', 'collected_status'], 'string'],
+            [['amount'], 'double'],
+            [['fk_lead'], 'integer'],
         ];
     }
 
@@ -118,6 +124,46 @@ class SyntelCallInfo extends ActiveRecord
     public function setCallpickerNumber($callpickerNumber)
     {
         $this->callpicker_number = $callpickerNumber;
+    }
+
+    public function getSalesStatus()
+    {
+        return $this->sales_status;
+    }
+
+    public function setSalesStatus($salesStatus)
+    {
+        $this->sales_status = $salesStatus;
+    }
+
+    public function getCollectedStatus()
+    {
+        return $this->collected_status;
+    }
+
+    public function setCollectedStatus($collectedStatus)
+    {
+        $this->collected_status = $collectedStatus;
+    }
+
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    public function getFkLead()
+    {
+        return $this->fk_lead;
+    }
+
+    public function setFkLead($fkLead)
+    {
+        $this->fk_lead = $fkLead;
     }
 
     /**
