@@ -19,6 +19,7 @@ use yii\web\Response;
 use app\models\ReportFile;
 use app\models\utils\DateHelper;
 use app\models\utils\FilenameHelper;
+use app\models\utils\NumberFormatter;
 use Exception;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use ZipArchive;
@@ -265,7 +266,7 @@ class UbbittFreemiumController extends Controller
         $syntelCallInfoModel = new SyntelCallInfo();
         $data['inbound_calls'] = $syntelCallInfoModel->countByCallPickerNumberAndDateAndType(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'inbound');
         $data['outbound_calls'] = $syntelCallInfoModel->countByCallPickerNumberAndDateAndType(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'outbound');
-        $data['answered_calls'] = $syntelCallInfoModel->countAllAnsweredByCallPickerNumberAndDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'outbound');
+        $data['answered_calls'] = $syntelCallInfoModel->countAllAnsweredByCallPickerNumberAndDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate);
         return $data;
     }
 
@@ -277,8 +278,65 @@ class UbbittFreemiumController extends Controller
         $model = new FreemiumSummaryDetail();
         $data = $model->findKpisReport($searchParams->startDate, $searchParams->endDate);
         $syntelCallInfoModel = new SyntelCallInfo();
-        $callsCount = $syntelCallInfoModel->countAllByCallPickerNumberAndDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate);
-        $data['nco_total_calls'] = $callsCount;
+        $data['nco_total_calls'] = $syntelCallInfoModel->countAllByCallPickerNumberAndDate(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate);
+        $data['sale_reason'] = $syntelCallInfoModel->countByPurpose(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Ventas');
+        $data['sale_reason_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['sale_reason'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls'] = $syntelCallInfoModel->countByPurpose(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Otros');
+        $data['cust_serv_calls_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls'] * 100 / $data['nco_total_calls']));
+        $data['sale_accepted'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Acepta Venta', null);
+        $data['sale_accepted_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['sale_accepted'] * 100 / $data['nco_total_calls']));
+        $data['call_scheduled'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Agenda Llamada', null);
+        $data['call_scheduled_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['call_scheduled'] * 100 / $data['nco_total_calls']));
+        $data['payment_promise_scheduled'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Agenda Promesa de Pago', null);
+        $data['payment_promise_scheduled_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['payment_promise_scheduled'] * 100 / $data['nco_total_calls']));
+        $data['deposit_slip_sent'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Se envía ficha de depósito', null);
+        $data['deposit_slip_sent_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['deposit_slip_sent'] * 100 / $data['nco_total_calls']));
+        // Asistencia Ubbitt
+        $data['cust_serv_calls_product_questions'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Dudas de producto', 'Asistencia Ubbitt');
+        $data['cust_serv_calls_product_questions_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_product_questions'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_product_advisory'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Asesorías de producto', 'Asistencia Ubbitt');
+        $data['cust_serv_calls_product_advisory_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_product_advisory'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_product_linkage'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Enlace de producto', 'Asistencia Ubbitt');
+        $data['cust_serv_calls_product_linkage_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_product_linkage'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_coverage_linkage'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Enlace de coberturas', 'Asistencia Ubbitt');
+        $data['cust_serv_calls_coverage_linkage_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_coverage_linkage'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_ubbitt_assistance'] = intval($data['cust_serv_calls_product_questions']) + intval($data['cust_serv_calls_product_advisory']) + intval($data['cust_serv_calls_product_linkage']) + intval($data['cust_serv_calls_coverage_linkage']);
+        $data['cust_serv_calls_ubbitt_assistance_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_ubbitt_assistance'] * 100 / $data['nco_total_calls']));
+        // Otros productos
+        $data['cust_serv_calls_other_products_medical_expenses'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Gastos médicos', 'Otros Seguros') + $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Gastos Médicos Mayores', 'Otros Seguros');
+        $data['cust_serv_calls_other_products_medical_expenses_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_other_products_medical_expenses'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_other_products_life'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Vida', 'Otros Seguros');
+        $data['cust_serv_calls_other_products_life_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_other_products_life'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_other_products_legalized'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Legalizados', 'Otros Seguros');
+        $data['cust_serv_calls_other_products_legalized_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_other_products_legalized'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_other_products_platforms'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Plataformas', 'Otros Seguros') + $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Plataformas (Uber, Didi, Cabify...)', 'Otros Seguros');
+        $data['cust_serv_calls_other_products_platforms_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_other_products_platforms'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_other_products_residential'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Residencial', 'Otros Seguros');
+        $data['cust_serv_calls_other_products_residential_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_other_products_residential'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_calls_other_products'] = intval($data['cust_serv_calls_other_products_medical_expenses']) + intval($data['cust_serv_calls_other_products_life']) + intval($data['cust_serv_calls_other_products_legalized']) + intval($data['cust_serv_calls_other_products_platforms']) + intval($data['cust_serv_calls_other_products_residential']);
+        $data['cust_serv_calls_other_products_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_calls_other_products'] * 100 / $data['nco_total_calls']));
+        // Atención a clientes
+        $data['cust_serv_cust_serv_report_advisor_care'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Reportar atención de asesor', 'Atención a Clientes (ATC)');
+        $data['cust_serv_cust_serv_report_advisor_care_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_cust_serv_report_advisor_care'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_cust_serv_policy_renewal_review'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Revisión renovación de póliza', 'Atención a Clientes (ATC)');
+        $data['cust_serv_cust_serv_policy_renewal_review_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_cust_serv_policy_renewal_review'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_cust_serv_product_cancellation'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Cancelación de producto', 'Atención a Clientes (ATC)');
+        $data['cust_serv_cust_serv_product_cancellation_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_cust_serv_product_cancellation'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_cust_serv_check_expiration_dates'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Checar fechas de vigencia', 'Atención a Clientes (ATC)');
+        $data['cust_serv_cust_serv_check_expiration_dates_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_cust_serv_check_expiration_dates'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_cust_serv'] = intval($data['cust_serv_cust_serv_report_advisor_care']) + intval($data['cust_serv_cust_serv_policy_renewal_review']) + intval($data['cust_serv_cust_serv_product_cancellation']) + intval($data['cust_serv_cust_serv_check_expiration_dates']);
+        $data['cust_serv_cust_serv_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_cust_serv'] * 100 / $data['nco_total_calls']));
+        // Dudas de cobranza
+        $data['cust_serv_collection_questions_payment_track'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Seguimiento de pago', 'Cobranza');
+        $data['cust_serv_collection_questions_payment_track_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_collection_questions_payment_track'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_collection_questions_payment_clarification'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Aclaraciones de pagos', null);
+        $data['cust_serv_collection_questions_payment_clarification_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_collection_questions_payment_clarification'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_collection_questions_make_payment'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Realizar pago', 'Cobranza');
+        $data['cust_serv_collection_questions_make_payment_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_collection_questions_make_payment'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_collection_questions_refund'] = $syntelCallInfoModel->countByTrackerNameAndStepName(Yii::$app->params['ubbitt_freemium_did'], $searchParams->startDate, $searchParams->endDate, 'Reembolsos', 'Atención a Clientes (ATC)');
+        $data['cust_serv_collection_questions_refund_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_collection_questions_refund'] * 100 / $data['nco_total_calls']));
+        $data['cust_serv_collection_questions'] = intval($data['cust_serv_collection_questions_payment_track']) + intval($data['cust_serv_collection_questions_refund']) + intval($data['cust_serv_collection_questions_payment_clarification']) + intval($data['cust_serv_collection_questions_make_payment']);
+        $data['cust_serv_collection_questions_percentage'] = strval(NumberFormatter::truncateTwoDecimal($data['cust_serv_collection_questions'] * 100 / $data['nco_total_calls']));
         return $data;
     }
 }
