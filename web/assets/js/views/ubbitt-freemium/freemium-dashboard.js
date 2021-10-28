@@ -1283,7 +1283,7 @@ function updateDashboardTree(kpis) {
                                 children: [],
                             },
                             {
-                                ttl_categoria: 'Reaiizar pago',
+                                ttl_categoria: 'Realizar pago',
                                 type: 'type3',
                                 total_llamadas:
                                     kpis.cust_serv_collection_questions_make_payment +
