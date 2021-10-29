@@ -43,6 +43,10 @@ class UbbittSyntelController extends Controller
             $syntelCall->trackerName = $call['tracker_name'];
             $syntelCall->stepName = $call['step_name'];
             $syntelCall->callpickerNumber = $call['troncal_number'];
+            $syntelCall->salesStatus = $call['sales_status'];
+            $syntelCall->collectedStatus = $call['collected_status'];
+            $syntelCall->amount = $call['amount'];
+            $syntelCall->fkLead = $call['fk_lead'];
             $syntelCall->save();
             $errors = $syntelCall->errors;
         }
