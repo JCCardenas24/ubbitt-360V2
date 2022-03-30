@@ -286,9 +286,6 @@ function findForecastData(start, end, moneyFormatter) {
             $('#ubbitt-investment').text(
                 moneyFormatter.format(data.ubbitt_investment).replace('.00', '')
             );
-            $('#spent-investment').text(
-                moneyFormatter.format(data.ubbitt_investment).replace('.00', '')
-            );
             $('#forecast-sales').text(
                 moneyFormatter
                     .format(parseInt(data.sales_forecast))
@@ -624,6 +621,9 @@ function findSummaryInputs(start, end, moneyFormatter) {
         },
         success: (data) => {
             $('#spent-budget').text(
+                moneyFormatter.format(data.spent_budget).replace('.00', '')
+            );
+            $('#spent-investment').text(
                 moneyFormatter.format(data.spent_budget).replace('.00', '')
             );
             $('#actual-investment').text(

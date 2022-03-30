@@ -218,7 +218,8 @@ class WebHookCalls extends ActiveRecord
         $calls = $query->offset($pages->offset)->limit($pages->limit)->all();
         return [
             'callsRecords' => $calls,
-            'totalPages' => $pages->pageCount
+            'totalPages' => $pages->pageCount,
+            'phone' => $phoneNumber
         ];
     }
 

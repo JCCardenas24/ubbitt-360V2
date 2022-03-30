@@ -117,6 +117,10 @@ use yii\helpers\Url;
                             href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'call-center-campaign-' . $campaign->campaignId . '-tab']) ?>"
                             class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
                                     class="path1"></span><span class="path2"></span></i>Call Center</a></li>
+                    <li><a id="report-campaign-<?= $campaign->campaignId ?>_side_menu"
+                            href="<?= Url::to(['ubbitt-premium/dashboard', 'id' => $campaign->campaignId, '#' => 'report-campaign-' . $campaign->campaignId . '-tab']) ?>"
+                            class="li_second_level side-menu-link-redirect"><i class="icon-Commit c-transparent"><span
+                                    class="path1"></span><span class="path2"></span></i>Reporte</a></li>                
                     <br>
                     <?php } ?>
                 </ul>

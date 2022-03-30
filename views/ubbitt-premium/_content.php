@@ -15,4 +15,8 @@
         aria-labelledby="call-center-campaign-<?= $campaignId ?>-tab">
         <?= $this->render('_content/_call-center') ?>
     </div>
+    <div class="tab-pane fade" id="report-campaign-<?= $campaignId ?>" role="tabpanel"
+        aria-labelledby="report-campaign-<?= $campaignId ?>-tab">
+        <?= $this->render('_content/_report') ?>
+    </div>
 </div>

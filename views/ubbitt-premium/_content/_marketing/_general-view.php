@@ -13,12 +13,12 @@
 </div>
 
 <div class="row presupuestos-row ml-0 mr-0">
-    <div class="col p-0 d-fjcc br">
+    <!-- <div class="col p-0 d-fjcc br">
         <div class="card_info ">
             <p>Presupuesto</p>
             <h5 id="marketing-budget">$0</h5>
         </div>
-    </div>
+    </div> -->
     <div class="col p-0 d-fjcc br">
         <div class="card_info ">
             <p>Presupuesto gastado</p>
@@ -80,7 +80,7 @@
             <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
         </div>
         <div class="wrapper_conector">
-            <div class="card_conector">
+           <!--  <div class="card_conector">
                 <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
                     title="Leads/Vistas">
                     <i class="ri-information-fill"></i>
@@ -91,10 +91,10 @@
                     <h1 id="marketing-visits-conversion">0%</h1>
                 </div>
             </div>
-            <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
+            <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt=""> -->
         </div>
         <div class="wrapper_conector">
-            <div class="card_conector">
+            <!-- <div class="card_conector">
                 <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
                     title="Conectados/Leads">
                     <i class="ri-information-fill"></i>
@@ -105,7 +105,7 @@
                     <h1 id="marketing-leads-conversion">0%</h1>
                 </div>
             </div>
-            <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt="">
+            <img src="<?= Yii::getAlias('@web') ?>/assets/images/conector.svg" alt=""> -->
         </div>
         <div class="wrapper_conector mr-0">
             <div class="card_conector">
@@ -204,7 +204,7 @@
     </div>
 
     <div class="row ml-0 mr-0 row_bottom_cards">
-        <div class="col p-0">
+       <!--  <div class="col p-0">
             <div class="card_bottom bottom_card_yellow">
                 <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
                     title="Costo por cada mil impresiones.">
@@ -259,7 +259,7 @@
                     <h1 id="marketing-cpl-contacted">$0</h1>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- <div class="col p-0">
             <div class="card_bottom bottom_card_orange">
                 <div>

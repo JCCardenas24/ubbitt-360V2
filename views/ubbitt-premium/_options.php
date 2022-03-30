@@ -19,14 +19,19 @@
             href="#call-center-campaign-<?= $campaignId ?>" role="tab"
             aria-controls="call-center-campaign-<?= $campaignId ?>" aria-selected="false">Call Center</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" id="report-campaign-<?= $campaignId ?>-tab" data-toggle="pill"
+            href="#report-campaign-<?= $campaignId ?>" role="tab"
+            aria-controls="report-campaign-<?= $campaignId ?>" aria-selected="false">Reporte</a>
+    </li>
 
     <li class="nav-item">
         <div class="d-flex balance_campaign_data">
-            <div class="d-flex">
+            <!-- <div class="d-flex">
                 <p>Inversión</p>
                 <span> | </span>
                 <small id="header-forecast-investment">$0</small>
-            </div>
+            </div> -->
             <div class="d-flex">
                 <p>Gasto</p>
                 <span> | </span>

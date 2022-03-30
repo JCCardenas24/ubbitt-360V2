@@ -13,7 +13,7 @@
 </div>
 
 <div class="row ml-0 mr-0 row_balance_resumen">
-    <div class="col">
+    <!-- <div class="col">
         <div class="card dark-gray">
             <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"
                 title="Es el monto de dinero invertido durante el periodo acordado.">
@@ -22,7 +22,7 @@
             <p>Inversión Ubbitt</p>
             <h5 id="ubbitt-investment">$0</h5>
         </div>
-    </div>
+    </div> -->
     <div class="col">
         <div class="card dark-gray">
             <a type="button" class="tooltip_btn" data-toggle="tooltip" data-placement="left" data-html="true"

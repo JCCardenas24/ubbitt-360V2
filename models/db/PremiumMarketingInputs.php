@@ -121,7 +121,7 @@ class PremiumMarketingInputs extends ActiveRecord
                 COALESCE(CAST(AVG(cpm) AS DECIMAL(5,2)), 0) AS cpm,
                 COALESCE(CAST(AVG(cpc) AS DECIMAL(5,2)), 0) AS cpc,
                 COALESCE(CAST(AVG(cp_visit) AS DECIMAL(5,2)), 0) AS cp_visit,
-                COALESCE(CAST(AVG(cpl) AS DECIMAL(5,2)), 0) AS cpl,
+                COALESCE(CAST((SUM(spent_budget)/SUM(leads)) AS DECIMAL(5,2)), 0) AS cpl,
                 COALESCE(CAST(AVG(cpl_contacted) AS DECIMAL(5,2)), 0) AS cpl_contacted,
                 COALESCE(CAST(AVG(sale_cost) AS DECIMAL(5,2)), 0) AS sale_cost,
                 COALESCE(CAST(AVG(roa) AS DECIMAL(5,2)), 0) AS roa,
