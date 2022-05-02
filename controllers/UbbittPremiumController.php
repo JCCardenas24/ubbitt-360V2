@@ -230,7 +230,7 @@ class UbbittPremiumController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], Yii::$app->params['ubbitt_premium_did_2'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         return $callsArray;
     }
 
@@ -240,7 +240,7 @@ class UbbittPremiumController extends Controller
         $searchParams->load(Yii::$app->request->get());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $callsModel = new WebHookCalls();
-        $calls = $callsModel->findAllByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term);
+        $calls = $callsModel->findAllByDateAndTerm(Yii::$app->params['ubbitt_premium_did'], Yii::$app->params['ubbitt_premium_did_2'], $searchParams->startDate, $searchParams->endDate, $searchParams->term);
 
         try {
             $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;

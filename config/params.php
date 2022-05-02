@@ -3,9 +3,13 @@
 return [
     'itemsPerPage' => 10,
     'ubbitt_freemium_did' => '5588547978',
+    'ubbitt_freemium_did_2' => '525589509596',
     'ubbitt_beyond_collection_did' => '5589571959',
+    'ubbitt_beyond_collection_did_2' => '525588547961',
     'ubbitt_beyond_renewal_did' => '5589505362',
+    'ubbitt_beyond_renewal_did_2' => '525588548319',
     'ubbitt_premium_did' => '5512091777',
+    'ubbitt_premium_did_2' => '525589505360',
     'report_type_dict' => [
         "kpis" => "Detalles de KPI's",
         "advisor" => "Productividad de asesores",

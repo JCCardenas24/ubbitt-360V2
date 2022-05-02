@@ -132,7 +132,7 @@ class UbbittBeyondController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_collection_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_collection_did'], Yii::$app->params['ubbitt_beyond_collection_did_2'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
@@ -142,13 +142,13 @@ class UbbittBeyondController extends Controller
         $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->get());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
-        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_collection_did'], 'llamadas-audios-beyond-cobranza.zip');
+        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_collection_did'], Yii::$app->params['ubbitt_beyond_collection_did_2'], 'llamadas-audios-beyond-cobranza.zip');
     }
 
-    private function downloadAudios(SearchByDateAndTermsForm $searchParams, $did, $zipFileName)
+    private function downloadAudios(SearchByDateAndTermsForm $searchParams, $did, $did2, $zipFileName)
     {
         $callsModel = new WebHookCalls();
-        $calls = $callsModel->findAllByDateAndTerm($did, $searchParams->startDate, $searchParams->endDate, $searchParams->term);
+        $calls = $callsModel->findAllByDateAndTerm($did, $did2, $searchParams->startDate, $searchParams->endDate, $searchParams->term);
 
         try {
             $outputPath = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
@@ -364,7 +364,7 @@ class UbbittBeyondController extends Controller
         $searchParams->load(Yii::$app->request->post());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
         $calls = new WebHookCalls();
-        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_renewal_did'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
+        $callsArray = $calls->findByDateAndTerm(Yii::$app->params['ubbitt_beyond_renewal_did'], Yii::$app->params['ubbitt_beyond_renewal_did_2'], $searchParams->startDate, $searchParams->endDate, $searchParams->term, $searchParams->page);
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $callsArray;
     }
@@ -374,7 +374,7 @@ class UbbittBeyondController extends Controller
         $searchParams = new SearchByDateAndTermsForm();
         $searchParams->load(Yii::$app->request->get());
         $searchParams->page = $searchParams->page == null ? 1 : $searchParams->page;
-        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_renewal_did'], 'llamadas-audios-beyond-renovacion.zip');
+        $this->downloadAudios($searchParams, Yii::$app->params['ubbitt_beyond_renewal_did'], Yii::$app->params['ubbitt_beyond_renewal_did_2'], 'llamadas-audios-beyond-renovacion.zip');
     }
 
     public function actionFindRenewalSales()
